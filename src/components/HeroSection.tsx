@@ -22,8 +22,9 @@ export function HeroSection() {
 
         {/* Main Headline */}
         <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-          <span className="text-foreground">The Corporate Tender for</span>
+          <span className="text-foreground">The Corporate Tender</span>
           <br />
+          <span className="text-foreground">For </span>
           <span className="gradient-text">Disciplined RWA Consumption</span>
         </h1>
 
