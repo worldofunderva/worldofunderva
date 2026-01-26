@@ -1,8 +1,11 @@
 import { Navbar } from '@/components/Navbar';
 import { HeroSection } from '@/components/HeroSection';
-import { TokenomicsSection } from '@/components/TokenomicsSection';
 import { BusinessPillars } from '@/components/BusinessPillars';
 import { SentinelGate } from '@/components/SentinelGate';
+import { TokenomicsSection } from '@/components/TokenomicsSection';
+import { ContractSection } from '@/components/ContractSection';
+import { BridgeSection } from '@/components/BridgeSection';
+import { CommunitySection } from '@/components/CommunitySection';
 import { Footer } from '@/components/Footer';
 
 const Index = () => {
@@ -11,9 +14,12 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
-        <TokenomicsSection />
         <BusinessPillars />
         <SentinelGate />
+        <TokenomicsSection />
+        <ContractSection />
+        <BridgeSection />
+        <CommunitySection />
       </main>
       <Footer />
     </div>

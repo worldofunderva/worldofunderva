@@ -4,9 +4,11 @@ import { Button } from '@/components/ui/button';
 import { useWallet } from '@/contexts/WalletContext';
 
 const navItems = [
+  { label: 'The Pillars', href: '#pillars' },
+  { label: 'Sentinel Mint', href: '#sentinel' },
   { label: 'Tokenomics', href: '#tokenomics' },
-  { label: 'RWA Pillars', href: '#pillars' },
-  { label: 'Sentinel', href: '#sentinel' },
+  { label: 'Bridge', href: '#bridge' },
+  { label: 'Community', href: '#community' },
 ];
 
 export function Navbar() {
