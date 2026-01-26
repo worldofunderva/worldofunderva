@@ -1,4 +1,5 @@
 import { Lock, Zap, Database, Users, Wallet, Building } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { cn } from '@/lib/utils';
 
 const distributions = [
@@ -7,21 +8,24 @@ const distributions = [
     percentage: 35,
     description: 'Powers 2.0% cashback rewards for Sentinel holders',
     icon: Database,
-    color: 'bg-primary',
+    color: 'hsl(212, 100%, 48%)',
+    tailwindColor: 'bg-primary',
   },
   {
     label: 'DEX Liquidity',
     percentage: 30,
     description: 'Ensures deep liquidity across exchanges',
     icon: Wallet,
-    color: 'bg-cyan-500',
+    color: 'hsl(190, 95%, 50%)',
+    tailwindColor: 'bg-cyan-500',
   },
   {
     label: 'Core Team',
     percentage: 15,
     description: '2-year linear vesting with cliff',
     icon: Users,
-    color: 'bg-violet-500',
+    color: 'hsl(270, 80%, 60%)',
+    tailwindColor: 'bg-violet-500',
     locked: true,
   },
   {
@@ -29,16 +33,24 @@ const distributions = [
     percentage: 15,
     description: 'Partnerships, integrations, incentives',
     icon: Building,
-    color: 'bg-emerald-500',
+    color: 'hsl(160, 80%, 45%)',
+    tailwindColor: 'bg-emerald-500',
   },
   {
     label: 'Treasury Reserve',
     percentage: 5,
     description: 'Strategic reserve for operations',
     icon: Lock,
-    color: 'bg-amber-500',
+    color: 'hsl(38, 92%, 50%)',
+    tailwindColor: 'bg-amber-500',
   },
 ];
+
+const pieData = distributions.map((d) => ({
+  name: d.label,
+  value: d.percentage,
+  color: d.color,
+}));
 
 export function TokenomicsSection() {
   return (
@@ -100,8 +112,8 @@ export function TokenomicsSection() {
               )}
             >
               <div className="col-span-5 sm:col-span-4 flex items-center gap-3">
-                <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", item.color, "bg-opacity-20")}>
-                  <item.icon className={cn("h-5 w-5", item.color.replace('bg-', 'text-'))} />
+                <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", item.tailwindColor, "bg-opacity-20")}>
+                  <item.icon className={cn("h-5 w-5", item.tailwindColor.replace('bg-', 'text-'))} />
                 </div>
                 <div>
                   <p className="font-medium text-sm sm:text-base">{item.label}</p>
@@ -123,22 +135,42 @@ export function TokenomicsSection() {
           ))}
         </div>
 
-        {/* Visual Distribution Bar */}
-        <div className="mt-8">
-          <div className="h-4 rounded-full overflow-hidden flex">
-            {distributions.map((item) => (
-              <div
-                key={item.label}
-                className={cn("h-full transition-all", item.color)}
-                style={{ width: `${item.percentage}%` }}
-                title={`${item.label}: ${item.percentage}%`}
-              />
-            ))}
+        {/* Pie Chart Distribution */}
+        <div className="mt-8 flex flex-col items-center">
+          <div className="w-full max-w-sm h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={100}
+                  paddingAngle={2}
+                  dataKey="value"
+                  stroke="hsl(222, 47%, 4%)"
+                  strokeWidth={2}
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'hsl(222, 47%, 8%)',
+                    border: '1px solid hsl(222, 30%, 15%)',
+                    borderRadius: '8px',
+                    color: 'hsl(210, 20%, 95%)',
+                  }}
+                  formatter={(value: number) => [`${value}%`, 'Allocation']}
+                />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
           <div className="flex flex-wrap justify-center gap-4 mt-4">
             {distributions.map((item) => (
               <div key={item.label} className="flex items-center gap-2">
-                <div className={cn("h-3 w-3 rounded-full", item.color)} />
+                <div className={cn("h-3 w-3 rounded-full", item.tailwindColor)} />
                 <span className="text-xs text-muted-foreground">{item.label}</span>
               </div>
             ))}
