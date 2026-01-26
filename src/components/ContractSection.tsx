@@ -1,10 +1,17 @@
 import { useState } from 'react';
-import { Copy, Check, ExternalLink } from 'lucide-react';
+import { Copy, Check, ExternalLink, TrendingUp, TrendingDown } from 'lucide-react';
 
 const CONTRACT_ADDRESS = '0x1234...5678abcd';
 
 export function ContractSection() {
   const [copied, setCopied] = useState(false);
+
+  // Placeholder data - would be fetched from API
+  const priceData = {
+    price: 0.0847,
+    change24h: 3.42,
+    isPositive: true,
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText('0x1234567890abcdef1234567890abcdef12345678');
@@ -22,6 +29,24 @@ export function ContractSection() {
         </div>
 
         <div className="glass-card p-6 max-w-2xl mx-auto">
+          {/* Price Display - Minimal */}
+          <div className="flex items-center justify-center gap-4 pb-5 mb-5 border-b border-border">
+            <span className="text-2xl font-mono font-semibold text-foreground">
+              ${priceData.price.toFixed(4)}
+            </span>
+            <span className={`flex items-center gap-1 text-sm font-medium ${
+              priceData.isPositive ? 'text-success' : 'text-destructive'
+            }`}>
+              {priceData.isPositive ? (
+                <TrendingUp className="h-3.5 w-3.5" />
+              ) : (
+                <TrendingDown className="h-3.5 w-3.5" />
+              )}
+              {priceData.isPositive ? '+' : ''}{priceData.change24h}%
+            </span>
+          </div>
+
+          {/* Contract Address */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">
