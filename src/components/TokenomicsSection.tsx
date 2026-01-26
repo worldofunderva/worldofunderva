@@ -1,160 +1,55 @@
-import { Lock, Zap, Database, Users, Wallet, Building } from 'lucide-react';
+import { Lock, Database, Users, Wallet, Building } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const distributions = [
-  {
-    label: 'RWA Engagement Pool',
-    percentage: 35,
-    description: 'Powers 2.0% cashback rewards for Sentinel holders',
-    icon: Database,
-    color: 'bg-primary',
-  },
-  {
-    label: 'DEX Liquidity',
-    percentage: 30,
-    description: 'Ensures deep liquidity across exchanges',
-    icon: Wallet,
-    color: 'bg-cyan-500',
-  },
-  {
-    label: 'Core Team',
-    percentage: 15,
-    description: '2-year linear vesting with cliff',
-    icon: Users,
-    color: 'bg-violet-500',
-    locked: true,
-  },
-  {
-    label: 'Ecosystem Growth',
-    percentage: 15,
-    description: 'Partnerships, integrations, incentives',
-    icon: Building,
-    color: 'bg-emerald-500',
-  },
-  {
-    label: 'Treasury Reserve',
-    percentage: 5,
-    description: 'Strategic reserve for operations',
-    icon: Lock,
-    color: 'bg-amber-500',
-  },
+  { label: 'RWA Engagement Pool', percentage: 35, icon: Database, color: 'bg-primary' },
+  { label: 'DEX Liquidity', percentage: 30, icon: Wallet, color: 'bg-cyan-500' },
+  { label: 'Core Team', percentage: 15, icon: Users, color: 'bg-violet-500', locked: true },
+  { label: 'Ecosystem', percentage: 15, icon: Building, color: 'bg-emerald-500' },
+  { label: 'Treasury', percentage: 5, icon: Lock, color: 'bg-amber-500' },
 ];
 
 export function TokenomicsSection() {
   return (
-    <section id="tokenomics" className="relative py-24 sm:py-32 bg-card/30">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="mx-auto max-w-2xl text-center mb-16">
-          <p className="text-sm font-medium text-primary mb-3">TOKEN ECONOMICS</p>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl mb-4">
-            Tokenomics Dashboard
+    <section id="tokenomics" className="py-20 lg:py-24 bg-card/30">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl mb-2">
+            Token Distribution
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Disciplined allocation. Transparent distribution. Zero tax policy.
+          <p className="text-sm text-muted-foreground">
+            21,000,000 fixed supply · Zero inflation · Zero tax
           </p>
         </div>
 
-        {/* Key Metrics */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-12">
-          <div className="rounded-xl border border-border bg-card p-6 text-center">
-            <p className="text-3xl font-bold font-mono text-primary mb-1">21M</p>
-            <p className="text-sm text-muted-foreground">Fixed Supply</p>
-          </div>
-          <div className="rounded-xl border border-border bg-card p-6 text-center">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <Zap className="h-6 w-6 text-success" />
-              <p className="text-3xl font-bold font-mono text-success">0%</p>
-            </div>
-            <p className="text-sm text-muted-foreground">Transaction Tax</p>
-          </div>
-          <div className="rounded-xl border border-border bg-card p-6 text-center">
-            <p className="text-3xl font-bold font-mono text-primary mb-1">2.0%</p>
-            <p className="text-sm text-muted-foreground">Sentinel Cashback</p>
-          </div>
-          <div className="rounded-xl border border-border bg-card p-6 text-center">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <Lock className="h-6 w-6 text-amber-500" />
-              <p className="text-3xl font-bold font-mono">2Y</p>
-            </div>
-            <p className="text-sm text-muted-foreground">Team Lock Period</p>
-          </div>
-        </div>
-
-        {/* Distribution Table */}
-        <div className="rounded-2xl border border-border bg-card overflow-hidden">
-          {/* Table Header */}
-          <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-border bg-secondary/30">
-            <div className="col-span-5 sm:col-span-4 text-sm font-medium text-muted-foreground">Allocation</div>
-            <div className="col-span-3 sm:col-span-2 text-sm font-medium text-muted-foreground text-right">Percentage</div>
-            <div className="col-span-4 sm:col-span-6 text-sm font-medium text-muted-foreground hidden sm:block">Description</div>
-          </div>
-
-          {/* Table Body */}
-          {distributions.map((item, index) => (
-            <div
-              key={item.label}
-              className={cn(
-                "grid grid-cols-12 gap-4 px-6 py-5 items-center transition-colors hover:bg-secondary/20",
-                index !== distributions.length - 1 && "border-b border-border"
-              )}
-            >
-              <div className="col-span-5 sm:col-span-4 flex items-center gap-3">
-                <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", item.color, "bg-opacity-20")}>
-                  <item.icon className={cn("h-5 w-5", item.color.replace('bg-', 'text-'))} />
-                </div>
-                <div>
-                  <p className="font-medium text-sm sm:text-base">{item.label}</p>
-                  {item.locked && (
-                    <span className="inline-flex items-center gap-1 text-xs text-amber-500">
-                      <Lock className="h-3 w-3" />
-                      Locked
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="col-span-3 sm:col-span-2 text-right">
-                <span className="font-mono font-semibold text-lg">{item.percentage}%</span>
-              </div>
-              <div className="col-span-4 sm:col-span-6 hidden sm:block">
-                <p className="text-sm text-muted-foreground">{item.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Visual Distribution Bar */}
-        <div className="mt-8">
-          <div className="h-4 rounded-full overflow-hidden flex">
+        {/* Visual Bar */}
+        <div className="mb-8">
+          <div className="h-3 rounded-full overflow-hidden flex">
             {distributions.map((item) => (
               <div
                 key={item.label}
-                className={cn("h-full transition-all", item.color)}
+                className={cn("h-full", item.color)}
                 style={{ width: `${item.percentage}%` }}
-                title={`${item.label}: ${item.percentage}%`}
               />
-            ))}
-          </div>
-          <div className="flex flex-wrap justify-center gap-4 mt-4">
-            {distributions.map((item) => (
-              <div key={item.label} className="flex items-center gap-2">
-                <div className={cn("h-3 w-3 rounded-full", item.color)} />
-                <span className="text-xs text-muted-foreground">{item.label}</span>
-              </div>
             ))}
           </div>
         </div>
 
-        {/* Zero Tax Highlight */}
-        <div className="mt-12 rounded-2xl border border-success/30 bg-success/5 p-8 text-center">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <Zap className="h-8 w-8 text-success" />
-            <h3 className="text-2xl font-bold">Zero Tax Policy</h3>
-          </div>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            World of Underva implements a <span className="text-foreground font-medium">0% transaction tax</span> to 
-            ensure frictionless commerce across all RWA verticals. Trade, transfer, and consume without hidden costs.
-          </p>
+        {/* Distribution Grid */}
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {distributions.map((item) => (
+            <div key={item.label} className="rounded-xl border border-border bg-card p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className={cn("h-2 w-2 rounded-full", item.color)} />
+                <span className="font-mono text-xl font-bold">{item.percentage}%</span>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {item.label}
+                {item.locked && <span className="text-amber-500 ml-1">(2Y Lock)</span>}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
