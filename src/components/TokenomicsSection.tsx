@@ -22,7 +22,7 @@ const distributions = [
   {
     label: 'Core Team',
     percentage: 15,
-    description: '2-year linear vesting with cliff',
+    description: '2-year hard lock (MPC Vault) + 3-year linear release',
     icon: Users,
     color: 'hsl(270, 80%, 60%)',
     tailwindColor: 'bg-violet-500',
@@ -31,10 +31,11 @@ const distributions = [
   {
     label: 'Ecosystem Growth',
     percentage: 15,
-    description: 'Partnerships, integrations, incentives',
+    description: '2-year hard lock (MPC Vault) + 3-year linear release',
     icon: Building,
     color: 'hsl(160, 80%, 45%)',
     tailwindColor: 'bg-emerald-500',
+    locked: true,
   },
   {
     label: 'Treasury Reserve',
@@ -87,9 +88,9 @@ export function TokenomicsSection() {
           <div className="rounded-xl border border-border bg-card p-6 text-center">
             <div className="flex items-center justify-center gap-2 mb-1">
               <Lock className="h-6 w-6 text-amber-500" />
-              <p className="text-3xl font-bold font-mono">2Y</p>
+              <p className="text-3xl font-bold font-mono">2Y+3Y</p>
             </div>
-            <p className="text-sm text-muted-foreground">Team Lock Period</p>
+            <p className="text-sm text-muted-foreground">Lock + Linear Release</p>
           </div>
         </div>
 
