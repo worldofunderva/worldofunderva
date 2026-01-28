@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle, ArrowRight } from 'lucide-react';
+import { CheckCircle2, Circle, Rocket, Shirt, Footprints, Truck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const phases = [
@@ -7,43 +7,47 @@ const phases = [
     title: 'The Enrollment Protocol',
     timeline: 'Immediate',
     status: 'active',
+    icon: Rocket,
     milestones: [
-      'Launch of $WOU on Ethereum L1 (Security) and Base L2 (Commerce)',
-      'Deployment of The Sentinel NFT: The mandatory "Hard Gate" for all ecosystem benefits',
-      'Establishment of the General Corporate Treasury and LP provisioning',
+      'Launch $WOU on ETH L1 & Base L2',
+      'Deploy Sentinel NFT Hard Gate',
+      'Establish Treasury & LP',
     ],
   },
   {
     phase: 'Phase 2',
-    title: 'Luxury Vertical Integration',
+    title: 'Luxury Vertical',
     timeline: 'Years 2-3',
     status: 'upcoming',
+    icon: Shirt,
     milestones: [
-      'Launch of Underva (Fashion)',
-      'Activation of the Automatic 2.0% Consumption Cashback engine for fashion retail',
-      'Token-gated access for "Sentinel" holders to exclusive apparel collections',
+      'Launch Underva (Fashion)',
+      '2.0% Cashback Engine',
+      'Token-gated Collections',
     ],
   },
   {
     phase: 'Phase 3',
-    title: 'Performance & Velocity Expansion',
+    title: 'Performance Expansion',
     timeline: 'Years 5-6',
     status: 'upcoming',
+    icon: Footprints,
     milestones: [
-      'Launch of Undervastride (Sportswear)',
-      'Expansion of the $WOU tender to high-volume performance gear',
-      'Optimization of the Base L2 commerce layer for high-cadence transactions',
+      'Launch Undervastride',
+      'High-volume Tender Expansion',
+      'Base L2 Optimization',
     ],
   },
   {
     phase: 'Phase 4',
-    title: 'Global Infrastructure & Logistics',
+    title: 'Global Infrastructure',
     timeline: 'Years 8-9',
     status: 'upcoming',
+    icon: Truck,
     milestones: [
-      'Launch of Underva Express (Logistics)',
-      'Activation of Strong Holder Status for B2B service tiers and priority routing',
-      'Completion of the vertically integrated RWA ecosystem',
+      'Launch Underva Express',
+      'B2B Strong Holder Tiers',
+      'Complete RWA Ecosystem',
     ],
   },
 ];
@@ -66,134 +70,124 @@ export function RoadmapSection() {
           </p>
         </div>
 
-        {/* Timeline */}
+        {/* Horizontal Timeline Chart */}
         <div className="relative">
-          {/* Vertical Line - Desktop */}
-          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary/50 via-primary to-primary/50" />
+          {/* Horizontal Progress Line */}
+          <div className="hidden md:block absolute top-[60px] left-0 right-0 h-1 bg-border rounded-full">
+            <div 
+              className="h-full bg-gradient-to-r from-primary via-primary to-primary/30 rounded-full"
+              style={{ width: '25%' }}
+            />
+          </div>
 
-          <div className="space-y-12 lg:space-y-0">
+          {/* Phase Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {phases.map((phase, index) => (
-              <div
-                key={phase.phase}
-                className={cn(
-                  "relative lg:grid lg:grid-cols-2 lg:gap-12",
-                  index !== phases.length - 1 && "lg:pb-16"
-                )}
-              >
-                {/* Timeline Node - Desktop */}
-                <div className="hidden lg:flex absolute left-1/2 top-8 -translate-x-1/2 z-10">
+              <div key={phase.phase} className="relative">
+                {/* Node on timeline */}
+                <div className="hidden md:flex justify-center mb-8">
                   <div
                     className={cn(
-                      "h-4 w-4 rounded-full border-2",
+                      "relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-4 transition-all",
                       phase.status === 'active'
-                        ? "bg-primary border-primary animate-pulse"
-                        : "bg-background border-border"
+                        ? "bg-primary border-primary/50 shadow-[0_0_20px_hsl(212_100%_48%/0.4)]"
+                        : "bg-card border-border"
                     )}
-                  />
+                  >
+                    <phase.icon className={cn(
+                      "h-4 w-4",
+                      phase.status === 'active' ? "text-primary-foreground" : "text-muted-foreground"
+                    )} />
+                  </div>
                 </div>
 
-                {/* Content - Alternating sides */}
+                {/* Card */}
                 <div
                   className={cn(
-                    "lg:text-right",
-                    index % 2 === 1 && "lg:col-start-2 lg:text-left"
+                    "group h-full rounded-xl border bg-card p-5 transition-all duration-300",
+                    phase.status === 'active'
+                      ? "border-primary/50 sentinel-glow"
+                      : "border-border hover:border-primary/30"
                   )}
                 >
-                  {index % 2 === 0 && (
-                    <PhaseCard phase={phase} alignment="right" />
-                  )}
-                </div>
+                  {/* Mobile Icon */}
+                  <div className="md:hidden flex items-center gap-3 mb-4">
+                    <div
+                      className={cn(
+                        "flex h-10 w-10 items-center justify-center rounded-full",
+                        phase.status === 'active'
+                          ? "bg-primary"
+                          : "bg-secondary"
+                      )}
+                    >
+                      <phase.icon className={cn(
+                        "h-4 w-4",
+                        phase.status === 'active' ? "text-primary-foreground" : "text-muted-foreground"
+                      )} />
+                    </div>
+                    <div>
+                      <span className="text-xs font-mono text-primary">{phase.phase}</span>
+                      <p className="text-xs text-muted-foreground">{phase.timeline}</p>
+                    </div>
+                  </div>
 
-                <div
-                  className={cn(
-                    index % 2 === 0 && "lg:col-start-2"
-                  )}
-                >
-                  {index % 2 === 1 && (
-                    <PhaseCard phase={phase} alignment="left" />
-                  )}
-                </div>
+                  {/* Desktop Header */}
+                  <div className="hidden md:block mb-4">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-mono font-medium text-primary uppercase tracking-wider">
+                        {phase.phase}
+                      </span>
+                      {phase.status === 'active' && (
+                        <span className="flex items-center gap-1 text-xs text-primary">
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                          Active
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground">{phase.timeline}</p>
+                  </div>
 
-                {/* Mobile Layout */}
-                <div className="lg:hidden">
-                  <PhaseCard phase={phase} alignment="left" />
+                  {/* Title */}
+                  <h3 className="text-base font-semibold mb-4">{phase.title}</h3>
+
+                  {/* Milestones */}
+                  <ul className="space-y-2">
+                    {phase.milestones.map((milestone, i) => (
+                      <li
+                        key={i}
+                        className="flex items-start gap-2 text-xs text-muted-foreground"
+                      >
+                        {phase.status === 'active' ? (
+                          <CheckCircle2 className="h-3.5 w-3.5 mt-0.5 text-primary shrink-0" />
+                        ) : (
+                          <Circle className="h-3.5 w-3.5 mt-0.5 text-border shrink-0" />
+                        )}
+                        <span className="leading-relaxed">{milestone}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <div className="inline-flex items-center gap-3 rounded-full border border-border bg-card/50 px-6 py-3">
-            <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-sm font-medium text-muted-foreground">
-              Currently executing <span className="text-foreground">Phase 1</span> milestones
-            </span>
-            <ArrowRight className="h-4 w-4 text-primary" />
+        {/* Legend */}
+        <div className="mt-12 flex flex-wrap justify-center gap-6 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-full bg-primary" />
+            <span>In Progress</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-full border border-border bg-card" />
+            <span>Upcoming</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-6 w-12 rounded-full bg-gradient-to-r from-primary to-primary/30" />
+            <span>Completion Progress</span>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function PhaseCard({
-  phase,
-  alignment,
-}: {
-  phase: typeof phases[0];
-  alignment: 'left' | 'right';
-}) {
-  return (
-    <div
-      className={cn(
-        "group rounded-2xl border border-border bg-card p-6 sm:p-8 transition-all duration-300",
-        "hover:border-primary/50 hover:sentinel-glow",
-        phase.status === 'active' && "border-primary/30 sentinel-glow"
-      )}
-    >
-      {/* Phase Header */}
-      <div className={cn("flex items-center gap-3 mb-4", alignment === 'right' && "lg:justify-end")}>
-        <span className="text-xs font-mono font-medium text-primary uppercase tracking-wider">
-          {phase.phase}
-        </span>
-        <span className="h-1 w-1 rounded-full bg-border" />
-        <span className="text-xs font-medium text-muted-foreground">
-          {phase.timeline}
-        </span>
-        {phase.status === 'active' && (
-          <>
-            <span className="h-1 w-1 rounded-full bg-border" />
-            <span className="text-xs font-medium text-primary">Active</span>
-          </>
-        )}
-      </div>
-
-      {/* Title */}
-      <h3 className={cn("text-xl font-semibold mb-4", alignment === 'right' && "lg:text-right")}>
-        {phase.title}
-      </h3>
-
-      {/* Milestones */}
-      <ul className="space-y-3">
-        {phase.milestones.map((milestone, i) => (
-          <li
-            key={i}
-            className={cn(
-              "flex items-start gap-3 text-sm text-muted-foreground",
-              alignment === 'right' && "lg:flex-row-reverse lg:text-right"
-            )}
-          >
-            {phase.status === 'active' ? (
-              <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary shrink-0" />
-            ) : (
-              <Circle className="h-4 w-4 mt-0.5 text-border shrink-0" />
-            )}
-            <span className="leading-relaxed">{milestone}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
