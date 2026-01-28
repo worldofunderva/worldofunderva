@@ -63,7 +63,7 @@ export function RoadmapSection() {
         <div className="mx-auto max-w-2xl text-center mb-16">
           <p className="text-sm font-medium text-primary mb-3">STRATEGIC TIMELINE</p>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl mb-4">
-            The Long-Term Protocol
+            The Decade of Discipline
           </h2>
           <p className="text-lg text-muted-foreground">
             A disciplined, multi-year roadmap for complete vertical integration.
