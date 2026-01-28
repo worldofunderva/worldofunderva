@@ -4,6 +4,7 @@ import { BusinessPillars } from '@/components/BusinessPillars';
 import { SentinelGate } from '@/components/SentinelGate';
 import { TokenomicsSection } from '@/components/TokenomicsSection';
 import { ContractSection } from '@/components/ContractSection';
+import { RoadmapSection } from '@/components/RoadmapSection';
 import { BridgeSection } from '@/components/BridgeSection';
 import { CommunitySection } from '@/components/CommunitySection';
 import { Footer } from '@/components/Footer';
@@ -18,6 +19,7 @@ const Index = () => {
         <SentinelGate />
         <TokenomicsSection />
         <ContractSection />
+        <RoadmapSection />
         <BridgeSection />
         <CommunitySection />
       </main>
