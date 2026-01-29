@@ -96,7 +96,7 @@ export function HeroSection() {
           </Button>
           <Button variant="sentinel-outline" size="lg" className="w-full sm:w-auto text-sm sm:text-base h-12 sm:h-14 px-6 sm:px-8" asChild>
             <a href="#tokenomics">
-              View Tokenomics
+              Read Whitepaper
             </a>
           </Button>
         </motion.div>
