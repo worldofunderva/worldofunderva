@@ -104,16 +104,16 @@ export function StaggerContainer({
   );
 }
 
-// Item for use inside StaggerContainer
-export function StaggerItem({
-  children,
-  className,
-}: {
+// Item for use inside StaggerContainer - wrapped in forwardRef to avoid ref warnings
+import { forwardRef } from 'react';
+
+export const StaggerItem = forwardRef<HTMLDivElement, {
   children: ReactNode;
   className?: string;
-}) {
+}>(function StaggerItem({ children, className }, ref) {
   return (
     <motion.div
+      ref={ref}
       variants={{
         hidden: { opacity: 0, y: 30 },
         visible: { opacity: 1, y: 0 },
@@ -124,4 +124,4 @@ export function StaggerItem({
       {children}
     </motion.div>
   );
-}
+});

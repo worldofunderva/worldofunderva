@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { MessageCircle, Youtube, BookOpen, Users, ArrowUpRight, Facebook, Linkedin } from 'lucide-react';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/scroll-reveal';
 import { cn } from '@/lib/utils';
@@ -17,6 +18,17 @@ const socialLinks = [
   { name: 'LinkedIn', icon: Linkedin, url: 'https://www.linkedin.com/company/worldofunderva/', color: 'hover:bg-[#0A66C2]/10 hover:border-[#0A66C2]/50' },
   { name: 'Audit Report', icon: Users, url: '#', color: 'hover:bg-primary/10 hover:border-primary/50' },
 ];
+
+// Wrapper component for social link icons that need to handle the ref
+const SocialIcon = forwardRef<HTMLSpanElement, { icon: React.ComponentType }>(
+  function SocialIcon({ icon: Icon }, ref) {
+    return (
+      <span ref={ref}>
+        <Icon />
+      </span>
+    );
+  }
+);
 
 export function CommunitySection() {
   return (
