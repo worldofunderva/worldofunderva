@@ -9,6 +9,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SentinelProvider } from '@/contexts/SentinelContext';
 import { config } from '@/config/wagmi';
+import { useWalletSessionPolicy } from '@/hooks/useWalletSessionPolicy';
 
 // Lazy load pages for code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -20,6 +21,11 @@ const PageLoader = () => (
     <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
   </div>
 );
+
+const WalletSessionPolicyManager = () => {
+  useWalletSessionPolicy();
+  return null;
+};
 
 // Configure QueryClient with optimized defaults
 const queryClient = new QueryClient({
@@ -35,6 +41,7 @@ const queryClient = new QueryClient({
 
 const App = () => (
   <WagmiProvider config={config} reconnectOnMount={false}>
+    <WalletSessionPolicyManager />
     <QueryClientProvider client={queryClient}>
       <RainbowKitProvider
         theme={darkTheme({

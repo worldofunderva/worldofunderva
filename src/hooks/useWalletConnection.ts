@@ -1,46 +1,7 @@
 import { useAccount, useDisconnect } from 'wagmi';
 import { useConnectModal, useAccountModal } from '@rainbow-me/rainbowkit';
 import { useCallback } from 'react';
-
-/**
- * Clears all wallet-related session data for security.
- * This ensures no residual connection state persists.
- */
-function clearWalletSessionData() {
-  if (typeof window === 'undefined') return;
-  
-  // Clear sessionStorage keys related to wagmi/wallet connections
-  const keysToRemove: string[] = [];
-  for (let i = 0; i < sessionStorage.length; i++) {
-    const key = sessionStorage.key(i);
-    if (key && (
-      key.startsWith('wagmi') || 
-      key.startsWith('wc@') || 
-      key.startsWith('walletconnect') ||
-      key.includes('wallet') ||
-      key.includes('connector')
-    )) {
-      keysToRemove.push(key);
-    }
-  }
-  keysToRemove.forEach(key => sessionStorage.removeItem(key));
-  
-  // Also clear any localStorage remnants (from previous sessions or third-party wallets)
-  const localKeysToRemove: string[] = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && (
-      key.startsWith('wagmi') || 
-      key.startsWith('wc@') || 
-      key.startsWith('walletconnect') ||
-      key.includes('wallet') ||
-      key.includes('connector')
-    )) {
-      localKeysToRemove.push(key);
-    }
-  }
-  localKeysToRemove.forEach(key => localStorage.removeItem(key));
-}
+import { clearWalletSessionData } from '@/lib/walletSession';
 
 /**
  * Hook that provides wallet connection utilities with safeguards
