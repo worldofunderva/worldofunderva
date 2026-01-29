@@ -1,6 +1,7 @@
 import { Lock, Zap, Database, Users, Wallet, Building } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { cn } from '@/lib/utils';
+import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/scroll-reveal';
 
 const distributions = [
   {
@@ -58,7 +59,7 @@ export function TokenomicsSection() {
     <section id="tokenomics" className="relative py-24 sm:py-32 bg-card/30">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mx-auto max-w-2xl text-center mb-16">
+        <ScrollReveal className="mx-auto max-w-2xl text-center mb-16">
           <p className="text-sm font-medium text-primary mb-3">TOKEN ECONOMICS</p>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl mb-4">
             Tokenomics Dashboard
@@ -66,78 +67,88 @@ export function TokenomicsSection() {
           <p className="text-lg text-muted-foreground">
             Disciplined allocation. Transparent distribution. Zero tax policy.
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Key Metrics */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-12">
-          <div className="rounded-xl border border-border bg-card p-6 text-center">
-            <p className="text-3xl font-bold font-mono text-primary mb-1">21M</p>
-            <p className="text-sm text-muted-foreground">Fixed Supply</p>
-          </div>
-          <div className="rounded-xl border border-border bg-card p-6 text-center">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <Zap className="h-6 w-6 text-success" />
-              <p className="text-3xl font-bold font-mono text-success">0%</p>
+        <StaggerContainer className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-12" staggerDelay={0.1}>
+          <StaggerItem>
+            <div className="rounded-xl border border-border bg-card p-6 text-center">
+              <p className="text-3xl font-bold font-mono text-primary mb-1">21M</p>
+              <p className="text-sm text-muted-foreground">Fixed Supply</p>
             </div>
-            <p className="text-sm text-muted-foreground">Transaction Tax</p>
-          </div>
-          <div className="rounded-xl border border-border bg-card p-6 text-center">
-            <p className="text-3xl font-bold font-mono text-primary mb-1">2.0%</p>
-            <p className="text-sm text-muted-foreground">Sentinel Cashback</p>
-          </div>
-          <div className="rounded-xl border border-border bg-card p-6 text-center">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <Lock className="h-6 w-6 text-amber-500" />
-              <p className="text-3xl font-bold font-mono">2Y+3Y</p>
+          </StaggerItem>
+          <StaggerItem>
+            <div className="rounded-xl border border-border bg-card p-6 text-center">
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <Zap className="h-6 w-6 text-success" />
+                <p className="text-3xl font-bold font-mono text-success">0%</p>
+              </div>
+              <p className="text-sm text-muted-foreground">Transaction Tax</p>
             </div>
-            <p className="text-sm text-muted-foreground">Lock + Linear Release</p>
-          </div>
-        </div>
+          </StaggerItem>
+          <StaggerItem>
+            <div className="rounded-xl border border-border bg-card p-6 text-center">
+              <p className="text-3xl font-bold font-mono text-primary mb-1">2.0%</p>
+              <p className="text-sm text-muted-foreground">Sentinel Cashback</p>
+            </div>
+          </StaggerItem>
+          <StaggerItem>
+            <div className="rounded-xl border border-border bg-card p-6 text-center">
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <Lock className="h-6 w-6 text-amber-500" />
+                <p className="text-3xl font-bold font-mono">2Y+3Y</p>
+              </div>
+              <p className="text-sm text-muted-foreground">Lock + Linear Release</p>
+            </div>
+          </StaggerItem>
+        </StaggerContainer>
 
         {/* Distribution Table */}
-        <div className="rounded-2xl border border-border bg-card overflow-hidden">
-          {/* Table Header */}
-          <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-border bg-secondary/30">
-            <div className="col-span-5 sm:col-span-4 text-sm font-medium text-muted-foreground">Allocation</div>
-            <div className="col-span-3 sm:col-span-2 text-sm font-medium text-muted-foreground text-right">Percentage</div>
-            <div className="col-span-4 sm:col-span-6 text-sm font-medium text-muted-foreground hidden sm:block">Description</div>
-          </div>
-
-          {/* Table Body */}
-          {distributions.map((item, index) => (
-            <div
-              key={item.label}
-              className={cn(
-                "grid grid-cols-12 gap-4 px-6 py-5 items-center transition-colors hover:bg-secondary/20",
-                index !== distributions.length - 1 && "border-b border-border"
-              )}
-            >
-              <div className="col-span-5 sm:col-span-4 flex items-center gap-3">
-                <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", item.tailwindColor, "bg-opacity-20")}>
-                  <item.icon className={cn("h-5 w-5", item.tailwindColor.replace('bg-', 'text-'))} />
-                </div>
-                <div>
-                  <p className="font-medium text-sm sm:text-base">{item.label}</p>
-                  {item.locked && (
-                    <span className="inline-flex items-center gap-1 text-xs text-amber-500">
-                      <Lock className="h-3 w-3" />
-                      Locked
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="col-span-3 sm:col-span-2 text-right">
-                <span className="font-mono font-semibold text-lg">{item.percentage}%</span>
-              </div>
-              <div className="col-span-4 sm:col-span-6 hidden sm:block">
-                <p className="text-sm text-muted-foreground">{item.description}</p>
-              </div>
+        <ScrollReveal delay={0.2}>
+          <div className="rounded-2xl border border-border bg-card overflow-hidden">
+            {/* Table Header */}
+            <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-border bg-secondary/30">
+              <div className="col-span-5 sm:col-span-4 text-sm font-medium text-muted-foreground">Allocation</div>
+              <div className="col-span-3 sm:col-span-2 text-sm font-medium text-muted-foreground text-right">Percentage</div>
+              <div className="col-span-4 sm:col-span-6 text-sm font-medium text-muted-foreground hidden sm:block">Description</div>
             </div>
-          ))}
-        </div>
+
+            {/* Table Body */}
+            {distributions.map((item, index) => (
+              <div
+                key={item.label}
+                className={cn(
+                  "grid grid-cols-12 gap-4 px-6 py-5 items-center transition-colors hover:bg-secondary/20",
+                  index !== distributions.length - 1 && "border-b border-border"
+                )}
+              >
+                <div className="col-span-5 sm:col-span-4 flex items-center gap-3">
+                  <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", item.tailwindColor, "bg-opacity-20")}>
+                    <item.icon className={cn("h-5 w-5", item.tailwindColor.replace('bg-', 'text-'))} />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm sm:text-base">{item.label}</p>
+                    {item.locked && (
+                      <span className="inline-flex items-center gap-1 text-xs text-amber-500">
+                        <Lock className="h-3 w-3" />
+                        Locked
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="col-span-3 sm:col-span-2 text-right">
+                  <span className="font-mono font-semibold text-lg">{item.percentage}%</span>
+                </div>
+                <div className="col-span-4 sm:col-span-6 hidden sm:block">
+                  <p className="text-sm text-muted-foreground">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </ScrollReveal>
 
         {/* Pie Chart Distribution */}
-        <div className="mt-8 flex flex-col items-center">
+        <ScrollReveal delay={0.3} className="mt-8 flex flex-col items-center">
           <div className="w-full max-w-sm h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -176,10 +187,10 @@ export function TokenomicsSection() {
               </div>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Zero Tax Highlight */}
-        <div className="mt-12 rounded-2xl border border-success/30 bg-success/5 p-8 text-center">
+        <ScrollReveal delay={0.4} variant="scale" className="mt-12 rounded-2xl border border-success/30 bg-success/5 p-8 text-center">
           <div className="inline-flex items-center gap-3 mb-4">
             <Zap className="h-8 w-8 text-success" />
             <h3 className="text-2xl font-bold">Zero Tax Policy</h3>
@@ -188,7 +199,7 @@ export function TokenomicsSection() {
             World of Underva implements a <span className="text-foreground font-medium">0% transaction tax</span> to 
             ensure frictionless commerce across all RWA verticals. Trade, transfer, and consume without hidden costs.
           </p>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );
