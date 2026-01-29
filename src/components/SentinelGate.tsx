@@ -158,7 +158,7 @@ export function SentinelGate() {
                     },
                     { 
                       label: 'Remaining', 
-                      value: isNFTContractReady ? '5,000 / 5,000' : '5,000 (Total)'
+                      value: isNFTContractReady ? '21,000 / 21,000' : '21,000 (Total)'
                     },
                     { label: 'Network', value: 'Base L2', highlight: true },
                   ].map((item, index) => (
