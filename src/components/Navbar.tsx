@@ -11,7 +11,6 @@ const navItems = [
   { label: 'Tokenomics', href: '#tokenomics' },
   { label: 'Roadmap', href: '#roadmap' },
   { label: 'Bridge', href: '#bridge' },
-  { label: 'Community', href: '#community' },
 ];
 
 export function Navbar() {
