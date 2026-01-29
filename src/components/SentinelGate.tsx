@@ -1,11 +1,15 @@
 import { Shield, Check, AlertTriangle, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useWallet } from '@/contexts/WalletContext';
+import { useAccount } from 'wagmi';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useSentinel } from '@/contexts/SentinelContext';
 import { cn } from '@/lib/utils';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 export function SentinelGate() {
-  const { isConnected, hasSentinelNFT, toggleSentinelNFT, connectWallet } = useWallet();
+  const { isConnected } = useAccount();
+  const { openConnectModal } = useConnectModal();
+  const { hasSentinelNFT, toggleSentinelNFT } = useSentinel();
 
   return (
     <section id="sentinel" className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
@@ -152,7 +156,7 @@ export function SentinelGate() {
                     variant="sentinel" 
                     size="lg" 
                     className="w-full h-11 sm:h-14 text-sm sm:text-base"
-                    onClick={connectWallet}
+                    onClick={openConnectModal}
                   >
                     Connect Wallet to Mint
                   </Button>
