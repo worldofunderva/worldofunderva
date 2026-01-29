@@ -54,18 +54,20 @@ const pieData = distributions.map((d) => ({
   color: d.color,
 }));
 
-// Custom tooltip component for better mobile visibility
-const CustomTooltip = ({ active, payload }: any) => {
+import { forwardRef } from 'react';
+
+// Custom tooltip component for better mobile visibility - wrapped in forwardRef for Recharts
+const CustomTooltip = forwardRef<HTMLDivElement, any>(function CustomTooltip({ active, payload }, ref) {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-card border border-primary rounded-lg p-3 shadow-xl shadow-primary/10">
+      <div ref={ref} className="bg-card border border-primary rounded-lg p-3 shadow-xl shadow-primary/10">
         <p className="text-primary font-semibold text-sm mb-1">{payload[0].name}</p>
         <p className="text-foreground font-mono text-lg">{payload[0].value}%</p>
       </div>
     );
   }
   return null;
-};
+});
 
 export function TokenomicsSection() {
   return (
