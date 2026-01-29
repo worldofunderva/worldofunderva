@@ -191,10 +191,6 @@ export function RoadmapSection() {
             <div className="h-3 w-3 rounded-full border border-border bg-card" />
             <span>Upcoming</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-6 w-12 rounded-full bg-gradient-to-r from-primary to-primary/30" />
-            <span>Completion Progress</span>
-          </div>
         </ScrollReveal>
       </div>
     </section>
