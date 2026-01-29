@@ -15,11 +15,9 @@ import { useWalletSessionPolicy } from '@/hooks/useWalletSessionPolicy';
 const Index = lazy(() => import("./pages/Index"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-// Loading fallback component
+// Minimal loading fallback - no spinner
 const PageLoader = () => (
-  <div className="min-h-screen bg-background flex items-center justify-center">
-    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-  </div>
+  <div className="min-h-screen bg-background" />
 );
 
 // Force full remount on HMR by using a keyed wrapper
