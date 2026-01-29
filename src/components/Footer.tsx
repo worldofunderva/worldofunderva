@@ -1,9 +1,10 @@
+import { forwardRef } from 'react';
 import { Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export function Footer() {
+export const Footer = forwardRef<HTMLElement>((_, ref) => {
   return (
-    <footer className="border-t border-border bg-card/30">
+    <footer ref={ref} className="border-t border-border bg-card/30">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -39,4 +40,6 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+});
+
+Footer.displayName = 'Footer';

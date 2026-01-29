@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -5,11 +6,11 @@ import { cn } from '@/lib/utils';
 const AUDIT_FIRM_NAME: string = 'Hacken';
 const AUDIT_REPORT_URL: string | null = null; // Set to actual URL when available
 
-export function TransparencyBar() {
+export const TransparencyBar = forwardRef<HTMLDivElement>((_, ref) => {
   const isAuditReady = Boolean(AUDIT_REPORT_URL);
 
   return (
-    <div className="bg-card/50 border-t border-border py-3">
+    <div ref={ref} className="bg-card/50 border-t border-border py-3">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-muted-foreground">
           <span>Smart Contracts Audited by</span>
@@ -35,4 +36,6 @@ export function TransparencyBar() {
       </div>
     </div>
   );
-}
+});
+
+TransparencyBar.displayName = 'TransparencyBar';
