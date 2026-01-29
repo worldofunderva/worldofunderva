@@ -182,16 +182,16 @@ export function RoadmapSection() {
         </div>
 
         {/* Legend */}
-        <ScrollReveal delay={0.5} className="mt-8 sm:mt-12 flex flex-wrap justify-center gap-4 sm:gap-6 text-[10px] sm:text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-primary" />
-            <span>In Progress</span>
+        <div className="mt-8 sm:mt-12 lg:mt-16 flex flex-wrap justify-center gap-6 sm:gap-8 text-xs sm:text-sm text-foreground/70">
+          <div className="flex items-center gap-2.5">
+            <div className="h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-primary shadow-[0_0_10px_hsl(var(--primary)/0.5)]" />
+            <span className="font-medium">In Progress</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full border border-border bg-card" />
-            <span>Upcoming</span>
+          <div className="flex items-center gap-2.5">
+            <div className="h-3 w-3 sm:h-4 sm:w-4 rounded-full border-2 border-border bg-card" />
+            <span className="font-medium">Upcoming</span>
           </div>
-        </ScrollReveal>
+        </div>
       </div>
     </section>
   );
