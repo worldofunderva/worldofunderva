@@ -1,47 +1,54 @@
 import { MessageCircle, Youtube, BookOpen, Users, ArrowUpRight } from 'lucide-react';
+import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/scroll-reveal';
+import { cn } from '@/lib/utils';
 
 const XIcon = () => (
-  <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current" aria-hidden="true">
+  <svg viewBox="0 0 24 24" className="h-4 w-4 sm:h-5 sm:w-5 fill-current" aria-hidden="true">
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
   </svg>
 );
 
 const socialLinks = [
-  { name: 'Telegram', icon: MessageCircle, url: '#' },
-  { name: 'X', icon: XIcon, url: '#' },
-  { name: 'YouTube', icon: Youtube, url: '#' },
-  { name: 'Medium', icon: BookOpen, url: '#' },
-  { name: 'Discord', icon: Users, url: '#' },
+  { name: 'Telegram', icon: MessageCircle, url: '#', color: 'hover:bg-[#0088cc]/10 hover:border-[#0088cc]/50' },
+  { name: 'X', icon: XIcon, url: '#', color: 'hover:bg-foreground/5 hover:border-foreground/20' },
+  { name: 'YouTube', icon: Youtube, url: '#', color: 'hover:bg-red-500/10 hover:border-red-500/50' },
+  { name: 'Medium', icon: BookOpen, url: '#', color: 'hover:bg-foreground/5 hover:border-foreground/20' },
+  { name: 'Discord', icon: Users, url: '#', color: 'hover:bg-[#5865F2]/10 hover:border-[#5865F2]/50' },
 ];
 
 export function CommunitySection() {
   return (
-    <section id="community" className="py-16 lg:py-20 border-t border-border">
+    <section id="community" className="py-12 sm:py-16 lg:py-20 border-t border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl mb-2">
+        <ScrollReveal className="text-center mb-8 sm:mb-10">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight mb-2">
             Community
           </h2>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Connect with the Underva network.
           </p>
-        </div>
+        </ScrollReveal>
 
-        <div className="flex flex-wrap justify-center gap-3">
+        <StaggerContainer className="flex flex-wrap justify-center gap-2 sm:gap-3" staggerDelay={0.05}>
           {socialLinks.map((social) => (
-            <a
-              key={social.name}
-              href={social.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass-card px-5 py-3 flex items-center gap-3 hover:border-primary/50 transition-colors group"
-            >
-              <social.icon />
-              <span className="text-sm font-medium text-foreground">{social.name}</span>
-              <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-            </a>
+            <StaggerItem key={social.name}>
+              <a
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  "glass-card px-4 sm:px-5 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3",
+                  "transition-all duration-300 group active:scale-95",
+                  social.color
+                )}
+              >
+                <social.icon />
+                <span className="text-xs sm:text-sm font-medium text-foreground">{social.name}</span>
+                <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+              </a>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );
