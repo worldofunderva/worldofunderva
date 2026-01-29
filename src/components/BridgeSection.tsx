@@ -8,21 +8,21 @@ const bridgeOptions = [
     description: 'Official native bridge',
     time: '~7 days',
     icon: Shield,
-    url: '#',
+    url: 'https://superbridge.app/base',
   },
   {
     name: 'Across Protocol',
     description: 'Fast cross-chain transfers',
     time: '~2-10 min',
     icon: Zap,
-    url: '#',
+    url: 'https://app.across.to/bridge-and-swap',
   },
   {
     name: 'Stargate Finance',
     description: 'Omnichain liquidity',
     time: '~1-5 min',
     icon: ArrowRightLeft,
-    url: '#',
+    url: 'https://stargate.finance/',
   },
 ];
 
