@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Wallet, Menu, X, Shield } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useWallet } from '@/contexts/WalletContext';
+import { Menu, X, Shield } from 'lucide-react';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -16,7 +15,6 @@ const navItems = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isConnected, address, connectWallet, disconnectWallet } = useWallet();
 
   // Track scroll position for enhanced navbar styling
   useEffect(() => {
@@ -86,27 +84,10 @@ export function Navbar() {
             animate={{ opacity: 1, x: 0 }}
             className="hidden lg:block"
           >
-            {isConnected ? (
-              <Button
-                variant="wallet-connected"
-                size="sm"
-                onClick={disconnectWallet}
-                className="gap-2"
-              >
-                <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
-                {address}
-              </Button>
-            ) : (
-              <Button
-                variant="wallet"
-                size="sm"
-                onClick={connectWallet}
-                className="gap-2"
-              >
-                <Wallet className="h-4 w-4" />
-                Connect Wallet
-              </Button>
-            )}
+            <ConnectButton 
+              chainStatus="icon"
+              showBalance={false}
+            />
           </motion.div>
 
           {/* Mobile Menu Button */}
@@ -194,35 +175,12 @@ export function Navbar() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="pt-6 border-t border-border"
+                className="pt-6 border-t border-border flex justify-center"
               >
-                {isConnected ? (
-                  <Button
-                    variant="wallet-connected"
-                    size="lg"
-                    onClick={() => {
-                      disconnectWallet();
-                      setIsOpen(false);
-                    }}
-                    className="w-full gap-2 h-14 text-base"
-                  >
-                    <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
-                    {address}
-                  </Button>
-                ) : (
-                  <Button
-                    variant="wallet"
-                    size="lg"
-                    onClick={() => {
-                      connectWallet();
-                      setIsOpen(false);
-                    }}
-                    className="w-full gap-2 h-14 text-base"
-                  >
-                    <Wallet className="h-5 w-5" />
-                    Connect Wallet
-                  </Button>
-                )}
+                <ConnectButton 
+                  chainStatus="icon"
+                  showBalance={false}
+                />
               </motion.div>
 
               {/* Network Indicators */}
