@@ -21,7 +21,7 @@ const phases = [
     status: 'upcoming',
     icon: Shirt,
     milestones: [
-      'Underva Fashion Launch',
+      'Underva Launch',
       'Cashback Engine Activation',
       'Token-gated Collections',
     ],
