@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Wallet, Menu, X, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAccount, useDisconnect } from 'wagmi';
-import { useConnectModal, useAccountModal } from '@rainbow-me/rainbowkit';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { NetworkSwitcher } from './NetworkSwitcher';
+import { useWalletConnection } from '@/hooks/useWalletConnection';
+import { useNetworkEnforcement } from '@/hooks/useNetworkEnforcement';
 
 const navItems = [
   { label: 'The Pillars', href: '#pillars' },
@@ -18,14 +18,16 @@ const navItems = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { address, isConnected } = useAccount();
-  const { disconnect } = useDisconnect();
-  const { openConnectModal } = useConnectModal();
-  const { openAccountModal } = useAccountModal();
-
-  const truncatedAddress = address 
-    ? `${address.slice(0, 6)}...${address.slice(-4)}`
-    : null;
+  
+  const { 
+    isConnected, 
+    truncatedAddress, 
+    handleConnect, 
+    openAccountModal 
+  } = useWalletConnection();
+  
+  // Enforce network restrictions
+  useNetworkEnforcement();
 
   // Track scroll position for enhanced navbar styling
   useEffect(() => {
@@ -47,6 +49,21 @@ export function Navbar() {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
+  const handleMobileConnect = () => {
+    setIsOpen(false);
+    // Delay modal open to allow menu animation to complete
+    setTimeout(() => {
+      handleConnect();
+    }, 150);
+  };
+
+  const handleMobileAccountModal = () => {
+    setIsOpen(false);
+    setTimeout(() => {
+      openAccountModal?.();
+    }, 150);
+  };
 
   return (
     <nav className={cn(
@@ -110,7 +127,7 @@ export function Navbar() {
               <Button
                 variant="wallet"
                 size="sm"
-                onClick={openConnectModal}
+                onClick={handleConnect}
                 className="gap-2"
               >
                 <Wallet className="h-4 w-4" />
@@ -220,31 +237,20 @@ export function Navbar() {
                 className="pt-4"
               >
                 {isConnected ? (
-                <Button
+                  <Button
                     variant="wallet-connected"
                     size="lg"
-                    onClick={() => {
-                      setIsOpen(false);
-                      setTimeout(() => {
-                        openAccountModal?.();
-                      }, 100);
-                    }}
+                    onClick={handleMobileAccountModal}
                     className="w-full gap-2 h-14 text-base"
                   >
                     <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
                     {truncatedAddress}
                   </Button>
                 ) : (
-                <Button
+                  <Button
                     variant="wallet"
                     size="lg"
-                    onClick={() => {
-                      setIsOpen(false);
-                      // Delay modal open to allow menu animation to complete
-                      setTimeout(() => {
-                        openConnectModal?.();
-                      }, 100);
-                    }}
+                    onClick={handleMobileConnect}
                     className="w-full gap-2 h-14 text-base"
                   >
                     <Wallet className="h-5 w-5" />
