@@ -3,9 +3,7 @@ import { Wallet, Menu, X, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { NetworkSwitcher } from './NetworkSwitcher';
 import { useWalletConnection } from '@/hooks/useWalletConnection';
-import { useNetworkEnforcement } from '@/hooks/useNetworkEnforcement';
 
 const navItems = [
   { label: 'The Pillars', href: '#pillars' },
@@ -26,9 +24,6 @@ export function Navbar() {
     openAccountModal 
   } = useWalletConnection();
   
-  // Enforce network restrictions
-  useNetworkEnforcement();
-
   // Track scroll position for enhanced navbar styling
   useEffect(() => {
     const handleScroll = () => {
@@ -104,13 +99,12 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Network Switcher & Wallet Button - Desktop */}
+          {/* Wallet Button - Desktop */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="hidden lg:flex lg:items-center lg:gap-2"
           >
-            <NetworkSwitcher variant="full" />
             {isConnected ? (
               <Button
                 variant="wallet-connected"
@@ -213,19 +207,6 @@ export function Navbar() {
                   </motion.a>
                 ))}
               </div>
-
-              {/* Network Switcher - Mobile */}
-              {isConnected && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.25 }}
-                  className="pt-6 border-t border-border"
-                >
-                  <p className="text-sm text-muted-foreground mb-3">Network</p>
-                  <NetworkSwitcher variant="full" className="w-full [&>button]:w-full [&>button]:justify-between" />
-                </motion.div>
-              )}
 
               {/* Wallet Button - Mobile */}
               <motion.div 
