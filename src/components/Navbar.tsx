@@ -51,18 +51,16 @@ export function Navbar() {
   }, [isOpen]);
 
   const handleMobileConnect = () => {
+    // IMPORTANT: on mobile, wallet modals / deep-links may require a direct
+    // user-initiated gesture. Avoid setTimeout here so the connect prompt
+    // reliably appears.
+    handleConnect();
     setIsOpen(false);
-    // Delay modal open to allow menu animation to complete
-    setTimeout(() => {
-      handleConnect();
-    }, 150);
   };
 
   const handleMobileAccountModal = () => {
+    openAccountModal?.();
     setIsOpen(false);
-    setTimeout(() => {
-      openAccountModal?.();
-    }, 150);
   };
 
   return (
