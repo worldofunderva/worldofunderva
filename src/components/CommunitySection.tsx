@@ -9,11 +9,11 @@ const XIcon = () => (
 );
 
 const socialLinks = [
-  { name: 'Telegram', icon: MessageCircle, url: '#', color: 'hover:bg-[#0088cc]/10 hover:border-[#0088cc]/50' },
-  { name: 'X', icon: XIcon, url: '#', color: 'hover:bg-foreground/5 hover:border-foreground/20' },
-  { name: 'YouTube', icon: Youtube, url: '#', color: 'hover:bg-red-500/10 hover:border-red-500/50' },
-  { name: 'Medium', icon: BookOpen, url: '#', color: 'hover:bg-foreground/5 hover:border-foreground/20' },
-  { name: 'Discord', icon: Users, url: '#', color: 'hover:bg-[#5865F2]/10 hover:border-[#5865F2]/50' },
+  { name: 'Telegram', icon: MessageCircle, url: 'https://t.me/worldofunderva', color: 'hover:bg-[#0088cc]/10 hover:border-[#0088cc]/50' },
+  { name: 'X', icon: XIcon, url: 'https://x.com/worldofunderva?s=21', color: 'hover:bg-foreground/5 hover:border-foreground/20' },
+  { name: 'YouTube', icon: Youtube, url: 'https://youtube.com/@worldofunderva', color: 'hover:bg-red-500/10 hover:border-red-500/50' },
+  { name: 'Medium', icon: BookOpen, url: 'https://medium.com/@worldofunderva', color: 'hover:bg-foreground/5 hover:border-foreground/20' },
+  { name: 'Audit Report', icon: Users, url: '#', color: 'hover:bg-primary/10 hover:border-primary/50' },
 ];
 
 export function CommunitySection() {
@@ -25,7 +25,7 @@ export function CommunitySection() {
             Community
           </h2>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            Connect with the Underva network.
+            Connect with World of Underva.
           </p>
         </ScrollReveal>
 
