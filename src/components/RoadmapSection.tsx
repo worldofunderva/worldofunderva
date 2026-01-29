@@ -182,7 +182,7 @@ export function RoadmapSection() {
         </div>
 
         {/* Legend */}
-        <div className="mt-8 sm:mt-12 lg:mt-16 flex flex-wrap justify-center gap-6 sm:gap-8 text-xs sm:text-sm text-foreground/70">
+        <div className="relative z-20 mt-8 sm:mt-12 lg:mt-16 flex flex-wrap justify-center gap-6 sm:gap-8 text-xs sm:text-sm text-foreground/70">
           <div className="flex items-center gap-2.5">
             <div className="h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-primary shadow-[0_0_10px_hsl(var(--primary)/0.5)]" />
             <span className="font-medium">In Progress</span>
