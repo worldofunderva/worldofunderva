@@ -1,5 +1,4 @@
-import { forwardRef } from 'react';
-import { MessageCircle, Youtube, BookOpen, Users, ArrowUpRight, Facebook, Linkedin } from 'lucide-react';
+import { MessageCircle, Youtube, BookOpen, ArrowUpRight, Facebook, Linkedin } from 'lucide-react';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/scroll-reveal';
 import { cn } from '@/lib/utils';
 
@@ -9,30 +8,14 @@ const XIcon = () => (
   </svg>
 );
 
-// Audit report URL - set to null until audit is complete, then replace with actual URL
-// Example: 'https://hacken.io/audits/world-of-underva'
-const AUDIT_REPORT_URL: string | null = null;
-
 const socialLinks = [
-  { name: 'Telegram', icon: MessageCircle, url: 'https://t.me/worldofunderva', color: 'hover:bg-[#0088cc]/10 hover:border-[#0088cc]/50', enabled: true },
-  { name: 'X', icon: XIcon, url: 'https://x.com/worldofunderva?s=21', color: 'hover:bg-foreground/5 hover:border-foreground/20', enabled: true },
-  { name: 'YouTube', icon: Youtube, url: 'https://youtube.com/@worldofunderva', color: 'hover:bg-red-500/10 hover:border-red-500/50', enabled: true },
-  { name: 'Medium', icon: BookOpen, url: 'https://medium.com/@worldofunderva', color: 'hover:bg-foreground/5 hover:border-foreground/20', enabled: true },
-  { name: 'Facebook', icon: Facebook, url: 'https://www.facebook.com/worldofunderva', color: 'hover:bg-[#1877F2]/10 hover:border-[#1877F2]/50', enabled: true },
-  { name: 'LinkedIn', icon: Linkedin, url: 'https://www.linkedin.com/company/worldofunderva/', color: 'hover:bg-[#0A66C2]/10 hover:border-[#0A66C2]/50', enabled: true },
-  { name: 'Audit Report', icon: Users, url: AUDIT_REPORT_URL, color: 'hover:bg-primary/10 hover:border-primary/50', enabled: Boolean(AUDIT_REPORT_URL) },
+  { name: 'Telegram', icon: MessageCircle, url: 'https://t.me/worldofunderva', color: 'hover:bg-[#0088cc]/10 hover:border-[#0088cc]/50' },
+  { name: 'X', icon: XIcon, url: 'https://x.com/worldofunderva?s=21', color: 'hover:bg-foreground/5 hover:border-foreground/20' },
+  { name: 'YouTube', icon: Youtube, url: 'https://youtube.com/@worldofunderva', color: 'hover:bg-red-500/10 hover:border-red-500/50' },
+  { name: 'Medium', icon: BookOpen, url: 'https://medium.com/@worldofunderva', color: 'hover:bg-foreground/5 hover:border-foreground/20' },
+  { name: 'Facebook', icon: Facebook, url: 'https://www.facebook.com/worldofunderva', color: 'hover:bg-[#1877F2]/10 hover:border-[#1877F2]/50' },
+  { name: 'LinkedIn', icon: Linkedin, url: 'https://www.linkedin.com/company/worldofunderva/', color: 'hover:bg-[#0A66C2]/10 hover:border-[#0A66C2]/50' },
 ];
-
-// Wrapper component for social link icons that need to handle the ref
-const SocialIcon = forwardRef<HTMLSpanElement, { icon: React.ComponentType }>(
-  function SocialIcon({ icon: Icon }, ref) {
-    return (
-      <span ref={ref}>
-        <Icon />
-      </span>
-    );
-  }
-);
 
 export function CommunitySection() {
   return (
@@ -50,34 +33,20 @@ export function CommunitySection() {
         <StaggerContainer className="flex flex-wrap justify-center gap-2 sm:gap-3" staggerDelay={0.05}>
           {socialLinks.map((social) => (
             <StaggerItem key={social.name}>
-              {social.enabled && social.url ? (
-                <a
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    "glass-card px-4 sm:px-5 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3",
-                    "transition-all duration-300 group active:scale-95",
-                    social.color
-                  )}
-                >
-                  <social.icon />
-                  <span className="text-xs sm:text-sm font-medium text-foreground">{social.name}</span>
-                  <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                </a>
-              ) : (
-                <div
-                  className={cn(
-                    "glass-card px-4 sm:px-5 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3",
-                    "opacity-50 cursor-not-allowed"
-                  )}
-                  title="Coming soon"
-                >
-                  <social.icon />
-                  <span className="text-xs sm:text-sm font-medium text-muted-foreground">{social.name}</span>
-                  <span className="text-[10px] text-muted-foreground/70">Soon</span>
-                </div>
-              )}
+              <a
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  "glass-card px-4 sm:px-5 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3",
+                  "transition-all duration-300 group active:scale-95",
+                  social.color
+                )}
+              >
+                <social.icon />
+                <span className="text-xs sm:text-sm font-medium text-foreground">{social.name}</span>
+                <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+              </a>
             </StaggerItem>
           ))}
         </StaggerContainer>
