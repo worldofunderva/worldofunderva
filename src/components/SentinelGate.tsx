@@ -47,16 +47,16 @@ export function SentinelGate() {
               <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0">
                 {[
                   {
-                    title: '2.0% Automatic Cashback',
-                    desc: 'Funded by the RWA Engagement Pool (UEP) on every consumption transaction.',
+                    title: '2.0% Instant Cashback',
+                    desc: 'Powered by the RWA Engagement Pool (UEP). Every Underva purchase triggers an automatic $WOU cashback to your wallet—instant on Base L2.',
                   },
                   {
-                    title: 'Strong Holder Status',
-                    desc: 'Priority access to limited drops, governance rights, and ecosystem perks.',
+                    title: 'Strong Holder VIP Status',
+                    desc: '7-day early access to limited drops, governance voting rights, Sentinels-Only community access, and exclusive utility airdrops.',
                   },
                   {
-                    title: 'Lifetime Enrollment',
-                    desc: 'One-time mint. Permanent benefits. No recurring fees.',
+                    title: 'Lifetime Ownership',
+                    desc: 'Mint once, benefit forever. No subscriptions. Your Sentinel is a tradeable asset with secondary market value on OpenSea & Blur.',
                   },
                 ].map((benefit) => (
                   <div key={benefit.title} className="flex items-start gap-3 text-left">
