@@ -12,7 +12,7 @@ const pillars = [
   },
   {
     icon: Footprints,
-    title: 'Undervastride',
+    title: 'Underva Stride',
     subtitle: 'Sportswear Division',
     description: 'High-velocity performance gear engineered for elite athletes. Every piece verified on-chain for authenticity and ownership.',
     features: ['Performance Tracking', 'Athletic NFTs', 'Verified Authentic'],

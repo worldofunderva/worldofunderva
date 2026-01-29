@@ -33,7 +33,7 @@ const phases = [
     status: 'upcoming',
     icon: Footprints,
     milestones: [
-      'Undervastride Sportswear',
+      'Underva Stride Launch',
       'Mass Velocity Expansion',
       'Base L2 Optimization',
     ],
