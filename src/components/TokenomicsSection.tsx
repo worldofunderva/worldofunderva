@@ -21,7 +21,7 @@ const distributions = [
     tailwindColor: 'bg-cyan-500',
   },
   {
-    label: 'Core Team',
+    label: 'Core Team & Advisors',
     percentage: 15,
     description: '2-year hard lock (MPC Vault) + 3-year linear release',
     icon: Users,
@@ -169,12 +169,24 @@ export function TokenomicsSection() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'hsl(222, 47%, 8%)',
-                    border: '1px solid hsl(222, 30%, 15%)',
+                    backgroundColor: 'hsl(222, 47%, 11%)',
+                    border: '1px solid hsl(212, 100%, 48%)',
                     borderRadius: '8px',
-                    color: 'hsl(210, 20%, 95%)',
+                    color: 'hsl(210, 20%, 98%)',
+                    padding: '12px 16px',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
+                    zIndex: 50,
                   }}
-                  formatter={(value: number) => [`${value}%`, 'Allocation']}
+                  itemStyle={{
+                    color: 'hsl(210, 20%, 98%)',
+                    fontWeight: 500,
+                  }}
+                  labelStyle={{
+                    color: 'hsl(212, 100%, 60%)',
+                    fontWeight: 600,
+                    marginBottom: '4px',
+                  }}
+                  formatter={(value: number, name: string) => [`${value}%`, name]}
                 />
               </PieChart>
             </ResponsiveContainer>
