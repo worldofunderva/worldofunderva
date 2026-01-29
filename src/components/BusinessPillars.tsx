@@ -1,5 +1,6 @@
 import { Shirt, Footprints, Truck, ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/scroll-reveal';
 
 const pillars = [
   {
@@ -33,7 +34,7 @@ export function BusinessPillars() {
     <section id="pillars" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mx-auto max-w-2xl text-center mb-16">
+        <ScrollReveal className="mx-auto max-w-2xl text-center mb-16">
           <p className="text-sm font-medium text-primary mb-3">RWA ECOSYSTEM</p>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl mb-4">
             The Business Pillars
@@ -41,66 +42,67 @@ export function BusinessPillars() {
           <p className="text-lg text-muted-foreground">
             Three verticals. One unified token economy. Complete institutional coverage.
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Pillars Grid */}
-        <div className="grid gap-6 md:grid-cols-3">
+        <StaggerContainer className="grid gap-6 md:grid-cols-3" staggerDelay={0.15}>
           {pillars.map((pillar) => (
-            <div
-              key={pillar.title}
-              className={cn(
-                "group relative rounded-2xl border border-border bg-card p-8 transition-all duration-300",
-                "hover:border-primary/50 hover:sentinel-glow"
-              )}
-            >
-              {/* Gradient Background */}
-              <div className={cn(
-                "absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100",
-                `bg-gradient-to-br ${pillar.gradient}`
-              )} />
+            <StaggerItem key={pillar.title}>
+              <div
+                className={cn(
+                  "group relative rounded-2xl border border-border bg-card p-8 transition-all duration-300 h-full",
+                  "hover:border-primary/50 hover:sentinel-glow"
+                )}
+              >
+                {/* Gradient Background */}
+                <div className={cn(
+                  "absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100",
+                  `bg-gradient-to-br ${pillar.gradient}`
+                )} />
 
-              <div className="relative z-10">
-                {/* Icon */}
-                <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <pillar.icon className="h-7 w-7" />
+                <div className="relative z-10">
+                  {/* Icon */}
+                  <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <pillar.icon className="h-7 w-7" />
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-xl font-semibold mb-1">{pillar.title}</h3>
+                  <p className="text-sm text-primary mb-4">{pillar.subtitle}</p>
+
+                  {/* Description */}
+                  <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                    {pillar.description}
+                  </p>
+
+                  {/* Features */}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {pillar.features.map((feature) => (
+                      <span
+                        key={feature}
+                        className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground"
+                      >
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Learn More Link */}
+                  <a
+                    href="#"
+                    className="inline-flex items-center gap-1 text-sm font-medium text-primary transition-all group-hover:gap-2"
+                  >
+                    Explore Division
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
                 </div>
-
-                {/* Title */}
-                <h3 className="text-xl font-semibold mb-1">{pillar.title}</h3>
-                <p className="text-sm text-primary mb-4">{pillar.subtitle}</p>
-
-                {/* Description */}
-                <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                  {pillar.description}
-                </p>
-
-                {/* Features */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {pillar.features.map((feature) => (
-                    <span
-                      key={feature}
-                      className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground"
-                    >
-                      {feature}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Learn More Link */}
-                <a
-                  href="#"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-primary transition-all group-hover:gap-2"
-                >
-                  Explore Division
-                  <ArrowUpRight className="h-4 w-4" />
-                </a>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {/* Bridge Mention */}
-        <div className="mt-16 rounded-2xl border border-border bg-card/50 p-8 text-center">
+        <ScrollReveal delay={0.3} className="mt-16 rounded-2xl border border-border bg-card/50 p-8 text-center">
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="h-3 w-3 rounded-full bg-amber-500" />
             <span className="text-xs font-medium text-muted-foreground">CROSS-CHAIN INFRASTRUCTURE</span>
@@ -111,7 +113,7 @@ export function BusinessPillars() {
             Seamlessly transfer between <span className="text-foreground font-medium">Ethereum L1</span> (Security) 
             and <span className="text-foreground font-medium">Base L2</span> (Velocity) with our institutional-grade bridge protocol.
           </p>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

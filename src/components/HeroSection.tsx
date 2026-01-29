@@ -1,5 +1,6 @@
 import { ArrowDown, Zap, Lock, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 
 export function HeroSection() {
   return (
@@ -13,29 +14,49 @@ export function HeroSection() {
       
       <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
         {/* Badge */}
-        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-2 backdrop-blur-sm">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-2 backdrop-blur-sm"
+        >
           <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
           <span className="text-xs font-medium text-muted-foreground">
             ETHEREUM L1 & BASE L2 SECURED
           </span>
-        </div>
+        </motion.div>
 
         {/* Main Headline */}
-        <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
+        >
           <span className="text-foreground">The Corporate Tender</span>
           <br />
           <span className="text-foreground">For </span>
           <span className="gradient-text">Disciplined RWA Consumption</span>
-        </h1>
+        </motion.h1>
 
         {/* Sub-headline */}
-        <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl"
+        >
           A fixed supply of <span className="font-mono text-foreground">21,000,000</span> tokens 
           powering institutional-grade Real-World Asset tokenization across Fashion, Sportswear, and Logistics.
-        </p>
+        </motion.p>
 
         {/* Stats Row */}
-        <div className="mb-10 flex flex-wrap items-center justify-center gap-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="mb-10 flex flex-wrap items-center justify-center gap-8"
+        >
           <div className="flex items-center gap-2">
             <Lock className="h-5 w-5 text-primary" />
             <div className="text-left">
@@ -59,10 +80,15 @@ export function HeroSection() {
               <p className="text-xs text-muted-foreground">Sentinel Holders</p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+        >
           <Button variant="sentinel" size="xl" asChild>
             <a href="#sentinel">
               Mint Sentinel NFT
@@ -73,15 +99,20 @@ export function HeroSection() {
               View Tokenomics
             </a>
           </Button>
-        </div>
+        </motion.div>
 
         {/* Scroll Indicator */}
-        <div className="mt-16 animate-bounce">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.4 }}
+          className="mt-16 animate-bounce"
+        >
           <a href="#pillars" className="inline-flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
             <span className="text-xs font-medium">Explore The Pillars</span>
             <ArrowDown className="h-5 w-5" />
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

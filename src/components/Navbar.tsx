@@ -7,6 +7,7 @@ const navItems = [
   { label: 'The Pillars', href: '#pillars' },
   { label: 'Sentinel Mint', href: '#sentinel' },
   { label: 'Tokenomics', href: '#tokenomics' },
+  { label: 'Roadmap', href: '#roadmap' },
   { label: 'Bridge', href: '#bridge' },
   { label: 'Community', href: '#community' },
 ];
