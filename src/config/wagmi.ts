@@ -3,7 +3,7 @@ import { mainnet, base } from 'wagmi/chains';
 
 export const config = getDefaultConfig({
   appName: 'World of Underva',
-  projectId: 'YOUR_WALLETCONNECT_PROJECT_ID', // Get one at https://cloud.walletconnect.com
+  projectId: '9da853ddca1e91febc374f3ad300afe9',
   chains: [mainnet, base],
   ssr: false,
 });
