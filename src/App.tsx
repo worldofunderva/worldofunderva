@@ -41,8 +41,8 @@ const queryClient = new QueryClient({
 
 const App = () => (
   <WagmiProvider config={config} reconnectOnMount={false}>
-    <WalletSessionPolicyManager />
     <QueryClientProvider client={queryClient}>
+      <WalletSessionPolicyManager />
       <RainbowKitProvider
         theme={darkTheme({
           accentColor: 'hsl(142, 76%, 36%)',
