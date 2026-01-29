@@ -1,4 +1,4 @@
-import { Shield, Check, AlertTriangle, Sparkles } from 'lucide-react';
+import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -6,10 +6,21 @@ import { useSentinel } from '@/contexts/SentinelContext';
 import { cn } from '@/lib/utils';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
+// Sentinel NFT mint price in ETH (on Base network)
+// $500 USD equivalent - update this value based on ETH price at launch
+const MINT_PRICE_ETH = '0.20';
+
 export function SentinelGate() {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
-  const { hasSentinelNFT, toggleSentinelNFT } = useSentinel();
+  const { hasSentinelNFT, isCheckingOwnership, isNFTContractReady } = useSentinel();
+
+  // Mint function - will be implemented when NFT contract is deployed
+  const handleMint = () => {
+    // TODO: Implement actual mint transaction when contract is ready
+    // Will use wagmi useWriteContract hook
+    console.log('Mint functionality pending - NFT contract not yet deployed');
+  };
 
   return (
     <section id="sentinel" className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
@@ -90,16 +101,23 @@ export function SentinelGate() {
                   </div>
                   <div className={cn(
                     "rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium",
-                    hasSentinelNFT 
-                      ? "bg-success/20 text-success" 
-                      : "bg-muted text-muted-foreground"
+                    isCheckingOwnership
+                      ? "bg-muted text-muted-foreground"
+                      : hasSentinelNFT 
+                        ? "bg-success/20 text-success" 
+                        : "bg-muted text-muted-foreground"
                   )}>
-                    {hasSentinelNFT ? 'ENROLLED' : 'NOT ENROLLED'}
+                    {isCheckingOwnership ? (
+                      <span className="flex items-center gap-1">
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                        CHECKING
+                      </span>
+                    ) : hasSentinelNFT ? 'ENROLLED' : 'NOT ENROLLED'}
                   </div>
                 </div>
 
                 {/* Status Display */}
-                {isConnected && !hasSentinelNFT && (
+                {isConnected && !hasSentinelNFT && !isCheckingOwnership && (
                   <div className="mb-4 sm:mb-6 rounded-lg border border-warning/30 bg-warning/10 p-3 sm:p-4">
                     <div className="flex items-start gap-2 sm:gap-3">
                       <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-warning shrink-0 mt-0.5" />
@@ -130,9 +148,9 @@ export function SentinelGate() {
                 {/* Mint Info */}
                 <div className="space-y-0 mb-5 sm:mb-8">
                   {[
-                    { label: 'Mint Price', value: '0.05 ETH' },
-                    { label: 'Supply', value: '10,000 / 21,000' },
-                    { label: 'Network', value: 'Ethereum L1', highlight: true },
+                    { label: 'Mint Price', value: `${MINT_PRICE_ETH} ETH (~$500)` },
+                    { label: 'Supply', value: isNFTContractReady ? '10,000 / 21,000' : 'TBA' },
+                    { label: 'Network', value: 'Base L2', highlight: true },
                   ].map((item, index) => (
                     <div 
                       key={item.label}
@@ -160,6 +178,16 @@ export function SentinelGate() {
                   >
                     Connect Wallet to Mint
                   </Button>
+                ) : isCheckingOwnership ? (
+                  <Button 
+                    variant="secondary" 
+                    size="lg" 
+                    className="w-full h-11 sm:h-14 text-sm sm:text-base"
+                    disabled
+                  >
+                    <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 mr-2 animate-spin" />
+                    Checking Ownership...
+                  </Button>
                 ) : hasSentinelNFT ? (
                   <Button 
                     variant="secondary" 
@@ -170,15 +198,25 @@ export function SentinelGate() {
                     <Check className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                     Already Enrolled
                   </Button>
-                ) : (
+                ) : isNFTContractReady ? (
                   <Button 
                     variant="sentinel" 
                     size="lg" 
                     className="w-full h-11 sm:h-14 text-sm sm:text-base animate-glow"
-                    onClick={toggleSentinelNFT}
+                    onClick={handleMint}
                   >
                     <Shield className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                     Mint Sentinel NFT
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="secondary" 
+                    size="lg" 
+                    className="w-full h-11 sm:h-14 text-sm sm:text-base"
+                    disabled
+                  >
+                    <Clock className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                    Minting Opens Soon
                   </Button>
                 )}
               </div>
