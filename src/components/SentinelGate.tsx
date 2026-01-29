@@ -5,15 +5,16 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useSentinel } from '@/contexts/SentinelContext';
 import { cn } from '@/lib/utils';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { useEthPrice } from '@/hooks/useEthPrice';
 
-// Sentinel NFT mint price in ETH (on Base network)
-// $500 USD equivalent - update this value based on ETH price at launch
-const MINT_PRICE_ETH = '0.20';
+// Fixed USD price for Sentinel NFT
+const MINT_PRICE_USD = 500;
 
 export function SentinelGate() {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { hasSentinelNFT, isCheckingOwnership, isNFTContractReady } = useSentinel();
+  const { ethPrice, getEthEquivalent, isLoading: isPriceLoading } = useEthPrice();
 
   // Mint function - will be implemented when NFT contract is deployed
   const handleMint = () => {
@@ -148,7 +149,13 @@ export function SentinelGate() {
                 {/* Mint Info */}
                 <div className="space-y-0 mb-5 sm:mb-8">
                   {[
-                    { label: 'Mint Price', value: '$500 USD (paid in ETH)' },
+                    { 
+                      label: 'Mint Price', 
+                      value: isPriceLoading 
+                        ? '$500 USD (...)' 
+                        : `$500 USD (${getEthEquivalent(MINT_PRICE_USD)} ETH)`,
+                      loading: isPriceLoading
+                    },
                     { label: 'Supply', value: '5,000 Sentinels' },
                     { label: 'Network', value: 'Base L2', highlight: true },
                   ].map((item, index) => (
@@ -167,7 +174,7 @@ export function SentinelGate() {
                     </div>
                   ))}
                   <p className="text-[10px] sm:text-xs text-muted-foreground pt-2">
-                    Price is fixed at $500 USD equivalent, regardless of ETH price fluctuations.
+                    Price is fixed at $500 USD. ETH amount updates with live market price{ethPrice ? ` ($${ethPrice.toLocaleString()}/ETH)` : ''}.
                   </p>
                 </div>
 
