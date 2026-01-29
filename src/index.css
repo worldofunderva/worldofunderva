@@ -76,13 +76,31 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-tight font-semibold;
+    text-wrap: balance;
+  }
+
+  /* Better touch targets on mobile */
+  button, a {
+    touch-action: manipulation;
+  }
+
+  /* Prevent text selection on interactive elements */
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
   }
 }
 
@@ -100,7 +118,7 @@
       0 0 60px hsl(var(--sentinel-blue) / 0.15);
   }
 
-  /* Glass morphism cards */
+  /* Glass morphism cards - Enhanced */
   .glass-card {
     background: linear-gradient(
       135deg,
@@ -108,7 +126,15 @@
       hsl(var(--surface-glass) / 0.3)
     );
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid hsl(var(--border) / 0.5);
+    border-radius: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .glass-card {
+      border-radius: 1rem;
+    }
   }
 
   /* Gradient text */
@@ -138,7 +164,28 @@
     background-image: 
       linear-gradient(hsl(var(--border) / 0.3) 1px, transparent 1px),
       linear-gradient(90deg, hsl(var(--border) / 0.3) 1px, transparent 1px);
-    background-size: 60px 60px;
+    background-size: 40px 40px;
+  }
+
+  @media (min-width: 640px) {
+    .grid-pattern {
+      background-size: 60px 60px;
+    }
+  }
+
+  /* Modern card hover effect */
+  .card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+  }
+
+  @media (hover: none) {
+    .card-hover:hover {
+      transform: none;
+    }
   }
 }
 
@@ -172,5 +219,24 @@
 
   .animate-float {
     animation: float 6s ease-in-out infinite;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Safe area insets for mobile */
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-area-inset-top {
+    padding-top: env(safe-area-inset-top);
   }
 }
