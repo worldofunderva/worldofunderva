@@ -1,4 +1,4 @@
-import { MessageCircle, Youtube, BookOpen, Users, ArrowUpRight } from 'lucide-react';
+import { MessageCircle, Youtube, BookOpen, Users, ArrowUpRight, Facebook, Linkedin } from 'lucide-react';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/scroll-reveal';
 import { cn } from '@/lib/utils';
 
@@ -13,6 +13,8 @@ const socialLinks = [
   { name: 'X', icon: XIcon, url: 'https://x.com/worldofunderva?s=21', color: 'hover:bg-foreground/5 hover:border-foreground/20' },
   { name: 'YouTube', icon: Youtube, url: 'https://youtube.com/@worldofunderva', color: 'hover:bg-red-500/10 hover:border-red-500/50' },
   { name: 'Medium', icon: BookOpen, url: 'https://medium.com/@worldofunderva', color: 'hover:bg-foreground/5 hover:border-foreground/20' },
+  { name: 'Facebook', icon: Facebook, url: 'https://www.facebook.com/worldofunderva', color: 'hover:bg-[#1877F2]/10 hover:border-[#1877F2]/50' },
+  { name: 'LinkedIn', icon: Linkedin, url: 'https://www.linkedin.com/company/worldofunderva/', color: 'hover:bg-[#0A66C2]/10 hover:border-[#0A66C2]/50' },
   { name: 'Audit Report', icon: Users, url: '#', color: 'hover:bg-primary/10 hover:border-primary/50' },
 ];
 
