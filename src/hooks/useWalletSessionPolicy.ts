@@ -7,16 +7,12 @@ import { clearWalletSessionData } from '@/lib/walletSession';
 // Supported chain IDs - Ethereum mainnet (1) and Base (8453)
 const SUPPORTED_CHAIN_IDS: readonly number[] = [mainnet.id, base.id];
 
-// Session key to track if this is a fresh page load
-const SESSION_INITIALIZED_KEY = 'wou_session_initialized';
-
 /**
  * Enforces the wallet session policy:
- * - Force disconnect on fresh page load (new tab/browser session)
- * - No persisted auto-reconnect across browser sessions
+ * - Force disconnect on EVERY page load (refresh, navigation, new tab)
+ * - No auto-reconnect - user must manually connect each time
  * - Disconnect if user connects on an unsupported network
- * - Clear residual connector storage on load/unload
- * - Wallet stays connected as long as the tab is open
+ * - Wallet only stays connected while actively on the page without refresh
  */
 export function useWalletSessionPolicy() {
   const { isConnected } = useAccount();
@@ -24,53 +20,26 @@ export function useWalletSessionPolicy() {
   const { disconnect: wagmiDisconnect } = useDisconnect();
 
   const hasForcedDisconnectRef = useRef(false);
-  const hasInitializedRef = useRef(false);
+  const hasRunInitialCleanupRef = useRef(false);
 
-  // Force disconnect on fresh page load (browser was closed/reopened)
+  // Force disconnect on EVERY page load - no auto-reconnect ever
   useEffect(() => {
-    if (hasInitializedRef.current) return;
-    hasInitializedRef.current = true;
+    if (hasRunInitialCleanupRef.current) return;
+    hasRunInitialCleanupRef.current = true;
 
-    // Check if this is a fresh session (browser was closed)
-    const wasInitialized = sessionStorage.getItem(SESSION_INITIALIZED_KEY);
-    
-    if (!wasInitialized) {
-      // Fresh session - clear all wallet data and force disconnect
-      clearWalletSessionData();
-      
-      // Mark session as initialized
-      sessionStorage.setItem(SESSION_INITIALIZED_KEY, 'true');
-      
-      // If somehow still connected, force disconnect
-      if (isConnected) {
-        (async () => {
-          try {
-            await wagmiDisconnect();
-          } catch {
-            // Ignore disconnect errors on init
-          }
-          clearWalletSessionData();
-        })();
+    // Always clear wallet data on page load
+    clearWalletSessionData();
+
+    // Force disconnect any lingering connection from wallet provider memory
+    (async () => {
+      try {
+        await wagmiDisconnect();
+      } catch {
+        // Ignore errors - wallet might not be connected
       }
-    }
-  }, [isConnected, wagmiDisconnect]);
-
-  // Clear connector state when leaving/reloading the page.
-  useEffect(() => {
-    const handleExit = () => {
       clearWalletSessionData();
-      // Also clear our session marker so next visit is fresh
-      sessionStorage.removeItem(SESSION_INITIALIZED_KEY);
-    };
-
-    window.addEventListener('beforeunload', handleExit);
-    window.addEventListener('pagehide', handleExit);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleExit);
-      window.removeEventListener('pagehide', handleExit);
-    };
-  }, []);
+    })();
+  }, [wagmiDisconnect]);
 
   // Enforce allowed networks (Ethereum/Base only).
   useEffect(() => {
