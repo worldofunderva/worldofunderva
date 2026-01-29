@@ -148,8 +148,8 @@ export function SentinelGate() {
                 {/* Mint Info */}
                 <div className="space-y-0 mb-5 sm:mb-8">
                   {[
-                    { label: 'Mint Price', value: `${MINT_PRICE_ETH} ETH (~$500)` },
-                    { label: 'Supply', value: isNFTContractReady ? '10,000 / 21,000' : 'TBA' },
+                    { label: 'Mint Price', value: '$500 USD (paid in ETH)' },
+                    { label: 'Supply', value: '5,000 Sentinels' },
                     { label: 'Network', value: 'Base L2', highlight: true },
                   ].map((item, index) => (
                     <div 
@@ -166,6 +166,9 @@ export function SentinelGate() {
                       )}>{item.value}</span>
                     </div>
                   ))}
+                  <p className="text-[10px] sm:text-xs text-muted-foreground pt-2">
+                    Price is fixed at $500 USD equivalent, regardless of ETH price fluctuations.
+                  </p>
                 </div>
 
                 {/* Action Button */}
