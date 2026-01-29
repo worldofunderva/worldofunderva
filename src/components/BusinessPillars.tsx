@@ -10,6 +10,7 @@ const pillars = [
     description: 'Luxury apparel and token-gated collections. Exclusive access to limited-edition fashion lines powered by blockchain authentication.',
     features: ['Token-Gated Access', 'Limited Collections', 'Digital Provenance'],
     gradient: 'from-violet-500/20 to-primary/20',
+    url: 'https://underva.com/',
   },
   {
     icon: Footprints,
@@ -18,6 +19,7 @@ const pillars = [
     description: 'High-velocity performance gear engineered for elite athletes. Every piece verified on-chain for authenticity and ownership.',
     features: ['Performance Tracking', 'Athletic NFTs', 'Verified Authentic'],
     gradient: 'from-primary/20 to-cyan-500/20',
+    url: 'https://undervastride.com/',
   },
   {
     icon: Truck,
@@ -26,6 +28,7 @@ const pillars = [
     description: 'B2B supply chain solutions and secure warehousing. Enterprise-grade logistics with full on-chain transparency.',
     features: ['B2B Supply Chain', 'Secure Warehousing', 'Chain Transparency'],
     gradient: 'from-cyan-500/20 to-emerald-500/20',
+    url: 'https://undervaexpress.com/',
   },
 ];
 
@@ -89,7 +92,9 @@ export function BusinessPillars() {
 
                   {/* Learn More Link */}
                   <a
-                    href="#"
+                    href={pillar.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 text-xs sm:text-sm font-medium text-primary transition-all group-hover:gap-2"
                   >
                     Explore Division
