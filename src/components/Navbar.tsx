@@ -220,12 +220,14 @@ export function Navbar() {
                 className="pt-4"
               >
                 {isConnected ? (
-                  <Button
+                <Button
                     variant="wallet-connected"
                     size="lg"
                     onClick={() => {
-                      openAccountModal?.();
                       setIsOpen(false);
+                      setTimeout(() => {
+                        openAccountModal?.();
+                      }, 100);
                     }}
                     className="w-full gap-2 h-14 text-base"
                   >
@@ -233,12 +235,15 @@ export function Navbar() {
                     {truncatedAddress}
                   </Button>
                 ) : (
-                  <Button
+                <Button
                     variant="wallet"
                     size="lg"
                     onClick={() => {
-                      openConnectModal?.();
                       setIsOpen(false);
+                      // Delay modal open to allow menu animation to complete
+                      setTimeout(() => {
+                        openConnectModal?.();
+                      }, 100);
                     }}
                     className="w-full gap-2 h-14 text-base"
                   >
