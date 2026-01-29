@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Shield } from 'lucide-react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { Wallet, Menu, X, Shield } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useAccount, useDisconnect } from 'wagmi';
+import { useConnectModal, useAccountModal } from '@rainbow-me/rainbowkit';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -15,6 +17,14 @@ const navItems = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { address, isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
+  const { openConnectModal } = useConnectModal();
+  const { openAccountModal } = useAccountModal();
+
+  const truncatedAddress = address 
+    ? `${address.slice(0, 6)}...${address.slice(-4)}`
+    : null;
 
   // Track scroll position for enhanced navbar styling
   useEffect(() => {
@@ -84,10 +94,27 @@ export function Navbar() {
             animate={{ opacity: 1, x: 0 }}
             className="hidden lg:block"
           >
-            <ConnectButton 
-              chainStatus="icon"
-              showBalance={false}
-            />
+            {isConnected ? (
+              <Button
+                variant="wallet-connected"
+                size="sm"
+                onClick={openAccountModal}
+                className="gap-2"
+              >
+                <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
+                {truncatedAddress}
+              </Button>
+            ) : (
+              <Button
+                variant="wallet"
+                size="sm"
+                onClick={openConnectModal}
+                className="gap-2"
+              >
+                <Wallet className="h-4 w-4" />
+                Connect Wallet
+              </Button>
+            )}
           </motion.div>
 
           {/* Mobile Menu Button */}
@@ -175,12 +202,35 @@ export function Navbar() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="pt-6 border-t border-border flex justify-center"
+                className="pt-6 border-t border-border"
               >
-                <ConnectButton 
-                  chainStatus="icon"
-                  showBalance={false}
-                />
+                {isConnected ? (
+                  <Button
+                    variant="wallet-connected"
+                    size="lg"
+                    onClick={() => {
+                      openAccountModal?.();
+                      setIsOpen(false);
+                    }}
+                    className="w-full gap-2 h-14 text-base"
+                  >
+                    <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
+                    {truncatedAddress}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="wallet"
+                    size="lg"
+                    onClick={() => {
+                      openConnectModal?.();
+                      setIsOpen(false);
+                    }}
+                    className="w-full gap-2 h-14 text-base"
+                  >
+                    <Wallet className="h-5 w-5" />
+                    Connect Wallet
+                  </Button>
+                )}
               </motion.div>
 
               {/* Network Indicators */}
