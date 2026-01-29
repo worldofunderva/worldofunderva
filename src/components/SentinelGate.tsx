@@ -156,7 +156,10 @@ export function SentinelGate() {
                         : `$500 USD (${getEthEquivalent(MINT_PRICE_USD)} ETH)`,
                       loading: isPriceLoading
                     },
-                    { label: 'Supply', value: '5,000 Sentinels' },
+                    { 
+                      label: 'Remaining', 
+                      value: isNFTContractReady ? '5,000 / 5,000' : '5,000 (Total)'
+                    },
                     { label: 'Network', value: 'Base L2', highlight: true },
                   ].map((item, index) => (
                     <div 
