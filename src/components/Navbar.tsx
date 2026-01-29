@@ -5,6 +5,7 @@ import { useAccount, useDisconnect } from 'wagmi';
 import { useConnectModal, useAccountModal } from '@rainbow-me/rainbowkit';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { NetworkSwitcher } from './NetworkSwitcher';
 
 const navItems = [
   { label: 'The Pillars', href: '#pillars' },
@@ -88,12 +89,13 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Wallet Button - Desktop */}
+          {/* Network Switcher & Wallet Button - Desktop */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="hidden lg:block"
+            className="hidden lg:flex lg:items-center lg:gap-2"
           >
+            <NetworkSwitcher variant="full" />
             {isConnected ? (
               <Button
                 variant="wallet-connected"
@@ -197,12 +199,25 @@ export function Navbar() {
                 ))}
               </div>
 
+              {/* Network Switcher - Mobile */}
+              {isConnected && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 }}
+                  className="pt-6 border-t border-border"
+                >
+                  <p className="text-sm text-muted-foreground mb-3">Network</p>
+                  <NetworkSwitcher variant="full" className="w-full [&>button]:w-full [&>button]:justify-between" />
+                </motion.div>
+              )}
+
               {/* Wallet Button - Mobile */}
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="pt-6 border-t border-border"
+                className="pt-4"
               >
                 {isConnected ? (
                   <Button
@@ -233,7 +248,7 @@ export function Navbar() {
                 )}
               </motion.div>
 
-              {/* Network Indicators */}
+              {/* Network Info */}
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -245,7 +260,7 @@ export function Navbar() {
                   Ethereum L1
                 </span>
                 <span className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-primary" />
+                  <span className="h-2 w-2 rounded-full bg-blue-500" />
                   Base L2
                 </span>
               </motion.div>
