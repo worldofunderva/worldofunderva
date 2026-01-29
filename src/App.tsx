@@ -22,10 +22,16 @@ const PageLoader = () => (
   </div>
 );
 
-const WalletSessionPolicyManager = () => {
+// Force full remount on HMR by using a keyed wrapper
+function WalletSessionPolicyManager() {
   useWalletSessionPolicy();
   return null;
-};
+}
+
+// Prevent HMR from trying to preserve state
+if (import.meta.hot) {
+  import.meta.hot.accept();
+}
 
 // Configure QueryClient with optimized defaults
 const queryClient = new QueryClient({
