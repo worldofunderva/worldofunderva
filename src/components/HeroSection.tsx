@@ -95,7 +95,7 @@ export function HeroSection() {
             </a>
           </Button>
           <Button variant="sentinel-outline" size="lg" className="w-full sm:w-auto text-sm sm:text-base h-12 sm:h-14 px-6 sm:px-8" asChild>
-            <a href="#tokenomics">
+            <a href="https://drive.google.com/file/d/1BB6S4S7Hn_FjsQdyrAGEZM6pgMYJ7uzQ/view" target="_blank" rel="noopener noreferrer">
               Read Whitepaper
             </a>
           </Button>
