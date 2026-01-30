@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useAccount, useDisconnect } from 'wagmi';
+import { useDisconnect } from 'wagmi';
 import { clearWalletSessionData } from '@/lib/walletSession';
 
 /**
@@ -12,9 +12,7 @@ import { clearWalletSessionData } from '@/lib/walletSession';
  * wagmi/RainbowKit will automatically prompt users to switch to Base.
  */
 export function useWalletSessionPolicy() {
-  const { isConnected } = useAccount();
   const { disconnect: wagmiDisconnect } = useDisconnect();
-
   const hasRunInitialCleanupRef = useRef(false);
 
   // Force disconnect on EVERY page load - no auto-reconnect ever
