@@ -42,6 +42,7 @@ export function useWalletSessionPolicy() {
   }, [wagmiDisconnect]);
 
   // Enforce allowed networks (Ethereum/Base only).
+  // NO auto-switch - simply disconnect and show access denied alert.
   useEffect(() => {
     if (!isConnected) {
       hasForcedDisconnectRef.current = false;
@@ -52,12 +53,15 @@ export function useWalletSessionPolicy() {
     if (!isSupported && !hasForcedDisconnectRef.current) {
       hasForcedDisconnectRef.current = true;
 
+      // Show access denied alert - do NOT auto-switch networks
       toast({
-        title: 'Unsupported Network',
-        description: 'Switch your wallet to Ethereum or Base, then reconnect.',
+        title: 'Access Denied',
+        description: 'Please switch your wallet to Ethereum or Base to connect.',
         variant: 'destructive',
+        duration: 6000,
       });
 
+      // Immediately disconnect - user must manually switch network and reconnect
       (async () => {
         try {
           await wagmiDisconnect();
