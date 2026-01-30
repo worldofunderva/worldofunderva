@@ -1,8 +1,8 @@
 import { useAccount } from 'wagmi';
-import { mainnet, base } from 'wagmi/chains';
+import { base } from 'wagmi/chains';
 
-// Supported chain IDs - Ethereum mainnet (1) and Base (8453)
-const SUPPORTED_CHAIN_IDS: readonly number[] = [mainnet.id, base.id];
+// Supported chain IDs - Base only (8453) for NFT minting
+const SUPPORTED_CHAIN_IDS: readonly number[] = [base.id];
 
 /**
  * Hook that checks if the current network is supported.

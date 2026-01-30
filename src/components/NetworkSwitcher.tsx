@@ -1,17 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, AlertTriangle } from 'lucide-react';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { mainnet, base } from 'wagmi/chains';
+import { base } from 'wagmi/chains';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Base only for NFT minting
 export const supportedNetworks = [
-  { 
-    chain: mainnet, 
-    name: 'Ethereum', 
-    color: 'bg-amber-500',
-    icon: '⟠'
-  },
   { 
     chain: base, 
     name: 'Base', 

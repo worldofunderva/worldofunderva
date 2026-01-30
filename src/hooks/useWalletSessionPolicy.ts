@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
-import { mainnet, base } from 'wagmi/chains';
+import { base } from 'wagmi/chains';
 import { toast } from '@/hooks/use-toast';
 import { clearWalletSessionData } from '@/lib/walletSession';
 
-// Supported chain IDs - Ethereum mainnet (1) and Base (8453)
-const SUPPORTED_CHAIN_IDS: readonly number[] = [mainnet.id, base.id];
+// Supported chain IDs - Base only (8453) for NFT minting
+const SUPPORTED_CHAIN_IDS: readonly number[] = [base.id];
 
 /**
  * Enforces the wallet session policy:
@@ -60,7 +60,7 @@ export function useWalletSessionPolicy() {
       // Show access denied alert - do NOT auto-switch networks
       toast({
         title: 'Access Denied',
-        description: 'Please switch your wallet to Ethereum or Base to connect.',
+        description: 'Please switch your wallet to Base network to connect.',
         variant: 'destructive',
         duration: 6000,
       });
