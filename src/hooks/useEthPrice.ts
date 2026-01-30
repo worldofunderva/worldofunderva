@@ -24,9 +24,12 @@ export function useEthPrice() {
   const { data: ethPrice, isLoading, error } = useQuery({
     queryKey: ['eth-price'],
     queryFn: fetchEthPrice,
-    staleTime: 1000 * 60 * 2, // Cache for 2 minutes
-    refetchInterval: 1000 * 60 * 2, // Refresh every 2 minutes
+    staleTime: 1000 * 60 * 1, // 1 minute staleTime (matches global config)
+    gcTime: 1000 * 60 * 10, // Keep in cache for 10 minutes
+    refetchInterval: 1000 * 60 * 2, // Background refresh every 2 minutes
+    refetchIntervalInBackground: false, // Don't refresh when tab is hidden
     retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 5000),
   });
 
   // Calculate ETH equivalent for a given USD amount

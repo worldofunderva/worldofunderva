@@ -11,9 +11,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
-    <!-- DNS Prefetch for wallet providers -->
+    <!-- Preconnect to blockchain RPC endpoints (reduces connection latency by ~100-200ms) -->
+    <link rel="preconnect" href="https://mainnet.base.org" crossorigin />
+    <link rel="preconnect" href="https://base.llamarpc.com" crossorigin />
+    
+    <!-- DNS Prefetch for wallet providers and APIs -->
     <link rel="dns-prefetch" href="https://cloudflare-eth.com" />
-    <link rel="dns-prefetch" href="https://mainnet.base.org" />
+    <link rel="dns-prefetch" href="https://api.coingecko.com" />
+    <link rel="dns-prefetch" href="https://relay.walletconnect.com" />
+    <link rel="dns-prefetch" href="https://rpc.walletconnect.com" />
 
     <meta property="og:title" content="World of Underva | $WOU Token" />
     <meta property="og:description" content="A next-generation RWA ecosystem. Join the future of decentralized finance." />

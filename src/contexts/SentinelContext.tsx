@@ -43,8 +43,10 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
     args: address ? [address] : undefined,
     query: {
       enabled: shouldQuery,
-      staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+      staleTime: 1000 * 60 * 1, // 1 minute staleTime (high-traffic optimization)
+      gcTime: 1000 * 60 * 10, // Keep in cache for 10 minutes
       retry: 2,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 5000),
     },
   });
 
