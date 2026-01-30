@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, AlertTriangle } from 'lucide-react';
-import { useAccount, useSwitchChain, useChainId } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { mainnet, base } from 'wagmi/chains';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -30,11 +30,11 @@ interface NetworkSwitcherProps {
 export function NetworkSwitcher({ variant = 'compact', className }: NetworkSwitcherProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { isConnected } = useAccount();
-  const chainId = useChainId();
-  const { switchChain, isPending, error } = useSwitchChain();
+  // Use useAccount().chainId to get the wallet's ACTUAL network, not app's configured chain
+  const { isConnected, chainId: walletChainId } = useAccount();
+  const { switchChain, isPending } = useSwitchChain();
 
-  const currentNetwork = supportedNetworks.find(n => n.chain.id === chainId);
+  const currentNetwork = supportedNetworks.find(n => n.chain.id === walletChainId);
   const isUnsupportedNetwork = isConnected && !currentNetwork;
 
   // Close dropdown when clicking outside
@@ -177,12 +177,12 @@ export function NetworkSwitcher({ variant = 'compact', className }: NetworkSwitc
                 <button
                   key={network.chain.id}
                   onClick={() => handleNetworkSwitch(network.chain.id)}
-                  disabled={network.chain.id === chainId || isPending}
+                  disabled={network.chain.id === walletChainId || isPending}
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-md",
                     "text-sm font-medium text-left",
                     "transition-colors duration-150",
-                    network.chain.id === chainId
+                    network.chain.id === walletChainId
                       ? "bg-primary/10 text-primary cursor-default"
                       : "text-foreground hover:bg-secondary",
                     isPending && "opacity-50 cursor-wait"
@@ -190,7 +190,7 @@ export function NetworkSwitcher({ variant = 'compact', className }: NetworkSwitc
                 >
                   <span className={cn("h-2.5 w-2.5 rounded-full", network.color)} />
                   <span>{network.name}</span>
-                  {network.chain.id === chainId && (
+                  {network.chain.id === walletChainId && (
                     <span className="ml-auto text-xs text-muted-foreground">Connected</span>
                   )}
                 </button>
