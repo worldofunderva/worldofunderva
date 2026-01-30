@@ -1,27 +1,47 @@
-# Cache static assets for 1 year
+# ===========================================
+# High-Traffic Optimized Headers (500k users)
+# ===========================================
+
+# JavaScript chunks - immutable with content hash
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# CSS chunks - immutable with content hash  
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# All other assets (fonts, etc)
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Cache images for 1 year
+# Images - long cache with stale-while-revalidate
 *.png
   Cache-Control: public, max-age=31536000, immutable
 *.jpg
+  Cache-Control: public, max-age=31536000, immutable
+*.webp
   Cache-Control: public, max-age=31536000, immutable
 *.svg
   Cache-Control: public, max-age=31536000, immutable
 *.ico
   Cache-Control: public, max-age=31536000, immutable
 
-# Cache fonts for 1 year
+# Fonts - immutable
 *.woff2
   Cache-Control: public, max-age=31536000, immutable
 *.woff
   Cache-Control: public, max-age=31536000, immutable
 
-# HTML files - no cache to always get fresh content
+# HTML - short cache with revalidation (ensures users get fresh app shell)
 /*.html
-  Cache-Control: no-cache, no-store, must-revalidate
+  Cache-Control: no-cache
+  
+# Root index - same as HTML
+/
+  Cache-Control: no-cache
 
-# Service worker and manifest
-/sw.js
-  Cache-Control: no-cache, no-store, must-revalidate
+# Security headers for all routes
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin

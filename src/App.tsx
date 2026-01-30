@@ -31,14 +31,18 @@ if (import.meta.hot) {
   import.meta.hot.accept();
 }
 
-// Configure QueryClient with optimized defaults
+// Configure QueryClient optimized for high-traffic (500k users)
+// Aggressive caching to minimize RPC calls and prevent rate limiting
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      gcTime: 1000 * 60 * 30, // 30 minutes (formerly cacheTime)
-      refetchOnWindowFocus: false,
-      retry: 1,
+      staleTime: 1000 * 60 * 1, // 1 minute - balance freshness vs RPC load
+      gcTime: 1000 * 60 * 30, // 30 minutes garbage collection
+      refetchOnWindowFocus: false, // Prevent refetch storms
+      refetchOnReconnect: false, // Don't hammer RPCs on network recovery
+      retry: 2, // Retry twice with exponential backoff
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
+      networkMode: 'offlineFirst', // Use cache first, fetch in background
     },
   },
 });
