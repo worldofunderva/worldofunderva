@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle, Rocket, Shirt, Footprints, Truck } from 'lucide-react';
+import { CheckCircle2, Circle, Shield, Shirt, Footprints, Truck, Coins, CreditCard, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/scroll-reveal';
 import { useMemo } from 'react';
@@ -9,7 +9,7 @@ interface Phase {
   timeline: string;
   startYear: number;
   endYear: number | null; // null means ongoing (2035+)
-  icon: typeof Rocket;
+  icon: typeof Shield;
   milestones: string[];
 }
 
@@ -20,24 +20,26 @@ const phases: Phase[] = [
     timeline: '2026–2028',
     startYear: 2026,
     endYear: 2028,
-    icon: Rocket,
+    icon: Shield,
     milestones: [
-      '$WOU Launch on ETH L1 & Base L2',
-      'Sentinel NFT Minting',
-      'Treasury & LP Establishment',
+      'Launch of $500 Sentinel NFT on Base',
+      '$WOU token deploys upon 2,000th mint',
+      'Locked liquidity from $1M initial raise',
+      'Community building & technical enrollment',
     ],
   },
   {
     phase: 'Phase 2',
-    title: 'The Luxury Expansion',
+    title: 'Underva Fashion Expansion',
     timeline: '2029–2031',
     startYear: 2029,
     endYear: 2031,
     icon: Shirt,
     milestones: [
-      'Underva Launch',
-      'Cashback Engine Activation',
-      'Token-gated Collections',
+      'Fashion e-commerce platform launch',
+      'Hybrid Payment Integration (Stripe + $WOU)',
+      '2.0% Reward Engine activation',
+      'Token-gated collections & drops',
     ],
   },
   {
@@ -48,22 +50,24 @@ const phases: Phase[] = [
     endYear: 2034,
     icon: Footprints,
     milestones: [
-      'Underva Stride Launch',
-      'Mass Velocity Expansion',
-      'Base L2 Optimization',
+      'Underva Stride storefront launch',
+      'High-performance apparel expansion',
+      'Base L2 velocity optimization',
+      'Extended ecosystem rewards',
     ],
   },
   {
     phase: 'Phase 4',
-    title: 'The Global Infrastructure Era',
+    title: 'The Infrastructure Era',
     timeline: '2035+',
     startYear: 2035,
     endYear: null,
     icon: Truck,
     milestones: [
-      'Underva Express Launch',
-      'B2B Logistics & Strong Holder Tiers',
-      'Complete RWA Ecosystem',
+      'Underva Express logistics launch',
+      '$WOU as "Corporate Tender" for B2B',
+      'Global supply chain integration',
+      'Complete RWA ecosystem maturity',
     ],
   },
 ];
@@ -136,6 +140,7 @@ export function RoadmapSection() {
     })),
     [currentYear]
   );
+
   return (
     <section id="roadmap" className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
       {/* Background Pattern */}
@@ -144,13 +149,34 @@ export function RoadmapSection() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <ScrollReveal className="mx-auto max-w-2xl text-center mb-10 sm:mb-16">
-          <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">STRATEGIC TIMELINE</p>
+          <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">THE ROAD TO $WOU</p>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
-            The Decade of Discipline
+            The Multi-Era Roadmap
           </h2>
           <p className="text-sm sm:text-base lg:text-lg text-muted-foreground px-2">
-            A disciplined, multi-year roadmap for complete vertical integration.
+            A disciplined, multi-year journey from enrollment to global infrastructure.
           </p>
+        </ScrollReveal>
+
+        {/* Key Milestones Summary */}
+        <ScrollReveal delay={0.1} className="mb-8 sm:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 sm:p-5 text-center">
+              <Coins className="h-6 w-6 sm:h-8 sm:w-8 text-primary mx-auto mb-2" />
+              <p className="text-sm font-semibold mb-1">Liquidity Trigger</p>
+              <p className="text-xs text-muted-foreground">$WOU deploys at 2,000 Sentinel mints</p>
+            </div>
+            <div className="rounded-xl border border-success/30 bg-success/5 p-4 sm:p-5 text-center">
+              <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-success mx-auto mb-2" />
+              <p className="text-sm font-semibold mb-1">Reward Activation</p>
+              <p className="text-xs text-muted-foreground">2.0% Engine live with Underva Fashion</p>
+            </div>
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 sm:p-5 text-center">
+              <CreditCard className="h-6 w-6 sm:h-8 sm:w-8 text-amber-500 mx-auto mb-2" />
+              <p className="text-sm font-semibold mb-1">Hybrid Payments</p>
+              <p className="text-xs text-muted-foreground">Stripe + $WOU across all pillars</p>
+            </div>
+          </div>
         </ScrollReveal>
 
         {/* Horizontal Timeline Chart */}

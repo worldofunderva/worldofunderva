@@ -1,4 +1,4 @@
-import { Shirt, Footprints, Truck, ArrowUpRight } from 'lucide-react';
+import { Shirt, Footprints, Truck, ArrowUpRight, CreditCard, Coins } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/scroll-reveal';
 
@@ -106,8 +106,38 @@ export function BusinessPillars() {
           ))}
         </StaggerContainer>
 
+        {/* Hybrid Payment Integration */}
+        <ScrollReveal delay={0.3} className="mt-10 sm:mt-16 rounded-xl sm:rounded-2xl border border-primary/30 bg-primary/5 p-5 sm:p-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div className="text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <CreditCard className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                <Coins className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                <span className="text-[10px] sm:text-xs font-medium text-primary uppercase tracking-wider">HYBRID PAYMENT INTEGRATION</span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2">Pay Your Way</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground max-w-xl">
+                Purchase products across all pillars using <span className="text-foreground font-medium">local currency via Stripe</span> or 
+                <span className="text-foreground font-medium"> $WOU crypto</span>. Full accessibility for all users while maintaining 
+                $WOU as the premium Corporate Tender for reward eligibility.
+              </p>
+            </div>
+            <div className="flex flex-wrap justify-center lg:justify-end gap-2 sm:gap-3">
+              <span className="rounded-full bg-card border border-border px-3 py-1.5 text-[10px] sm:text-xs font-medium">
+                Stripe Integration
+              </span>
+              <span className="rounded-full bg-card border border-border px-3 py-1.5 text-[10px] sm:text-xs font-medium">
+                $WOU Payments
+              </span>
+              <span className="rounded-full bg-primary/20 border border-primary/30 px-3 py-1.5 text-[10px] sm:text-xs font-medium text-primary">
+                2.0% Cashback on $WOU
+              </span>
+            </div>
+          </div>
+        </ScrollReveal>
+
         {/* Bridge Mention */}
-        <ScrollReveal delay={0.3} className="mt-10 sm:mt-16 rounded-xl sm:rounded-2xl border border-border bg-card/50 p-5 sm:p-8 text-center">
+        <ScrollReveal delay={0.4} className="mt-6 sm:mt-8 rounded-xl sm:rounded-2xl border border-border bg-card/50 p-5 sm:p-8 text-center">
           <div className="inline-flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <div className="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-amber-500" />
             <span className="text-[10px] sm:text-xs font-medium text-muted-foreground">CROSS-CHAIN INFRASTRUCTURE</span>

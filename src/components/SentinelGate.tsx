@@ -1,4 +1,4 @@
-import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock } from 'lucide-react';
+import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock, Crown, Ticket, Truck, Vote, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -9,6 +9,9 @@ import { useEthPrice } from '@/hooks/useEthPrice';
 
 // Fixed USD price for Sentinel NFT
 const MINT_PRICE_USD = 500;
+
+// Liquidity trigger threshold
+const LIQUIDITY_TRIGGER_THRESHOLD = 2000;
 
 export function SentinelGate() {
   const { isConnected } = useAccount();
@@ -30,45 +33,66 @@ export function SentinelGate() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-primary/5 rounded-full blur-3xl" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16 items-center">
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16 items-start">
           {/* Content Side */}
           <ScrollReveal variant="fade-right">
             <div className="text-center lg:text-left">
-              <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">COMPLIANCE GATEWAY</p>
+              <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">STRONG HOLDER VIP STATUS</p>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-4 sm:mb-6">
                 The Sentinel NFT Gate
               </h2>
               <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mb-6 sm:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                The Sentinel NFT is your <span className="text-foreground font-medium">mandatory, one-time compliance credential</span> required 
-                to unlock the full benefits of the World of Underva ecosystem.
+                Fixed at <span className="text-foreground font-mono font-semibold">$500 USD</span> to ensure ecosystem fairness.
+                The Sentinel NFT is your <span className="text-foreground font-medium">mandatory enrollment credential</span> required 
+                to participate in the 2.0% Automated Reward Engine.
               </p>
 
-              {/* Benefits List */}
-              <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0">
-                {[
-                  {
-                    title: '2.0% Instant Cashback',
-                    desc: 'Powered by the RWA Engagement Pool (UEP). Every Underva purchase triggers an automatic $WOU cashback to your wallet—instant on Base L2.',
-                  },
-                  {
-                    title: 'Strong Holder VIP Status',
-                    desc: '7-day early access to limited drops, governance voting rights, Sentinels-Only community access, and exclusive utility airdrops.',
-                  },
-                  {
-                    title: 'Lifetime Ownership',
-                    desc: 'Mint once, benefit forever. No subscriptions. Your Sentinel is a tradeable asset with secondary market value on OpenSea & Blur.',
-                  },
-                ].map((benefit) => (
-                  <div key={benefit.title} className="flex items-start gap-3 text-left">
-                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
-                      <Check className="h-3 w-3 sm:h-4 sm:w-4" />
+              {/* The Reward Engine */}
+              <div className="mb-6 sm:mb-8 rounded-xl border border-primary/30 bg-primary/5 p-4 sm:p-6 text-left">
+                <h4 className="text-sm sm:text-base font-semibold mb-4 flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                  The Automated Reward Engine
+                </h4>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
+                      <Check className="h-3 w-3" />
                     </div>
                     <div>
-                      <p className="text-sm sm:text-base font-medium">{benefit.title}</p>
-                      <p className="text-xs sm:text-sm text-muted-foreground">
-                        {benefit.desc}
+                      <p className="text-xs sm:text-sm font-medium">The Sentinel Reward (Active Buyers)</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">
+                        Automated 2.0% cashback on all purchases made using $WOU. Reserved strictly for Sentinel NFT holders.
                       </p>
                     </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
+                      <Check className="h-3 w-3" />
+                    </div>
+                    <div>
+                      <p className="text-xs sm:text-sm font-medium">The Loyalty Dividend (Strong Holders)</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">
+                        Automated 2.0% bonus based on total $WOU held, distributed every 6 months to wallets holding both $WOU and the Sentinel NFT.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* VIP Perks Grid */}
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0">
+                {[
+                  { icon: Ticket, title: 'Early Access', desc: 'Limited drops & private auctions' },
+                  { icon: Vote, title: 'Governance', desc: 'Voting rights on key decisions' },
+                  { icon: Users, title: 'Exclusive Community', desc: 'Sentinels-Only access' },
+                  { icon: Crown, title: 'Private Events', desc: 'Underva & Stride hosted events' },
+                  { icon: Sparkles, title: 'Utility Airdrops', desc: 'Exclusive ecosystem rewards' },
+                  { icon: Truck, title: 'Express Logistics', desc: 'Priority shipment processing' },
+                ].map((perk) => (
+                  <div key={perk.title} className="rounded-lg border border-border bg-card p-3 sm:p-4">
+                    <perk.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary mb-2" />
+                    <p className="text-xs sm:text-sm font-medium">{perk.title}</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground">{perk.desc}</p>
                   </div>
                 ))}
               </div>
@@ -97,7 +121,7 @@ export function SentinelGate() {
                     </div>
                     <div>
                       <h3 className="text-sm sm:text-base font-semibold">Sentinel NFT</h3>
-                      <p className="text-xs sm:text-sm text-muted-foreground">Compliance Credential</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">Fixed Entry Equity</p>
                     </div>
                   </div>
                   <div className={cn(
@@ -125,7 +149,7 @@ export function SentinelGate() {
                       <div>
                         <p className="text-xs sm:text-sm font-medium text-warning">Disqualified from Rewards</p>
                         <p className="text-[10px] sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">
-                          Your wallet lacks the Sentinel NFT. Mint now to unlock 2.0% cashback and Strong Holder benefits.
+                          Your wallet lacks the Sentinel NFT. Mint now to unlock the 2.0% Automated Reward Engine.
                         </p>
                       </div>
                     </div>
@@ -139,7 +163,7 @@ export function SentinelGate() {
                       <div>
                         <p className="text-xs sm:text-sm font-medium text-success">Full Access Granted</p>
                         <p className="text-[10px] sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">
-                          You are enrolled in the Sentinel program. All rewards and benefits are active.
+                          You are enrolled in the Sentinel program. All rewards and VIP benefits are active.
                         </p>
                       </div>
                     </div>
@@ -150,7 +174,7 @@ export function SentinelGate() {
                 <div className="space-y-0 mb-5 sm:mb-8">
                   {[
                     { 
-                      label: 'Mint Price', 
+                      label: 'Mint Price (Fixed)', 
                       value: isPriceLoading 
                         ? '$500 USD (...)' 
                         : `$500 USD (${getEthEquivalent(MINT_PRICE_USD)} ETH)`,
@@ -179,6 +203,22 @@ export function SentinelGate() {
                   <p className="text-[10px] sm:text-xs text-muted-foreground pt-2">
                     Price is fixed at $500 USD. ETH amount updates with live market price{ethPrice ? ` ($${ethPrice.toLocaleString()}/ETH)` : ''}.
                   </p>
+                </div>
+
+                {/* Liquidity Trigger */}
+                <div className="mb-5 sm:mb-8 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 sm:p-4">
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
+                      <span className="text-amber-500 text-xs font-bold">$</span>
+                    </div>
+                    <div>
+                      <p className="text-xs sm:text-sm font-medium text-amber-500">The Liquidity Trigger</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                        $WOU token deploys on Base DEX upon <span className="text-foreground font-medium">{LIQUIDITY_TRIGGER_THRESHOLD.toLocaleString()} Sentinel mints</span>. 
+                        A significant portion of the initial $1,000,000 raised provides deep, stable liquidity for robust market entry.
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Action Button */}

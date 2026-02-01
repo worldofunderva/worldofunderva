@@ -1,4 +1,4 @@
-import { ArrowDown, Zap, Lock, Shield } from 'lucide-react';
+import { ArrowDown, Zap, Lock, Shield, CreditCard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
@@ -22,7 +22,7 @@ export function HeroSection() {
         >
           <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-primary animate-pulse" />
           <span className="text-[10px] sm:text-xs font-medium text-muted-foreground">
-            ETHEREUM L1 & BASE L2 SECURED
+            BASE NETWORK • HYBRID PAYMENTS
           </span>
         </motion.div>
 
@@ -48,6 +48,7 @@ export function HeroSection() {
         >
           A fixed supply of <span className="font-mono text-foreground">21,000,000</span> tokens 
           powering institutional-grade Real-World Asset tokenization across Fashion, Sportswear, and Logistics.
+          <span className="block mt-2 text-primary font-medium">Pay with crypto or local currency—your choice.</span>
         </motion.p>
 
         {/* Stats Row - Redesigned for mobile */}
@@ -55,7 +56,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mb-8 sm:mb-10 grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-8 max-w-md sm:max-w-none mx-auto"
+          className="mb-8 sm:mb-10 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-8 max-w-lg sm:max-w-none mx-auto"
         >
           <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-3 sm:p-0 rounded-xl bg-card/50 sm:bg-transparent border border-border/50 sm:border-0">
             <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
@@ -76,8 +77,16 @@ export function HeroSection() {
           <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-3 sm:p-0 rounded-xl bg-card/50 sm:bg-transparent border border-border/50 sm:border-0">
             <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             <div className="text-center sm:text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground">2.0% Cashback</p>
+              <p className="text-xs sm:text-sm font-medium text-foreground">2.0% Rewards</p>
               <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Sentinel Holders</p>
+            </div>
+          </div>
+          <div className="hidden sm:block h-8 w-px bg-border" />
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-3 sm:p-0 rounded-xl bg-card/50 sm:bg-transparent border border-border/50 sm:border-0">
+            <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <div className="text-center sm:text-left">
+              <p className="text-xs sm:text-sm font-medium text-foreground">Hybrid Pay</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Crypto or Fiat</p>
             </div>
           </div>
         </motion.div>
