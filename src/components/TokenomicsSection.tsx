@@ -1,47 +1,54 @@
-import { Lock, Zap, Database, Users, Wallet, Building } from 'lucide-react';
+import { Lock, Zap, Database, Users, Wallet, Building, Clock, AlertCircle } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { cn } from '@/lib/utils';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/scroll-reveal';
+import { forwardRef } from 'react';
 
 const distributions = [
   {
-    label: 'RWA Engagement Pool',
+    label: 'RWA Engagement Pool (UEP)',
     percentage: 35,
-    description: 'Powers 2.0% cashback rewards for Sentinel holders',
+    tokens: '7,350,000',
+    description: 'Automated rewards & cashback. Inactive until Underva Fashion launch.',
     icon: Database,
     color: 'hsl(212, 100%, 48%)',
     tailwindColor: 'bg-primary',
+    inactive: true,
   },
   {
-    label: 'DEX Liquidity',
+    label: 'DEX Liquidity Pool',
     percentage: 30,
-    description: 'Ensures deep liquidity across exchanges',
+    tokens: '6,300,000',
+    description: 'Deep liquidity for organic market demand and ecosystem stability',
     icon: Wallet,
     color: 'hsl(190, 95%, 50%)',
     tailwindColor: 'bg-cyan-500',
   },
   {
+    label: 'Ecosystem Growth',
+    percentage: 15,
+    tokens: '3,150,000',
+    description: 'Pillar expansion and strategic partnerships',
+    icon: Building,
+    color: 'hsl(160, 80%, 45%)',
+    tailwindColor: 'bg-emerald-500',
+  },
+  {
     label: 'Core Team & Advisors',
     percentage: 15,
-    description: '2-year hard lock (MPC Vault) + 3-year linear release',
+    tokens: '3,150,000',
+    description: '4-year lock with 1-year cliff',
     icon: Users,
     color: 'hsl(270, 80%, 60%)',
     tailwindColor: 'bg-violet-500',
     locked: true,
-  },
-  {
-    label: 'Ecosystem Growth',
-    percentage: 15,
-    description: '2-year hard lock (MPC Vault) + 3-year linear release',
-    icon: Building,
-    color: 'hsl(160, 80%, 45%)',
-    tailwindColor: 'bg-emerald-500',
-    locked: true,
+    lockDetails: '4Y Lock / 1Y Cliff',
   },
   {
     label: 'Treasury Reserve',
     percentage: 5,
-    description: 'Strategic reserve for operations',
+    tokens: '1,050,000',
+    description: 'Strategic operations and ecosystem security',
     icon: Lock,
     color: 'hsl(38, 92%, 50%)',
     tailwindColor: 'bg-amber-500',
@@ -53,8 +60,6 @@ const pieData = distributions.map((d) => ({
   value: d.percentage,
   color: d.color,
 }));
-
-import { forwardRef } from 'react';
 
 // Custom tooltip component for better mobile visibility - wrapped in forwardRef for Recharts
 const CustomTooltip = forwardRef<HTMLDivElement, any>(function CustomTooltip({ active, payload }, ref) {
@@ -104,16 +109,16 @@ export function TokenomicsSection() {
           <StaggerItem>
             <div className="rounded-lg sm:rounded-xl border border-border bg-card p-4 sm:p-6 text-center">
               <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono text-primary mb-0.5 sm:mb-1">2.0%</p>
-              <p className="text-[10px] sm:text-sm text-muted-foreground">Sentinel Cashback</p>
+              <p className="text-[10px] sm:text-sm text-muted-foreground">Automated Rewards</p>
             </div>
           </StaggerItem>
           <StaggerItem>
             <div className="rounded-lg sm:rounded-xl border border-border bg-card p-4 sm:p-6 text-center">
               <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
                 <Lock className="h-4 w-4 sm:h-6 sm:w-6 text-amber-500" />
-                <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono">2Y+3Y</p>
+                <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono">4Y/1Y</p>
               </div>
-              <p className="text-[10px] sm:text-sm text-muted-foreground">Lock + Release</p>
+              <p className="text-[10px] sm:text-sm text-muted-foreground">Lock / Cliff</p>
             </div>
           </StaggerItem>
         </StaggerContainer>
@@ -123,9 +128,10 @@ export function TokenomicsSection() {
           <div className="rounded-xl sm:rounded-2xl border border-border bg-card overflow-hidden">
             {/* Table Header */}
             <div className="grid grid-cols-12 gap-4 px-4 sm:px-6 py-3 sm:py-4 border-b border-border bg-secondary/30">
-              <div className="col-span-5 sm:col-span-4 text-xs sm:text-sm font-medium text-muted-foreground">Allocation</div>
-              <div className="col-span-3 sm:col-span-2 text-xs sm:text-sm font-medium text-muted-foreground text-right">Percentage</div>
-              <div className="col-span-4 sm:col-span-6 text-xs sm:text-sm font-medium text-muted-foreground hidden sm:block">Description</div>
+              <div className="col-span-4 sm:col-span-3 text-xs sm:text-sm font-medium text-muted-foreground">Allocation</div>
+              <div className="col-span-2 text-xs sm:text-sm font-medium text-muted-foreground text-right">%</div>
+              <div className="col-span-2 text-xs sm:text-sm font-medium text-muted-foreground text-right">Tokens</div>
+              <div className="col-span-4 sm:col-span-5 text-xs sm:text-sm font-medium text-muted-foreground hidden sm:block">Description</div>
             </div>
 
             {/* Table Body */}
@@ -137,7 +143,7 @@ export function TokenomicsSection() {
                   index !== distributions.length - 1 && "border-b border-border"
                 )}
               >
-                <div className="col-span-5 sm:col-span-4 flex items-center gap-2 sm:gap-3">
+                <div className="col-span-4 sm:col-span-3 flex items-center gap-2 sm:gap-3">
                   <div className={cn("flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg", item.tailwindColor, "bg-opacity-20")}>
                     <item.icon className={cn("h-4 w-4 sm:h-5 sm:w-5", item.tailwindColor.replace('bg-', 'text-'))} />
                   </div>
@@ -146,15 +152,24 @@ export function TokenomicsSection() {
                     {item.locked && (
                       <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs text-amber-500">
                         <Lock className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                        Locked
+                        {item.lockDetails}
+                      </span>
+                    )}
+                    {item.inactive && (
+                      <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground">
+                        <Clock className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                        Inactive
                       </span>
                     )}
                   </div>
                 </div>
-                <div className="col-span-3 sm:col-span-2 text-right">
+                <div className="col-span-2 text-right">
                   <span className="font-mono font-semibold text-base sm:text-lg">{item.percentage}%</span>
                 </div>
-                <div className="col-span-4 sm:col-span-6 hidden sm:block">
+                <div className="col-span-2 text-right">
+                  <span className="font-mono text-xs sm:text-sm text-muted-foreground">{item.tokens}</span>
+                </div>
+                <div className="col-span-4 sm:col-span-5 hidden sm:block">
                   <p className="text-xs sm:text-sm text-muted-foreground">{item.description}</p>
                 </div>
               </div>
@@ -179,16 +194,40 @@ export function TokenomicsSection() {
                     {item.locked && (
                       <span className="inline-flex items-center gap-1 text-[10px] text-amber-500">
                         <Lock className="h-2.5 w-2.5" />
-                        Locked
+                        {item.lockDetails}
+                      </span>
+                    )}
+                    {item.inactive && (
+                      <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+                        <Clock className="h-2.5 w-2.5" />
+                        Inactive
                       </span>
                     )}
                   </div>
                 </div>
-                <span className="font-mono font-semibold text-lg">{item.percentage}%</span>
+                <div className="text-right">
+                  <span className="font-mono font-semibold text-lg">{item.percentage}%</span>
+                  <p className="font-mono text-xs text-muted-foreground">{item.tokens}</p>
+                </div>
               </div>
               <p className="text-xs text-muted-foreground">{item.description}</p>
             </div>
           ))}
+        </ScrollReveal>
+
+        {/* UEP Inactive Notice */}
+        <ScrollReveal delay={0.25} className="mt-6 sm:mt-8">
+          <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-4 sm:p-5 flex items-start gap-3">
+            <AlertCircle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-amber-500 mb-1">RWA Engagement Pool (UEP) Status</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                The 35% UEP allocation (7,350,000 $WOU) remains <span className="text-foreground font-medium">inactive</span> until 
+                the launch of the first utility: <span className="text-foreground font-medium">Underva Fashion</span>. 
+                Upon activation, the Automated Reward Engine will begin distributing 2.0% cashback and loyalty dividends.
+              </p>
+            </div>
+          </div>
         </ScrollReveal>
 
         {/* Pie Chart Distribution */}
@@ -219,7 +258,7 @@ export function TokenomicsSection() {
             {distributions.map((item) => (
               <div key={item.label} className="flex items-center gap-1.5 sm:gap-2">
                 <div className={cn("h-2 w-2 sm:h-3 sm:w-3 rounded-full", item.tailwindColor)} />
-                <span className="text-[10px] sm:text-xs text-muted-foreground">{item.label}</span>
+                <span className="text-[10px] sm:text-xs text-muted-foreground">{item.label.split(' (')[0]}</span>
               </div>
             ))}
           </div>
