@@ -215,21 +215,6 @@ export function TokenomicsSection() {
           ))}
         </ScrollReveal>
 
-        {/* UEP Inactive Notice */}
-        <ScrollReveal delay={0.25} className="mt-6 sm:mt-8">
-          <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-4 sm:p-5 flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm font-medium text-amber-500 mb-1">RWA Engagement Pool (UEP) Status</p>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                The 35% UEP allocation (7,350,000 $WOU) remains <span className="text-foreground font-medium">inactive</span> until 
-                the launch of the first utility: <span className="text-foreground font-medium">Underva Fashion</span>. 
-                Upon activation, the Automated Reward Engine will begin distributing 2.0% cashback and loyalty dividends.
-              </p>
-            </div>
-          </div>
-        </ScrollReveal>
-
         {/* Pie Chart Distribution */}
         <ScrollReveal delay={0.3} className="mt-6 sm:mt-8 flex flex-col items-center">
           <div className="w-full max-w-xs sm:max-w-sm h-48 sm:h-64">

@@ -30,16 +30,16 @@ const phases: Phase[] = [
   },
   {
     phase: 'Phase 2',
-    title: 'Underva Fashion Expansion',
+    title: 'The Expansion Era',
     timeline: '2029–2031',
     startYear: 2029,
     endYear: 2031,
     icon: Shirt,
     milestones: [
-      'Fashion e-commerce platform launch',
+      'Underva Fashion Launch',
       'Hybrid Payment Integration (Stripe + $WOU)',
       '2.0% Reward Engine activation',
-      'Token-gated collections & drops',
+      'Underva Stride Sportswear Launch',
     ],
   },
   {
@@ -50,10 +50,10 @@ const phases: Phase[] = [
     endYear: 2034,
     icon: Footprints,
     milestones: [
-      'Underva Stride storefront launch',
       'High-performance apparel expansion',
       'Base L2 velocity optimization',
       'Extended ecosystem rewards',
+      'Global athlete partnerships',
     ],
   },
   {
