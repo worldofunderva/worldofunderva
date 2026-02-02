@@ -33,86 +33,99 @@ export function SentinelGate() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-primary/5 rounded-full blur-3xl" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-6 lg:grid-cols-2 lg:gap-8 items-stretch">
-          {/* Technical Details / Lore Side */}
-          <ScrollReveal variant="fade-right" className="h-full">
-            <div className={cn(
-              "h-full rounded-xl sm:rounded-2xl border border-border bg-card p-5 sm:p-6 lg:p-8 flex flex-col"
-            )}>
-              <div className="text-center lg:text-left mb-6">
-                <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">STRONG HOLDER VIP STATUS</p>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight mb-3 sm:mb-4">
-                  The Sentinel NFT Gate
-                </h2>
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  Fixed at <span className="text-foreground font-mono font-semibold">$500 USD</span> to ensure ecosystem fairness.
-                  The Sentinel NFT is your <span className="text-foreground font-medium">mandatory enrollment credential</span> required 
-                  to participate in the 2.0% Automated Reward Engine.
-                </p>
-              </div>
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16 items-start">
+          {/* Content Side */}
+          <ScrollReveal variant="fade-right">
+            <div className="text-center lg:text-left">
+              <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">STRONG HOLDER VIP STATUS</p>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-4 sm:mb-6">
+                The Sentinel NFT Gate
+              </h2>
+              <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mb-6 sm:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                Fixed at <span className="text-foreground font-mono font-semibold">$500 USD</span> to ensure ecosystem fairness.
+                The Sentinel NFT is your <span className="text-foreground font-medium">mandatory enrollment credential</span> required 
+                to participate in the 2.0% Automated Reward Engine.
+              </p>
 
               {/* The Reward Engine */}
-              <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 sm:p-5 text-left mb-4 sm:mb-6">
-                <h4 className="text-xs sm:text-sm font-semibold mb-3 flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-primary" />
+              <div className="mb-6 sm:mb-8 rounded-xl border border-primary/30 bg-primary/5 p-4 sm:p-6 text-left">
+                <h4 className="text-sm sm:text-base font-semibold mb-4 flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   The Automated Reward Engine
                 </h4>
-                <div className="space-y-2.5">
-                  <div className="flex items-start gap-2.5">
-                    <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
-                      <Check className="h-2.5 w-2.5" />
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
+                      <Check className="h-3 w-3" />
                     </div>
                     <div>
-                      <p className="text-[11px] sm:text-xs font-medium">The Sentinel Reward (Active Buyers)</p>
-                      <p className="text-[10px] text-muted-foreground">
-                        2.0% cashback on all $WOU purchases. Sentinel NFT required.
+                      <p className="text-xs sm:text-sm font-medium">The Sentinel Reward (Active Buyers)</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">
+                        Automated 2.0% cashback on all purchases made using $WOU. Reserved strictly for Sentinel NFT holders.
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-2.5">
-                    <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
-                      <Check className="h-2.5 w-2.5" />
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
+                      <Check className="h-3 w-3" />
                     </div>
                     <div>
-                      <p className="text-[11px] sm:text-xs font-medium">The Loyalty Dividend (Strong Holders)</p>
-                      <p className="text-[10px] text-muted-foreground">
-                        2.0% bonus every 6 months for $WOU + Sentinel holders.
+                      <p className="text-xs sm:text-sm font-medium">The Loyalty Dividend (Strong Holders)</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">
+                        Automated 2.0% bonus based on total $WOU held, distributed every 6 months to wallets holding both $WOU and the Sentinel NFT.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* VIP Perks Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 flex-1">
-                {[
-                  { icon: Ticket, title: 'Early Access', desc: 'Limited drops' },
-                  { icon: Vote, title: 'Governance', desc: 'Voting rights' },
-                  { icon: Users, title: 'Community', desc: 'Sentinels-Only' },
-                  { icon: Crown, title: 'Events', desc: 'Private access' },
-                  { icon: Sparkles, title: 'Airdrops', desc: 'Utility rewards' },
-                  { icon: Truck, title: 'Express', desc: 'Priority shipping' },
-                ].map((perk) => (
-                  <div key={perk.title} className="rounded-lg border border-border bg-secondary/30 p-2.5 sm:p-3">
-                    <perk.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary mb-1.5" />
-                    <p className="text-[10px] sm:text-xs font-medium">{perk.title}</p>
-                    <p className="text-[9px] sm:text-[10px] text-muted-foreground">{perk.desc}</p>
-                  </div>
-                ))}
+              {/* VIP Perks List */}
+              <div className="mb-6 sm:mb-8 text-left max-w-xl mx-auto lg:mx-0">
+                <h4 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                  <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                  VIP Perks
+                </h4>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <span>Early access to limited drops & private auctions</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <span>Governance voting rights on key decisions</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <span>Sentinels-Only exclusive community access</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <span>Private events hosted by Underva & Stride</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <span>Exclusive utility airdrops & ecosystem rewards</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <span>Priority "Express" shipment processing</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </ScrollReveal>
 
-          {/* Mint / Action Box Side */}
-          <ScrollReveal variant="fade-left" delay={0.2} className="h-full">
-            <div className={cn(
-              "h-full rounded-xl sm:rounded-2xl border p-5 sm:p-6 lg:p-8 transition-all duration-500 flex flex-col",
-              hasSentinelNFT 
-                ? "border-success/50 bg-success/5 sentinel-glow"
-                : isConnected
-                  ? "border-warning/50 bg-warning/5"
-                  : "border-border bg-card"
-            )}>
+          {/* Interactive Card Side */}
+          <ScrollReveal variant="fade-left" delay={0.2}>
+            <div className="relative">
+              <div className={cn(
+                "rounded-xl sm:rounded-2xl border p-5 sm:p-6 lg:p-8 transition-all duration-500",
+                hasSentinelNFT 
+                  ? "border-success/50 bg-success/5 sentinel-glow"
+                  : isConnected
+                    ? "border-warning/50 bg-warning/5"
+                    : "border-border bg-card"
+              )}>
                 {/* Card Header */}
                 <div className="flex items-center justify-between mb-5 sm:mb-8">
                   <div className="flex items-center gap-2 sm:gap-3">
@@ -224,8 +237,7 @@ export function SentinelGate() {
                   </div>
                 </div>
 
-                {/* Action Button - pushed to bottom */}
-                <div className="mt-auto">
+                {/* Action Button */}
                 {!isConnected ? (
                   <Button 
                     variant="sentinel" 
@@ -276,7 +288,7 @@ export function SentinelGate() {
                     Minting Opens Soon
                   </Button>
                 )}
-                </div>
+              </div>
             </div>
           </ScrollReveal>
         </div>
