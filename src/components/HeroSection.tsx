@@ -22,7 +22,7 @@ export function HeroSection() {
         >
           <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-primary animate-pulse" />
           <span className="text-[10px] sm:text-xs font-medium text-muted-foreground">
-            BASE NETWORK • HYBRID PAYMENTS
+            ETHEREUM L1 & BASE L2 SECURED
           </span>
         </motion.div>
 
@@ -48,7 +48,7 @@ export function HeroSection() {
         >
           A fixed supply of <span className="font-mono text-foreground">21,000,000</span> tokens 
           powering institutional-grade Real-World Asset tokenization across Fashion, Sportswear, and Logistics.
-          <span className="block mt-2 text-primary font-medium">Pay with crypto or local currency—your choice.</span>
+          <span className="block mt-2 text-primary font-medium">Pay with $WOU or local currency — your choice.</span>
         </motion.p>
 
         {/* Stats Row - Three metrics */}
@@ -56,29 +56,29 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mb-8 sm:mb-10 flex flex-wrap items-center justify-center gap-4 sm:gap-8"
+          className="mb-8 sm:mb-10 flex flex-row items-center justify-center gap-3 sm:gap-6 lg:gap-8"
         >
-          <div className="flex items-center gap-2">
-            <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
             <div className="text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground">21M Fixed</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Total Supply</p>
+              <p className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap">21M Fixed</p>
+              <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Total Supply</p>
             </div>
           </div>
-          <div className="h-8 w-px bg-border" />
-          <div className="flex items-center gap-2">
-            <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+          <div className="h-8 w-px bg-border shrink-0" />
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
             <div className="text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground">Zero Tax</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Frictionless Commerce</p>
+              <p className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap">Zero Tax</p>
+              <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">No Fees</p>
             </div>
           </div>
-          <div className="h-8 w-px bg-border" />
-          <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+          <div className="h-8 w-px bg-border shrink-0" />
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
             <div className="text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground">2.0% Automated Rewards</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">Sentinel Holders</p>
+              <p className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap">2.0% Rewards</p>
+              <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Automated</p>
             </div>
           </div>
         </motion.div>
