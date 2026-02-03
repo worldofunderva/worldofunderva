@@ -41,24 +41,27 @@ export function CommunitySection() {
         </ScrollReveal>
 
         <StaggerContainer className="flex flex-wrap justify-center gap-2 sm:gap-3" staggerDelay={0.05}>
-          {socialLinks.map((social) => (
-            <StaggerItem key={social.name}>
-              <a
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  "glass-card px-4 sm:px-5 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3",
-                  "transition-all duration-300 group active:scale-95",
-                  social.color
-                )}
-              >
-                <social.icon />
-                <span className="text-xs sm:text-sm font-medium text-foreground">{social.name}</span>
-                <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-              </a>
-            </StaggerItem>
-          ))}
+          {socialLinks.map((social) => {
+            const IconComponent = social.icon;
+            return (
+              <StaggerItem key={social.name}>
+                <a
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "glass-card px-4 sm:px-5 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3",
+                    "transition-all duration-300 group active:scale-95",
+                    social.color
+                  )}
+                >
+                  <IconComponent />
+                  <span className="text-xs sm:text-sm font-medium text-foreground">{social.name}</span>
+                  <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                </a>
+              </StaggerItem>
+            );
+          })}
         </StaggerContainer>
       </div>
     </section>

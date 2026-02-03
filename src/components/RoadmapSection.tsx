@@ -148,11 +148,14 @@ export function RoadmapSection() {
       
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <ScrollReveal className="mx-auto max-w-2xl text-center mb-10 sm:mb-16">
-          <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">STRATEGIC TIMELINE</p>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight">
+        <ScrollReveal className="mx-auto max-w-3xl text-center mb-10 sm:mb-16">
+          <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3 tracking-widest">STRATEGIC TIMELINE</p>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
             The Decade of Discipline
           </h2>
+          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground">
+            A disciplined, multi-year roadmap for complete vertical integration.
+          </p>
         </ScrollReveal>
 
         {/* Horizontal Timeline Chart */}
