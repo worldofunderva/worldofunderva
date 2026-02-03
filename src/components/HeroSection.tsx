@@ -1,4 +1,4 @@
-import { ArrowDown, Zap, Lock, Shield, CreditCard } from 'lucide-react';
+import { ArrowDown, Zap, Lock, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
@@ -51,42 +51,34 @@ export function HeroSection() {
           <span className="block mt-2 text-primary font-medium">Pay with crypto or local currency—your choice.</span>
         </motion.p>
 
-        {/* Stats Row - Redesigned for mobile */}
+        {/* Stats Row - Three metrics */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mb-8 sm:mb-10 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-8 max-w-lg sm:max-w-none mx-auto"
+          className="mb-8 sm:mb-10 flex flex-wrap items-center justify-center gap-4 sm:gap-8"
         >
-          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-3 sm:p-0 rounded-xl bg-card/50 sm:bg-transparent border border-border/50 sm:border-0">
+          <div className="flex items-center gap-2">
             <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-            <div className="text-center sm:text-left">
+            <div className="text-left">
               <p className="text-xs sm:text-sm font-medium text-foreground">21M Fixed</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Total Supply</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Total Supply</p>
             </div>
           </div>
-          <div className="hidden sm:block h-8 w-px bg-border" />
-          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-3 sm:p-0 rounded-xl bg-card/50 sm:bg-transparent border border-border/50 sm:border-0">
+          <div className="h-8 w-px bg-border" />
+          <div className="flex items-center gap-2">
             <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-            <div className="text-center sm:text-left">
+            <div className="text-left">
               <p className="text-xs sm:text-sm font-medium text-foreground">Zero Tax</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Frictionless Commerce</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Frictionless Commerce</p>
             </div>
           </div>
-          <div className="hidden sm:block h-8 w-px bg-border" />
-          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-3 sm:p-0 rounded-xl bg-card/50 sm:bg-transparent border border-border/50 sm:border-0">
+          <div className="h-8 w-px bg-border" />
+          <div className="flex items-center gap-2">
             <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-            <div className="text-center sm:text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground">2.0% Rewards</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Sentinel Holders</p>
-            </div>
-          </div>
-          <div className="hidden sm:block h-8 w-px bg-border" />
-          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-3 sm:p-0 rounded-xl bg-card/50 sm:bg-transparent border border-border/50 sm:border-0">
-            <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-            <div className="text-center sm:text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground">Hybrid Pay</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Crypto or Fiat</p>
+            <div className="text-left">
+              <p className="text-xs sm:text-sm font-medium text-foreground">2.0% Automated Rewards</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Sentinel Holders</p>
             </div>
           </div>
         </motion.div>
