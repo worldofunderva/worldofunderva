@@ -37,14 +37,13 @@ export function SentinelGate() {
           {/* Content Side */}
           <ScrollReveal variant="fade-right">
             <div className="text-center lg:text-left">
-              <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">STRONG HOLDER VIP STATUS</p>
+              <p className="text-[10px] sm:text-xs font-medium text-primary tracking-widest mb-2 sm:mb-3">COMPLIANCE GATEWAY</p>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-4 sm:mb-6">
                 The Sentinel NFT Gate
               </h2>
               <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mb-6 sm:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Fixed at <span className="text-foreground font-mono font-semibold">$500 USD</span> to ensure ecosystem fairness.
-                The Sentinel NFT is your <span className="text-foreground font-medium">mandatory enrollment credential</span> required 
-                to participate in the 2.0% Automated Reward Engine.
+                The Sentinel NFT is your <span className="text-foreground font-semibold">mandatory, one-time compliance credential</span> required 
+                to unlock the full benefits of the World of Underva ecosystem.
               </p>
 
               {/* Three Main Perks */}
