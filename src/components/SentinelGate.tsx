@@ -1,4 +1,4 @@
-import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock, Crown, Ticket, Truck, Vote, Users } from 'lucide-react';
+import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -47,70 +47,80 @@ export function SentinelGate() {
                 to participate in the 2.0% Automated Reward Engine.
               </p>
 
-              {/* The Reward Engine */}
-              <div className="mb-6 sm:mb-8 rounded-xl border border-primary/30 bg-primary/5 p-4 sm:p-6 text-left">
-                <h4 className="text-sm sm:text-base font-semibold mb-4 flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                  The Automated Reward Engine
-                </h4>
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
-                      <Check className="h-3 w-3" />
-                    </div>
-                    <div>
-                      <p className="text-xs sm:text-sm font-medium">The Sentinel Reward (Active Buyers)</p>
-                      <p className="text-[10px] sm:text-xs text-muted-foreground">
-                        Automated 2.0% cashback on all purchases made using $WOU. Reserved strictly for Sentinel NFT holders.
-                      </p>
-                    </div>
+              {/* Three Main Perks */}
+              <div className="space-y-4 sm:space-y-5 text-left">
+                {/* 2.0% Automated Reward Engine */}
+                <div className="flex items-start gap-3">
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
+                    <Check className="h-3 w-3" />
                   </div>
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
-                      <Check className="h-3 w-3" />
-                    </div>
-                    <div>
-                      <p className="text-xs sm:text-sm font-medium">The Loyalty Dividend (Strong Holders)</p>
-                      <p className="text-[10px] sm:text-xs text-muted-foreground">
-                        Automated 2.0% bonus based on total $WOU held, distributed every 6 months to wallets holding both $WOU and the Sentinel NFT.
-                      </p>
-                    </div>
+                  <div>
+                    <p className="text-xs sm:text-sm font-semibold text-foreground">2.0% Automated Reward Engine</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                      Powered by the RWA Engagement Pool (UEP). Every Underva purchase triggers an automatic $WOU cashback to your wallet—instant on Base L2.
+                    </p>
+                    <ul className="mt-2 space-y-1">
+                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                        <Check className="h-3 w-3 text-primary shrink-0" />
+                        <span>2.0% instant cashback on all $WOU purchases</span>
+                      </li>
+                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                        <Check className="h-3 w-3 text-primary shrink-0" />
+                        <span>2.0% semi-annual loyalty dividend for holders</span>
+                      </li>
+                    </ul>
                   </div>
                 </div>
-              </div>
 
-              {/* VIP Perks List */}
-              <div className="mb-6 sm:mb-8 text-left max-w-xl mx-auto lg:mx-0">
-                <h4 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 flex items-center gap-2">
-                  <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                  VIP Perks
-                </h4>
-                <ul className="space-y-2">
-                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span>Early access to limited drops & private auctions</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span>Governance voting rights on key decisions</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span>Sentinels-Only exclusive community access</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span>Private events hosted by Underva & Stride</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span>Exclusive utility airdrops & ecosystem rewards</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span>Priority "Express" shipment processing</span>
-                  </li>
-                </ul>
+                {/* Strong Holder VIP Status */}
+                <div className="flex items-start gap-3">
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
+                    <Check className="h-3 w-3" />
+                  </div>
+                  <div>
+                    <p className="text-xs sm:text-sm font-semibold text-foreground">Strong Holder VIP Status</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                      7-day early access to limited drops, governance voting rights, Sentinels-Only community access, and exclusive utility airdrops.
+                    </p>
+                    <ul className="mt-2 space-y-1">
+                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                        <Check className="h-3 w-3 text-primary shrink-0" />
+                        <span>Early access to limited drops & private auctions</span>
+                      </li>
+                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                        <Check className="h-3 w-3 text-primary shrink-0" />
+                        <span>Governance voting rights on key decisions</span>
+                      </li>
+                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                        <Check className="h-3 w-3 text-primary shrink-0" />
+                        <span>Private events hosted by Underva & Stride</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Lifetime Ownership */}
+                <div className="flex items-start gap-3">
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
+                    <Check className="h-3 w-3" />
+                  </div>
+                  <div>
+                    <p className="text-xs sm:text-sm font-semibold text-foreground">Lifetime Ownership</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                      Mint once, benefit forever. No subscriptions. Your Sentinel is a tradeable asset with secondary market value on OpenSea & Blur.
+                    </p>
+                    <ul className="mt-2 space-y-1">
+                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                        <Check className="h-3 w-3 text-primary shrink-0" />
+                        <span>Priority "Express" shipment processing</span>
+                      </li>
+                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                        <Check className="h-3 w-3 text-primary shrink-0" />
+                        <span>Exclusive utility airdrops & ecosystem rewards</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
           </ScrollReveal>
