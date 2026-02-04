@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAccount, useSwitchChain } from 'wagmi';
@@ -11,22 +10,15 @@ import { cn } from '@/lib/utils';
  * 
  * Displays a prominent red banner when user is connected to wrong network.
  * Provides quick action to switch to Base network.
+ * This is shown INSTEAD of allowing connection on wrong networks.
  */
 export function NetworkWarningBanner() {
-  const { isConnected, chainId, status } = useAccount();
+  const { isConnected, chainId } = useAccount();
   const { switchChain, isPending } = useSwitchChain();
 
-  // chainId might be undefined initially, so we need to handle that case
-  // Only show warning if we're connected AND have a chainId AND it's not Base
+  // Only show if connected AND chainId is known AND not on Base
   const isOnBase = chainId === base.id;
   const showBanner = isConnected && chainId !== undefined && !isOnBase;
-
-  // Debug logging
-  useEffect(() => {
-    if (isConnected) {
-      console.log('[NetworkWarningBanner] Connected:', { chainId, isOnBase, status, baseId: base.id });
-    }
-  }, [isConnected, chainId, isOnBase, status]);
 
   const handleSwitch = () => {
     if (switchChain) {
@@ -45,16 +37,16 @@ export function NetworkWarningBanner() {
           className="fixed top-0 left-0 right-0 z-[100] overflow-hidden"
         >
           <div className={cn(
-            "bg-destructive/95 backdrop-blur-sm",
-            "border-b border-destructive",
-            "px-4 py-3"
+            "bg-destructive",
+            "border-b-2 border-destructive-foreground/20",
+            "px-4 py-3 sm:py-4"
           )}>
             <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
               {/* Warning Icon & Message */}
               <div className="flex items-center gap-2 text-destructive-foreground">
-                <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
-                <span className="text-xs sm:text-sm font-medium text-center sm:text-left">
-                  Wrong Network Detected — Please switch to <strong>Base Network</strong> to access World of Underva
+                <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 animate-pulse" />
+                <span className="text-sm sm:text-base font-semibold text-center sm:text-left">
+                  Wrong Network — Switch to Base to continue
                 </span>
               </div>
 
@@ -65,14 +57,14 @@ export function NetworkWarningBanner() {
                 onClick={handleSwitch}
                 disabled={isPending}
                 className={cn(
-                  "bg-white/10 border-white/30 text-white",
-                  "hover:bg-white/20 hover:border-white/50",
-                  "text-xs sm:text-sm font-semibold",
+                  "bg-white text-destructive border-white",
+                  "hover:bg-white/90 hover:text-destructive",
+                  "text-sm font-bold px-6",
                   "shrink-0",
                   isPending && "opacity-50 cursor-wait"
                 )}
               >
-                {isPending ? 'Switching...' : 'Switch to Base'}
+                {isPending ? 'Switching...' : 'Switch to Base Network'}
               </Button>
             </div>
           </div>
@@ -80,4 +72,17 @@ export function NetworkWarningBanner() {
       )}
     </AnimatePresence>
   );
+}
+
+/**
+ * Hook to check if wallet should be blocked due to wrong network
+ */
+export function useNetworkBlock() {
+  const { isConnected, chainId } = useAccount();
+  const isOnBase = chainId === base.id;
+  
+  // Block interactions if connected but not on Base
+  const isBlocked = isConnected && chainId !== undefined && !isOnBase;
+  
+  return { isBlocked, isOnBase };
 }
