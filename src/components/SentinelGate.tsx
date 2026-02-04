@@ -1,6 +1,7 @@
 import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAccount } from 'wagmi';
+import { base } from 'wagmi/chains';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useSentinel } from '@/contexts/SentinelContext';
 import { cn } from '@/lib/utils';
@@ -14,10 +15,14 @@ const MINT_PRICE_USD = 500;
 const LIQUIDITY_TRIGGER_THRESHOLD = 2000;
 
 export function SentinelGate() {
-  const { isConnected } = useAccount();
+  const { isConnected, chainId } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { hasSentinelNFT, isCheckingOwnership, isNFTContractReady } = useSentinel();
   const { ethPrice, getEthEquivalent, isLoading: isPriceLoading } = useEthPrice();
+  
+  // Network check - only Base is supported
+  const isOnBase = chainId === base.id;
+  const isWrongNetwork = isConnected && chainId !== undefined && !isOnBase;
 
   // Mint function - will be implemented when NFT contract is deployed
   const handleMint = () => {
@@ -33,7 +38,7 @@ export function SentinelGate() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-primary/5 rounded-full blur-3xl" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16 items-start">
+        <div className="grid gap-8 lg:grid-cols-[1fr,400px] lg:gap-12 xl:gap-16 items-start">
           {/* Content Side */}
           <ScrollReveal variant="fade-right">
             <div className="text-center lg:text-left">
@@ -46,79 +51,77 @@ export function SentinelGate() {
                 to unlock the full benefits of the World of Underva ecosystem.
               </p>
 
-              {/* Three Main Perks */}
-              <div className="space-y-4 sm:space-y-5 text-left">
+              {/* Three Main Perks - Horizontal Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 text-left">
                 {/* 2.0% Automated Reward Engine */}
-                <div className="flex items-start gap-3">
-                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
-                    <Check className="h-3 w-3" />
+                <div className="glass-card p-4 sm:p-5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/20 text-success mb-3">
+                    <Check className="h-4 w-4" />
                   </div>
-                  <div>
-                    <p className="text-xs sm:text-sm font-semibold text-foreground">2.0% Automated Reward Engine</p>
-                    <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
-                      Powered by the RWA Engagement Pool (UEP). Every Underva purchase triggers an automatic $WOU cashback to your wallet—instant on Base L2.
-                    </p>
-                    <ul className="mt-2 space-y-1">
-                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
-                        <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>2.0% instant cashback on all $WOU purchases</span>
-                      </li>
-                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
-                        <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>2.0% semi-annual loyalty dividend for holders</span>
-                      </li>
-                    </ul>
-                  </div>
+                  <p className="text-xs sm:text-sm font-semibold text-foreground mb-2">2.0% Automated Reward Engine</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground mb-3">
+                    Powered by the RWA Engagement Pool (UEP).
+                  </p>
+                  <ul className="space-y-1.5">
+                    <li className="flex items-start gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                      <Check className="h-3 w-3 text-primary shrink-0 mt-0.5" />
+                      <span>2.0% instant cashback</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                      <Check className="h-3 w-3 text-primary shrink-0 mt-0.5" />
+                      <span>Semi-annual dividends</span>
+                    </li>
+                  </ul>
                 </div>
 
                 {/* Strong Holder VIP Status */}
-                <div className="flex items-start gap-3">
-                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
-                    <Check className="h-3 w-3" />
+                <div className="glass-card p-4 sm:p-5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/20 text-success mb-3">
+                    <Check className="h-4 w-4" />
                   </div>
-                  <div>
-                    <p className="text-xs sm:text-sm font-semibold text-foreground">Strong Holder VIP Status</p>
-                    <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
-                      7-day early access to limited drops, governance voting rights, Sentinels-Only community access, and exclusive utility airdrops.
-                    </p>
-                    <ul className="mt-2 space-y-1">
-                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
-                        <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>Early access to limited drops & private auctions</span>
-                      </li>
-                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
-                        <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>Governance voting rights on key decisions</span>
-                      </li>
-                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
-                        <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>Private events hosted by Underva & Stride</span>
-                      </li>
-                    </ul>
-                  </div>
+                  <p className="text-xs sm:text-sm font-semibold text-foreground mb-2">Strong Holder VIP Status</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground mb-3">
+                    Exclusive access and governance rights.
+                  </p>
+                  <ul className="space-y-1.5">
+                    <li className="flex items-start gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                      <Check className="h-3 w-3 text-primary shrink-0 mt-0.5" />
+                      <span>7-day early access</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                      <Check className="h-3 w-3 text-primary shrink-0 mt-0.5" />
+                      <span>Governance voting</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                      <Check className="h-3 w-3 text-primary shrink-0 mt-0.5" />
+                      <span>Private events</span>
+                    </li>
+                  </ul>
                 </div>
 
                 {/* Lifetime Ownership */}
-                <div className="flex items-start gap-3">
-                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
-                    <Check className="h-3 w-3" />
+                <div className="glass-card p-4 sm:p-5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/20 text-success mb-3">
+                    <Check className="h-4 w-4" />
                   </div>
-                  <div>
-                    <p className="text-xs sm:text-sm font-semibold text-foreground">Lifetime Ownership</p>
-                    <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
-                      Mint once, benefit forever. No subscriptions. Your Sentinel is a tradeable asset with secondary market value on OpenSea & Blur.
-                    </p>
-                    <ul className="mt-2 space-y-1">
-                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
-                        <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>Priority "Express" shipment processing</span>
-                      </li>
-                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
-                        <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>Exclusive utility airdrops & ecosystem rewards</span>
-                      </li>
-                    </ul>
-                  </div>
+                  <p className="text-xs sm:text-sm font-semibold text-foreground mb-2">Lifetime Ownership</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground mb-3">
+                    Mint once, benefit forever.
+                  </p>
+                  <ul className="space-y-1.5">
+                    <li className="flex items-start gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                      <Check className="h-3 w-3 text-primary shrink-0 mt-0.5" />
+                      <span>Priority processing</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                      <Check className="h-3 w-3 text-primary shrink-0 mt-0.5" />
+                      <span>Tradeable on OpenSea</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                      <Check className="h-3 w-3 text-primary shrink-0 mt-0.5" />
+                      <span>Exclusive airdrops</span>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -166,8 +169,23 @@ export function SentinelGate() {
                   </div>
                 </div>
 
+                {/* Wrong Network Warning */}
+                {isWrongNetwork && (
+                  <div className="mb-4 sm:mb-6 rounded-lg border border-destructive/50 bg-destructive/10 p-3 sm:p-4">
+                    <div className="flex items-start gap-2 sm:gap-3">
+                      <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-destructive shrink-0 mt-0.5 animate-pulse" />
+                      <div>
+                        <p className="text-xs sm:text-sm font-medium text-destructive">Wrong Network</p>
+                        <p className="text-[10px] sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">
+                          Please switch to Base Network to mint your Sentinel NFT.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Status Display */}
-                {isConnected && !hasSentinelNFT && !isCheckingOwnership && (
+                {isConnected && !isWrongNetwork && !hasSentinelNFT && !isCheckingOwnership && (
                   <div className="mb-4 sm:mb-6 rounded-lg border border-warning/30 bg-warning/10 p-3 sm:p-4">
                     <div className="flex items-start gap-2 sm:gap-3">
                       <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-warning shrink-0 mt-0.5" />
@@ -255,6 +273,16 @@ export function SentinelGate() {
                     onClick={openConnectModal}
                   >
                     Connect Wallet to Mint
+                  </Button>
+                ) : isWrongNetwork ? (
+                  <Button 
+                    variant="destructive" 
+                    size="lg" 
+                    className="w-full h-10 sm:h-12 text-xs sm:text-sm"
+                    disabled
+                  >
+                    <AlertTriangle className="h-4 w-4 mr-2" />
+                    Switch to Base Network
                   </Button>
                 ) : isCheckingOwnership ? (
                   <Button 
