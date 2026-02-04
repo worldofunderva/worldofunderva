@@ -10,7 +10,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { SentinelProvider } from '@/contexts/SentinelContext';
 import { config } from '@/config/wagmi';
 import { useWalletSessionPolicy } from '@/hooks/useWalletSessionPolicy';
-import { useStrictNetworkGatekeeper } from '@/hooks/useStrictNetworkGatekeeper';
+import { NetworkWarningBanner } from '@/components/NetworkWarningBanner';
 
 // Lazy load pages for code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -23,11 +23,10 @@ const PageLoader = () => (
 
 /**
  * Wallet Security Manager
- * Combines session policy (no auto-reconnect) with strict network enforcement
+ * Enforces session policy (no auto-reconnect)
  */
 function WalletSecurityManager() {
   useWalletSessionPolicy();
-  useStrictNetworkGatekeeper();
   return null;
 }
 
@@ -67,6 +66,7 @@ const App = () => (
       >
         <SentinelProvider>
           <TooltipProvider>
+            <NetworkWarningBanner />
             <Toaster />
             <Sonner />
             <BrowserRouter>
