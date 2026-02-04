@@ -48,6 +48,7 @@ export function HeroSection() {
         >
           A fixed supply of <span className="font-mono text-foreground">21,000,000</span> tokens 
           powering institutional-grade Real-World Asset tokenization across Fashion, Sportswear, and Logistics.
+          <span className="block mt-2 text-primary font-medium">Pay with $WOU or local currency — your choice.</span>
         </motion.p>
 
         {/* Stats Row - Three metrics */}
