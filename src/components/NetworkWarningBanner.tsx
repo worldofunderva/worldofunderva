@@ -1,4 +1,5 @@
-import { AlertTriangle, X } from 'lucide-react';
+import { useEffect } from 'react';
+import { AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { base } from 'wagmi/chains';
@@ -12,11 +13,20 @@ import { cn } from '@/lib/utils';
  * Provides quick action to switch to Base network.
  */
 export function NetworkWarningBanner() {
-  const { isConnected, chainId } = useAccount();
+  const { isConnected, chainId, status } = useAccount();
   const { switchChain, isPending } = useSwitchChain();
 
+  // chainId might be undefined initially, so we need to handle that case
+  // Only show warning if we're connected AND have a chainId AND it's not Base
   const isOnBase = chainId === base.id;
-  const showBanner = isConnected && !isOnBase;
+  const showBanner = isConnected && chainId !== undefined && !isOnBase;
+
+  // Debug logging
+  useEffect(() => {
+    if (isConnected) {
+      console.log('[NetworkWarningBanner] Connected:', { chainId, isOnBase, status, baseId: base.id });
+    }
+  }, [isConnected, chainId, isOnBase, status]);
 
   const handleSwitch = () => {
     if (switchChain) {
