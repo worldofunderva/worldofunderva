@@ -31,7 +31,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4 }}
-          className="mb-5 sm:mb-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.1]"
+          className="mb-4 sm:mb-6 text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]"
         >
           <span className="text-foreground">The Corporate Tender</span>
           <br />
@@ -44,7 +44,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="mx-auto mb-8 sm:mb-10 max-w-2xl text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground px-2"
+          className="mx-auto mb-6 sm:mb-8 max-w-2xl text-[0.9rem] sm:text-base md:text-lg lg:text-xl text-muted-foreground px-2"
         >
           A fixed supply of <span className="font-mono text-foreground">21,000,000</span> tokens 
           powering institutional-grade Real-World Asset tokenization across Fashion, Sportswear, and Logistics.
@@ -56,29 +56,29 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mb-10 sm:mb-12 flex flex-row items-center justify-center gap-4 sm:gap-6 lg:gap-8"
+          className="mb-8 sm:mb-10 flex flex-row items-center justify-center gap-3 sm:gap-6 lg:gap-8"
         >
-          <div className="flex items-center gap-2 sm:gap-2">
-            <Lock className="h-5 w-5 sm:h-5 sm:w-5 text-primary shrink-0" />
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
             <div className="text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">21M Fixed</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">Total Supply</p>
+              <p className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap">21M Fixed</p>
+              <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Total Supply</p>
             </div>
           </div>
-          <div className="h-10 w-px bg-border shrink-0" />
-          <div className="flex items-center gap-2 sm:gap-2">
-            <Zap className="h-5 w-5 sm:h-5 sm:w-5 text-primary shrink-0" />
+          <div className="h-8 w-px bg-border shrink-0" />
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
             <div className="text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">Zero Tax</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">No Fees</p>
+              <p className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap">Zero Tax</p>
+              <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">No Fees</p>
             </div>
           </div>
-          <div className="h-10 w-px bg-border shrink-0" />
-          <div className="flex items-center gap-2 sm:gap-2">
-            <Shield className="h-5 w-5 sm:h-5 sm:w-5 text-primary shrink-0" />
+          <div className="h-8 w-px bg-border shrink-0" />
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
             <div className="text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">2.0% Rewards</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">Automated</p>
+              <p className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap">2.0% Rewards</p>
+              <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Automated</p>
             </div>
           </div>
         </motion.div>
