@@ -142,18 +142,18 @@ export function RoadmapSection() {
   );
 
   return (
-    <section id="roadmap" className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
+    <section id="roadmap" className="relative py-20 sm:py-28 lg:py-36 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 grid-pattern opacity-30" />
       
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <ScrollReveal className="mx-auto max-w-3xl text-center mb-10 sm:mb-16">
-          <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3 tracking-widest">STRATEGIC TIMELINE</p>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
+        <ScrollReveal className="mx-auto max-w-3xl text-center mb-12 sm:mb-16">
+          <p className="text-sm font-medium text-primary mb-3 tracking-widest">STRATEGIC TIMELINE</p>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-4">
             The Decade of Discipline
           </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed">
             A disciplined, multi-year roadmap for complete vertical integration.
           </p>
         </ScrollReveal>
@@ -169,7 +169,7 @@ export function RoadmapSection() {
           </ScrollReveal>
 
           {/* Phase Cards */}
-          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6" staggerDelay={0.15}>
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6" staggerDelay={0.15}>
             {phasesWithStatus.map((phase) => (
               <StaggerItem key={phase.phase} className="relative">
                 {/* Node on timeline - Desktop only */}
@@ -196,7 +196,7 @@ export function RoadmapSection() {
                 {/* Card */}
                 <div
                   className={cn(
-                    "group h-full rounded-lg sm:rounded-xl border bg-card p-4 sm:p-5 transition-all duration-300",
+                    "group h-full rounded-xl border bg-card p-5 sm:p-6 transition-all duration-300",
                     phase.status === 'completed'
                       ? "border-success/50 bg-success/5"
                       : phase.status === 'active'
@@ -205,10 +205,10 @@ export function RoadmapSection() {
                   )}
                 >
                   {/* Mobile/Tablet Icon & Header */}
-                  <div className="lg:hidden flex items-center gap-3 mb-3 sm:mb-4">
+                  <div className="lg:hidden flex items-center gap-3 mb-4">
                     <div
                       className={cn(
-                        "flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full",
+                        "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
                         phase.status === 'completed'
                           ? "bg-success"
                           : phase.status === 'active'
@@ -225,21 +225,21 @@ export function RoadmapSection() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-[10px] sm:text-xs font-mono text-primary">{phase.phase}</span>
+                        <span className="text-xs font-mono text-primary">{phase.phase}</span>
                         {phase.status === 'completed' && (
-                          <span className="flex items-center gap-1 text-[10px] sm:text-xs text-success">
+                          <span className="flex items-center gap-1 text-xs text-success">
                             <CheckCircle2 className="h-3 w-3" />
                             Complete
                           </span>
                         )}
                         {phase.status === 'active' && (
-                          <span className="flex items-center gap-1 text-[10px] sm:text-xs text-primary">
+                          <span className="flex items-center gap-1 text-xs text-primary">
                             <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
                             Active
                           </span>
                         )}
                       </div>
-                      <p className="text-[10px] sm:text-xs text-muted-foreground">{phase.timeline}</p>
+                      <p className="text-xs text-muted-foreground">{phase.timeline}</p>
                     </div>
                   </div>
 
@@ -266,21 +266,21 @@ export function RoadmapSection() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3 lg:mb-4">{phase.title}</h3>
+                  <h3 className="text-base sm:text-lg font-semibold mb-3 lg:mb-4">{phase.title}</h3>
 
                   {/* Milestones */}
-                  <ul className="space-y-1.5 sm:space-y-2">
+                  <ul className="space-y-2">
                     {phase.milestones.map((milestone, i) => (
                       <li
                         key={i}
-                        className="flex items-start gap-2 text-[10px] sm:text-xs text-muted-foreground"
+                        className="flex items-start gap-2 text-sm text-muted-foreground"
                       >
                         {phase.status === 'completed' ? (
-                          <CheckCircle2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 mt-0.5 text-success shrink-0" />
+                          <CheckCircle2 className="h-4 w-4 mt-0.5 text-success shrink-0" />
                         ) : phase.status === 'active' ? (
-                          <CheckCircle2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 mt-0.5 text-primary shrink-0" />
+                          <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary shrink-0" />
                         ) : (
-                          <Circle className="h-3 w-3 sm:h-3.5 sm:w-3.5 mt-0.5 text-border shrink-0" />
+                          <Circle className="h-4 w-4 mt-0.5 text-border shrink-0" />
                         )}
                         <span className="leading-relaxed">{milestone}</span>
                       </li>
@@ -293,17 +293,17 @@ export function RoadmapSection() {
         </div>
 
         {/* Legend */}
-        <div className="relative z-20 mt-16 sm:mt-20 lg:mt-32 flex flex-wrap justify-center gap-4 sm:gap-6 text-[10px] sm:text-xs text-muted-foreground">
+        <div className="relative z-20 mt-16 sm:mt-20 lg:mt-32 flex flex-wrap justify-center gap-5 sm:gap-6 text-xs sm:text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
-            <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-success" />
+            <div className="h-3 w-3 rounded-full bg-success" />
             <span>Completed</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-primary" />
+            <div className="h-3 w-3 rounded-full bg-primary" />
             <span>In Progress</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full border border-border bg-card" />
+            <div className="h-3 w-3 rounded-full border border-border bg-card" />
             <span>Upcoming</span>
           </div>
         </div>
