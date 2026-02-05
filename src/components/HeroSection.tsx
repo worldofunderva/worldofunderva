@@ -46,7 +46,7 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mx-auto mb-8 sm:mb-10 max-w-2xl text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground px-4 sm:px-2"
         >
-          <span className="block max-w-[280px] sm:max-w-none mx-auto">
+          <span className="block max-w-[320px] sm:max-w-none mx-auto">
             A fixed supply of <span className="font-mono text-foreground">21,000,000</span> tokens 
             powering institutional-grade Real-World Asset tokenization across Fashion, Sportswear, and Logistics.
           </span>
