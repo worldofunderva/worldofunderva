@@ -25,6 +25,7 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           // Vendor chunks for better caching
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'wallet-vendor': ['wagmi', 'viem', '@rainbow-me/rainbowkit'],
           'ui-vendor': ['framer-motion', 'lucide-react'],
           'query-vendor': ['@tanstack/react-query'],
         },
@@ -41,6 +42,6 @@ export default defineConfig(({ mode }) => ({
   },
   // Optimize dependencies
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
+    include: ['react', 'react-dom', 'react-router-dom', 'wagmi', 'viem'],
   },
 }));

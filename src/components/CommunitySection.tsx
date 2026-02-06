@@ -29,18 +29,18 @@ const socialLinks = [
 
 export function CommunitySection() {
   return (
-    <section id="community" className="py-16 sm:py-20 lg:py-24 border-t border-border">
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-        <ScrollReveal className="text-center mb-10 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl lg:text-3xl font-semibold tracking-tight mb-3">
+    <section id="community" className="py-12 sm:py-16 lg:py-20 border-t border-border">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <ScrollReveal className="text-center mb-8 sm:mb-10">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight mb-2">
             Community
           </h2>
-          <p className="text-sm sm:text-base text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Connect with World of Underva.
           </p>
         </ScrollReveal>
 
-        <StaggerContainer className="flex flex-wrap justify-center gap-3 sm:gap-4" staggerDelay={0.05}>
+        <StaggerContainer className="flex flex-wrap justify-center gap-2 sm:gap-3" staggerDelay={0.05}>
           {socialLinks.map((social) => {
             const IconComponent = social.icon;
             return (
@@ -50,14 +50,14 @@ export function CommunitySection() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cn(
-                    "glass-card px-5 sm:px-6 py-3 sm:py-3.5 flex items-center gap-3",
+                    "glass-card px-4 sm:px-5 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3",
                     "transition-all duration-300 group active:scale-95",
                     social.color
                   )}
                 >
                   <IconComponent />
-                  <span className="text-sm font-medium text-foreground">{social.name}</span>
-                  <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <span className="text-xs sm:text-sm font-medium text-foreground">{social.name}</span>
+                  <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary transition-colors" />
                 </a>
               </StaggerItem>
             );

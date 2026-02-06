@@ -76,49 +76,49 @@ const CustomTooltip = forwardRef<HTMLDivElement, any>(function CustomTooltip({ a
 
 export function TokenomicsSection() {
   return (
-    <section id="tokenomics" className="relative py-20 sm:py-28 lg:py-36 bg-card/30">
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+    <section id="tokenomics" className="relative py-16 sm:py-24 lg:py-32 bg-card/30">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <ScrollReveal className="mx-auto max-w-2xl text-center mb-12 sm:mb-16">
-          <p className="text-sm font-medium text-primary mb-3 tracking-wide">TOKEN ECONOMICS</p>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-4">
+        <ScrollReveal className="mx-auto max-w-2xl text-center mb-10 sm:mb-16">
+          <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">TOKEN ECONOMICS</p>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
             Tokenomics Dashboard
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed">
+          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground px-2">
             Disciplined allocation. Transparent distribution. Zero tax policy.
           </p>
         </ScrollReveal>
 
         {/* Key Metrics */}
-        <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-10 sm:mb-12" staggerDelay={0.1}>
+        <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12" staggerDelay={0.1}>
           <StaggerItem>
-            <div className="rounded-xl border border-border bg-card p-5 sm:p-6 text-center">
-              <p className="text-2xl sm:text-3xl lg:text-3xl font-bold font-mono text-primary mb-1">21M</p>
-              <p className="text-xs sm:text-sm text-muted-foreground">Fixed Supply</p>
+            <div className="rounded-lg sm:rounded-xl border border-border bg-card p-4 sm:p-6 text-center">
+              <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono text-primary mb-0.5 sm:mb-1">21M</p>
+              <p className="text-[10px] sm:text-sm text-muted-foreground">Fixed Supply</p>
             </div>
           </StaggerItem>
           <StaggerItem>
-            <div className="rounded-xl border border-border bg-card p-5 sm:p-6 text-center">
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
-                <p className="text-2xl sm:text-3xl lg:text-3xl font-bold font-mono text-success">0%</p>
+            <div className="rounded-lg sm:rounded-xl border border-border bg-card p-4 sm:p-6 text-center">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                <Zap className="h-4 w-4 sm:h-6 sm:w-6 text-success" />
+                <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono text-success">0%</p>
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground">Transaction Tax</p>
+              <p className="text-[10px] sm:text-sm text-muted-foreground">Transaction Tax</p>
             </div>
           </StaggerItem>
           <StaggerItem>
-            <div className="rounded-xl border border-border bg-card p-5 sm:p-6 text-center">
-              <p className="text-2xl sm:text-3xl lg:text-3xl font-bold font-mono text-primary mb-1">2.0%</p>
-              <p className="text-xs sm:text-sm text-muted-foreground">Automated Rewards</p>
+            <div className="rounded-lg sm:rounded-xl border border-border bg-card p-4 sm:p-6 text-center">
+              <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono text-primary mb-0.5 sm:mb-1">2.0%</p>
+              <p className="text-[10px] sm:text-sm text-muted-foreground">Automated Rewards</p>
             </div>
           </StaggerItem>
           <StaggerItem>
-            <div className="rounded-xl border border-border bg-card p-5 sm:p-6 text-center">
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <Lock className="h-5 w-5 sm:h-6 sm:w-6 text-amber-500" />
-                <p className="text-2xl sm:text-3xl lg:text-3xl font-bold font-mono">4Y/1Y</p>
+            <div className="rounded-lg sm:rounded-xl border border-border bg-card p-4 sm:p-6 text-center">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                <Lock className="h-4 w-4 sm:h-6 sm:w-6 text-amber-500" />
+                <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono">4Y/1Y</p>
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground">Lock / Cliff</p>
+              <p className="text-[10px] sm:text-sm text-muted-foreground">Lock / Cliff</p>
             </div>
           </StaggerItem>
         </StaggerContainer>
@@ -178,39 +178,39 @@ export function TokenomicsSection() {
         </ScrollReveal>
 
         {/* Mobile Distribution Cards */}
-        <ScrollReveal delay={0.2} className="sm:hidden space-y-4">
+        <ScrollReveal delay={0.2} className="sm:hidden space-y-3">
           {distributions.map((item) => (
             <div
               key={item.label}
-              className="rounded-xl border border-border bg-card p-5"
+              className="rounded-lg border border-border bg-card p-4"
             >
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", item.tailwindColor, "bg-opacity-20")}>
+                  <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", item.tailwindColor, "bg-opacity-20")}>
                     <item.icon className={cn("h-4 w-4", item.tailwindColor.replace('bg-', 'text-'))} />
                   </div>
                   <div>
                     <p className="font-medium text-sm">{item.label}</p>
                     {item.locked && (
-                      <span className="inline-flex items-center gap-1 text-xs text-amber-500">
-                        <Lock className="h-3 w-3" />
+                      <span className="inline-flex items-center gap-1 text-[10px] text-amber-500">
+                        <Lock className="h-2.5 w-2.5" />
                         {item.lockDetails}
                       </span>
                     )}
                     {item.inactive && (
-                      <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                        <Clock className="h-3 w-3" />
+                      <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+                        <Clock className="h-2.5 w-2.5" />
                         Inactive
                       </span>
                     )}
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="font-mono font-semibold text-xl">{item.percentage}%</span>
-                  <p className="font-mono text-sm text-muted-foreground">{item.tokens}</p>
+                  <span className="font-mono font-semibold text-lg">{item.percentage}%</span>
+                  <p className="font-mono text-xs text-muted-foreground">{item.tokens}</p>
                 </div>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+              <p className="text-xs text-muted-foreground">{item.description}</p>
             </div>
           ))}
         </ScrollReveal>
@@ -250,12 +250,12 @@ export function TokenomicsSection() {
         </ScrollReveal>
 
         {/* Zero Tax Highlight */}
-        <ScrollReveal delay={0.4} variant="scale" className="mt-10 sm:mt-12 rounded-2xl border border-success/30 bg-success/5 p-6 sm:p-8 text-center">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <Zap className="h-7 w-7 sm:h-8 sm:w-8 text-success" />
-            <h3 className="text-xl sm:text-2xl lg:text-2xl font-bold">Zero Tax Policy</h3>
+        <ScrollReveal delay={0.4} variant="scale" className="mt-8 sm:mt-12 rounded-xl sm:rounded-2xl border border-success/30 bg-success/5 p-5 sm:p-8 text-center">
+          <div className="inline-flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-success" />
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-bold">Zero Tax Policy</h3>
           </div>
-          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm lg:text-base text-muted-foreground max-w-2xl mx-auto">
             World of Underva implements a <span className="text-foreground font-medium">0% transaction tax</span> to 
             ensure frictionless commerce across all RWA verticals. Trade, transfer, and consume without hidden costs.
           </p>

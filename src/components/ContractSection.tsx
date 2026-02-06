@@ -35,87 +35,87 @@ export function ContractSection() {
     : null;
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 border-t border-border">
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-        <ScrollReveal className="text-center mb-8 sm:mb-10">
-          <h2 className="text-2xl sm:text-3xl lg:text-3xl font-semibold tracking-tight">
+    <section className="py-12 sm:py-16 lg:py-20 border-t border-border">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <ScrollReveal className="text-center mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight">
             Contract
           </h2>
         </ScrollReveal>
 
         <ScrollReveal delay={0.1}>
-          <div className="glass-card p-6 sm:p-8 max-w-2xl mx-auto">
+          <div className="glass-card p-4 sm:p-6 max-w-2xl mx-auto">
             {/* Price Display - Shows TBA if not launched */}
-            <div className="flex items-center justify-center gap-4 pb-5 sm:pb-6 mb-5 sm:mb-6 border-b border-border">
+            <div className="flex items-center justify-center gap-3 sm:gap-4 pb-4 sm:pb-5 mb-4 sm:mb-5 border-b border-border">
               {priceData ? (
                 <>
-                  <span className="text-2xl sm:text-3xl font-mono font-semibold text-foreground">
+                  <span className="text-xl sm:text-2xl font-mono font-semibold text-foreground">
                     ${priceData.price.toFixed(4)}
                   </span>
-                  <span className={`flex items-center gap-1.5 text-sm font-medium ${
+                  <span className={`flex items-center gap-1 text-xs sm:text-sm font-medium ${
                     priceData.isPositive ? 'text-success' : 'text-destructive'
                   }`}>
                     {priceData.isPositive ? (
-                      <TrendingUp className="h-4 w-4" />
+                      <TrendingUp className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     ) : (
-                      <TrendingDown className="h-4 w-4" />
+                      <TrendingDown className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     )}
                     {priceData.isPositive ? '+' : ''}{priceData.change24h}%
                   </span>
                 </>
               ) : (
                 <span className="flex items-center gap-2 text-muted-foreground">
-                  <Clock className="h-5 w-5" />
-                  <span className="text-base font-medium">Price available after launch</span>
+                  <Clock className="h-4 w-4" />
+                  <span className="text-sm font-medium">Price available after launch</span>
                 </span>
               )}
             </div>
 
             {/* Contract Address */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-5">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-center sm:text-left w-full sm:w-auto">
-                <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-2">
+                <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wider mb-1.5 sm:mb-2">
                   $WOU Token Address
                 </p>
                 <div className="flex items-center justify-center sm:justify-start gap-2 sm:gap-3">
                   {CONTRACT_ADDRESS ? (
                     <>
-                      <code className="text-sm sm:text-base font-mono text-foreground">
+                      <code className="text-xs sm:text-sm font-mono text-foreground">
                         {`${CONTRACT_ADDRESS.slice(0, 6)}...${CONTRACT_ADDRESS.slice(-4)}`}
                       </code>
                       <button
                         onClick={handleCopy}
-                        className="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/50"
+                        className="p-1.5 sm:p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/50"
                         aria-label="Copy contract address"
                       >
                         {copied ? (
-                          <Check className="h-4 w-4 text-success" />
+                          <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-success" />
                         ) : (
-                          <Copy className="h-4 w-4" />
+                          <Copy className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         )}
                       </button>
                     </>
                   ) : (
-                    <span className="text-sm sm:text-base font-mono text-muted-foreground">
+                    <span className="text-xs sm:text-sm font-mono text-muted-foreground">
                       TBA — Available at launch
                     </span>
                   )}
                 </div>
               </div>
-              <div className="flex gap-5 sm:gap-4">
+              <div className="flex gap-4 sm:gap-3">
                 {etherscanUrl ? (
                   <a 
                     href={etherscanUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    <ExternalLink className="h-4 w-4" />
+                    <ExternalLink className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     Etherscan
                   </a>
                 ) : (
-                  <span className="flex items-center gap-1.5 text-sm text-muted-foreground/50 cursor-not-allowed">
-                    <ExternalLink className="h-4 w-4" />
+                  <span className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm text-muted-foreground/50 cursor-not-allowed">
+                    <ExternalLink className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     Etherscan
                   </span>
                 )}
@@ -124,14 +124,14 @@ export function ContractSection() {
                     href={basescanUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    <ExternalLink className="h-4 w-4" />
+                    <ExternalLink className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     Basescan
                   </a>
                 ) : (
-                  <span className="flex items-center gap-1.5 text-sm text-muted-foreground/50 cursor-not-allowed">
-                    <ExternalLink className="h-4 w-4" />
+                  <span className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm text-muted-foreground/50 cursor-not-allowed">
+                    <ExternalLink className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     Basescan
                   </span>
                 )}

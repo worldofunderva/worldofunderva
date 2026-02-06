@@ -28,54 +28,54 @@ const bridgeOptions = [
 
 export function BridgeSection() {
   return (
-    <section id="bridge" className="py-16 sm:py-20 lg:py-24 border-t border-border bg-card/20">
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-        <ScrollReveal className="text-center mb-10 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl lg:text-3xl font-semibold tracking-tight mb-3">
+    <section id="bridge" className="py-12 sm:py-16 lg:py-20 border-t border-border bg-card/20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <ScrollReveal className="text-center mb-8 sm:mb-10">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight mb-2">
             Bridge
           </h2>
-          <p className="text-sm sm:text-base text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Transfer $WOU between Ethereum L1 and Base L2.
           </p>
         </ScrollReveal>
 
         {/* Network Indicator */}
-        <ScrollReveal delay={0.1} className="flex items-center justify-center gap-4 mb-10 sm:mb-12">
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-amber-500" />
-            <span className="text-sm text-muted-foreground">Ethereum L1</span>
+        <ScrollReveal delay={0.1} className="flex items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-10">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-amber-500" />
+            <span className="text-xs sm:text-sm text-muted-foreground">Ethereum L1</span>
           </div>
-          <ArrowRightLeft className="h-4 w-4 text-primary" />
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-primary" />
-            <span className="text-sm text-muted-foreground">Base L2</span>
+          <ArrowRightLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-primary" />
+            <span className="text-xs sm:text-sm text-muted-foreground">Base L2</span>
           </div>
         </ScrollReveal>
 
         {/* Bridge Options */}
-        <StaggerContainer className="grid gap-4 sm:gap-5 sm:grid-cols-2 md:grid-cols-3 max-w-4xl mx-auto" staggerDelay={0.1}>
+        <StaggerContainer className="grid gap-3 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 max-w-4xl mx-auto" staggerDelay={0.1}>
           {bridgeOptions.map((bridge) => (
             <StaggerItem key={bridge.name}>
               <a
                 href={bridge.url}
                 className={cn(
-                  "glass-card p-5 sm:p-6 flex items-center sm:block gap-4 sm:gap-0",
+                  "glass-card p-4 sm:p-5 flex items-center sm:block gap-3 sm:gap-0",
                   "hover:border-primary/50 transition-all duration-300 group active:scale-[0.98]"
                 )}
               >
-                <div className="flex items-start justify-between sm:mb-4">
-                  <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                    <bridge.icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                <div className="flex items-start justify-between sm:mb-3">
+                  <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <bridge.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   </div>
                   <ChevronRight className="hidden sm:block h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                 </div>
                 
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-base text-foreground sm:mb-1.5">{bridge.name}</h3>
-                  <p className="text-sm text-muted-foreground sm:mb-4">{bridge.description}</p>
+                  <h3 className="font-semibold text-sm sm:text-base text-foreground sm:mb-1">{bridge.name}</h3>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground sm:mb-3">{bridge.description}</p>
                   
-                  <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground mt-1.5 sm:mt-0">
-                    <Clock className="h-3.5 w-3.5" />
+                  <div className="flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs text-muted-foreground mt-1 sm:mt-0">
+                    <Clock className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                     <span>{bridge.time}</span>
                   </div>
                 </div>

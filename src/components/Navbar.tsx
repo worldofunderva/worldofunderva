@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Shield } from 'lucide-react';
+import { Wallet, Menu, X, Shield } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useWalletConnection } from '@/hooks/useWalletConnection';
 
 const navItems = [
   { label: 'The Pillars', href: '#pillars' },
@@ -14,6 +16,13 @@ const navItems = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  
+  const { 
+    isConnected, 
+    truncatedAddress, 
+    handleConnect, 
+    openAccountModal 
+  } = useWalletConnection();
   
   // Track scroll position for enhanced navbar styling
   useEffect(() => {
@@ -35,6 +44,19 @@ export function Navbar() {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
+  const handleMobileConnect = () => {
+    // IMPORTANT: on mobile, wallet modals / deep-links may require a direct
+    // user-initiated gesture. Avoid setTimeout here so the connect prompt
+    // reliably appears.
+    handleConnect();
+    setIsOpen(false);
+  };
+
+  const handleMobileAccountModal = () => {
+    openAccountModal?.();
+    setIsOpen(false);
+  };
 
   return (
     <nav className={cn(
@@ -77,8 +99,34 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Empty space for symmetry on desktop */}
-          <div className="hidden lg:block w-32" />
+          {/* Wallet Button - Desktop */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="hidden lg:flex lg:items-center lg:gap-2"
+          >
+            {isConnected ? (
+              <Button
+                variant="wallet-connected"
+                size="sm"
+                onClick={openAccountModal}
+                className="gap-2"
+              >
+                <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
+                {truncatedAddress}
+              </Button>
+            ) : (
+              <Button
+                variant="wallet"
+                size="sm"
+                onClick={handleConnect}
+                className="gap-2"
+              >
+                <Wallet className="h-4 w-4" />
+                Connect Wallet
+              </Button>
+            )}
+          </motion.div>
 
           {/* Mobile Menu Button */}
           <motion.button
@@ -160,11 +208,41 @@ export function Navbar() {
                 ))}
               </div>
 
+              {/* Wallet Button - Mobile */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="pt-4"
+              >
+                {isConnected ? (
+                  <Button
+                    variant="wallet-connected"
+                    size="lg"
+                    onClick={handleMobileAccountModal}
+                    className="w-full gap-2 h-14 text-base"
+                  >
+                    <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
+                    {truncatedAddress}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="wallet"
+                    size="lg"
+                    onClick={handleMobileConnect}
+                    className="w-full gap-2 h-14 text-base"
+                  >
+                    <Wallet className="h-5 w-5" />
+                    Connect Wallet
+                  </Button>
+                )}
+              </motion.div>
+
               {/* Network Info */}
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.4 }}
                 className="flex items-center justify-center gap-6 pt-6 text-xs text-muted-foreground"
               >
                 <span className="flex items-center gap-2">
