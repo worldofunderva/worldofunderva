@@ -1,7 +1,5 @@
-import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock } from 'lucide-react';
+import { Shield, Check, AlertTriangle, Sparkles, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAccount } from 'wagmi';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useSentinel } from '@/contexts/SentinelContext';
 import { cn } from '@/lib/utils';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
@@ -14,17 +12,8 @@ const MINT_PRICE_USD = 500;
 const LIQUIDITY_TRIGGER_THRESHOLD = 2000;
 
 export function SentinelGate() {
-  const { isConnected } = useAccount();
-  const { openConnectModal } = useConnectModal();
-  const { hasSentinelNFT, isCheckingOwnership, isNFTContractReady } = useSentinel();
+  const { hasSentinelNFT, isNFTContractReady } = useSentinel();
   const { ethPrice, getEthEquivalent, isLoading: isPriceLoading } = useEthPrice();
-
-  // Mint function - will be implemented when NFT contract is deployed
-  const handleMint = () => {
-    // TODO: Implement actual mint transaction when contract is ready
-    // Will use wagmi useWriteContract hook
-    console.log('Mint functionality pending - NFT contract not yet deployed');
-  };
 
   return (
     <section id="sentinel" className="relative py-20 sm:py-28 lg:py-36 overflow-hidden">
@@ -131,9 +120,7 @@ export function SentinelGate() {
                 "rounded-xl sm:rounded-2xl border p-5 sm:p-6 lg:p-8 transition-all duration-500",
                 hasSentinelNFT 
                   ? "border-success/50 bg-success/5 sentinel-glow"
-                  : isConnected
-                    ? "border-warning/50 bg-warning/5"
-                    : "border-border bg-card"
+                  : "border-border bg-card"
               )}>
                 {/* Card Header */}
                 <div className="flex items-center justify-between mb-5 sm:mb-8">
@@ -151,30 +138,23 @@ export function SentinelGate() {
                   </div>
                   <div className={cn(
                     "rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium",
-                    isCheckingOwnership
-                      ? "bg-muted text-muted-foreground"
-                      : hasSentinelNFT 
-                        ? "bg-success/20 text-success" 
-                        : "bg-muted text-muted-foreground"
+                    hasSentinelNFT 
+                      ? "bg-success/20 text-success" 
+                      : "bg-muted text-muted-foreground"
                   )}>
-                    {isCheckingOwnership ? (
-                      <span className="flex items-center gap-1">
-                        <Loader2 className="h-3 w-3 animate-spin" />
-                        CHECKING
-                      </span>
-                    ) : hasSentinelNFT ? 'ENROLLED' : 'NOT ENROLLED'}
+                    {hasSentinelNFT ? 'ENROLLED' : 'NOT ENROLLED'}
                   </div>
                 </div>
 
                 {/* Status Display */}
-                {isConnected && !hasSentinelNFT && !isCheckingOwnership && (
-                  <div className="mb-4 sm:mb-6 rounded-lg border border-warning/30 bg-warning/10 p-3 sm:p-4">
+                {!hasSentinelNFT && (
+                  <div className="mb-4 sm:mb-6 rounded-lg border border-muted bg-muted/10 p-3 sm:p-4">
                     <div className="flex items-start gap-2 sm:gap-3">
-                      <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-warning shrink-0 mt-0.5" />
+                      <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-xs sm:text-sm font-medium text-warning">Disqualified from Rewards</p>
-                        <p className="text-[10px] sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">
-                          Your wallet lacks the Sentinel NFT. Mint now to unlock the 2.0% Automated Reward Engine.
+                        <p className="text-xs sm:text-sm font-medium text-muted-foreground">Minting Coming Soon</p>
+                        <p className="text-[10px] sm:text-sm text-muted-foreground/80 mt-0.5 sm:mt-1">
+                          The Sentinel NFT mint will open shortly. Stay tuned for announcements.
                         </p>
                       </div>
                     </div>
@@ -247,56 +227,15 @@ export function SentinelGate() {
                 </div>
 
                 {/* Action Button */}
-                {!isConnected ? (
-                  <Button 
-                    variant="sentinel" 
-                    size="lg" 
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm"
-                    onClick={openConnectModal}
-                  >
-                    Connect Wallet to Mint
-                  </Button>
-                ) : isCheckingOwnership ? (
-                  <Button 
-                    variant="secondary" 
-                    size="lg" 
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm"
-                    disabled
-                  >
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Checking Ownership...
-                  </Button>
-                ) : hasSentinelNFT ? (
-                  <Button 
-                    variant="secondary" 
-                    size="lg" 
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm"
-                    disabled
-                  >
-                    <Check className="h-4 w-4 mr-2" />
-                    Already Enrolled
-                  </Button>
-                ) : isNFTContractReady ? (
-                  <Button 
-                    variant="sentinel" 
-                    size="lg" 
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm animate-glow"
-                    onClick={handleMint}
-                  >
-                    <Shield className="h-4 w-4 mr-2" />
-                    Mint Sentinel NFT
-                  </Button>
-                ) : (
-                  <Button 
-                    variant="secondary" 
-                    size="lg" 
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm"
-                    disabled
-                  >
-                    <Clock className="h-4 w-4 mr-2" />
-                    Minting Opens Soon
-                  </Button>
-                )}
+                <Button 
+                  variant="secondary" 
+                  size="lg" 
+                  className="w-full h-10 sm:h-12 text-xs sm:text-sm"
+                  disabled
+                >
+                  <Clock className="h-4 w-4 mr-2" />
+                  Minting Opens Soon
+                </Button>
               </div>
             </div>
           </ScrollReveal>
