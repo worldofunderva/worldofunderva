@@ -41,6 +41,6 @@ export default defineConfig(({ mode }) => ({
   },
   // Optimize dependencies
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'wagmi', 'viem'],
+    include: ['react', 'react-dom', 'react-router-dom'],
   },
 }));
