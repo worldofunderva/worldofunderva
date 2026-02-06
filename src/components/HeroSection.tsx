@@ -33,22 +33,33 @@ export function HeroSection() {
           transition={{ duration: 0.7, delay: 0.4 }}
           className="mb-5 sm:mb-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.1]"
         >
-          <span className="text-foreground">The Corporate Tender</span>
+          <span className="text-foreground">The Institutional Standard</span>
           <br />
           <span className="text-foreground">For </span>
           <span className="gradient-text">Disciplined RWA Consumption</span>
         </motion.h1>
 
-        {/* Sub-headline */}
-        <motion.p
+        {/* Sub-headline - Three lines with bold pillars */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="mx-auto mb-8 sm:mb-10 max-w-2xl text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground px-4 sm:px-2"
+          className="mx-auto mb-8 sm:mb-10 max-w-2xl text-center px-4 sm:px-2"
         >
-          A fixed supply of <span className="font-mono text-foreground">21,000,000</span> tokens 
-          powering institutional-grade Real-World Asset tokenization across Fashion, Sportswear, and Logistics.
-        </motion.p>
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+            An immutable ecosystem with a fixed supply of{' '}
+            <span className="font-mono text-foreground">21,000,000</span> tokens
+          </p>
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+            engineered for multi-layer security.
+          </p>
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+            Powering global Real-World Asset tokenization across{' '}
+            <span className="font-semibold text-foreground">Fashion</span>,{' '}
+            <span className="font-semibold text-foreground">Sportswear</span>, and{' '}
+            <span className="font-semibold text-foreground">Logistics</span>.
+          </p>
+        </motion.div>
 
         {/* Stats Row - Three metrics */}
         <motion.div
