@@ -16,7 +16,7 @@ const pillars = [
     icon: Footprints,
     title: 'Underva Stride',
     subtitle: 'Sportswear Division',
-    description: 'High-velocity performance gear engineered for elite athletes. Every piece verified on-chain for authenticity and ownership.',
+    description: 'High velocity performance gear engineered for elite athletes. Every piece verified on-chain for authenticity and ownership.',
     features: ['Propulsion Logic', 'Verified Authentic', 'Performance Tracking'],
     gradient: 'from-primary/20 to-cyan-500/20',
     url: 'https://undervastride.com/',
