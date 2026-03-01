@@ -1,6 +1,4 @@
-import '@rainbow-me/rainbowkit/styles.css';
 import { lazy, Suspense } from 'react';
-import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -14,17 +12,14 @@ import { NetworkWarningBanner } from '@/components/NetworkWarningBanner';
 
 // Lazy load pages for code splitting
 const Index = lazy(() => import("./pages/Index"));
+const DocsPage = lazy(() => import("./pages/Docs"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-// Minimal loading fallback - no spinner
+// Minimal loading fallback
 const PageLoader = () => (
   <div className="min-h-screen bg-background" />
 );
 
-/**
- * Wallet Security Manager
- * Enforces session policy (no auto-reconnect)
- */
 function WalletSecurityManager() {
   useWalletSessionPolicy();
   return null;
@@ -35,12 +30,11 @@ if (import.meta.hot) {
   import.meta.hot.accept();
 }
 
-// Configure QueryClient optimized for high-traffic (500k users)
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 1, // 1 minute
-      gcTime: 1000 * 60 * 30, // 30 minutes garbage collection
+      staleTime: 1000 * 60 * 1,
+      gcTime: 1000 * 60 * 30,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       retry: 2,
@@ -54,32 +48,23 @@ const App = () => (
   <WagmiProvider config={config} reconnectOnMount={false}>
     <QueryClientProvider client={queryClient}>
       <WalletSecurityManager />
-      <RainbowKitProvider
-        theme={darkTheme({
-          accentColor: 'hsl(142, 76%, 36%)',
-          accentColorForeground: 'white',
-          borderRadius: 'medium',
-          fontStack: 'system',
-        })}
-        modalSize="compact"
-        showRecentTransactions={false}
-      >
-        <SentinelProvider>
-          <TooltipProvider>
-            <NetworkWarningBanner />
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
-          </TooltipProvider>
-        </SentinelProvider>
-      </RainbowKitProvider>
+      <SentinelProvider>
+        <TooltipProvider>
+          <NetworkWarningBanner />
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/docs" element={<DocsPage />} />
+                <Route path="/docs/:section" element={<DocsPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </TooltipProvider>
+      </SentinelProvider>
     </QueryClientProvider>
   </WagmiProvider>
 );

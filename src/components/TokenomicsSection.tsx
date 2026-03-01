@@ -6,10 +6,10 @@ import { forwardRef } from 'react';
 
 const distributions = [
   {
-    label: 'RWA Engagement Pool (UEP)',
+    label: 'WOU Engagement Pool (WEP)',
     percentage: 35,
     tokens: '7,350,000',
-    description: 'Automated rewards & cashback. Inactive until Underva Fashion launch.',
+    description: 'Automated rewards and cashback. Inactive until Underva Fashion launch.',
     icon: Database,
     color: 'hsl(212, 100%, 48%)',
     tailwindColor: 'bg-primary',
@@ -19,7 +19,7 @@ const distributions = [
     label: 'DEX Liquidity Pool',
     percentage: 30,
     tokens: '6,300,000',
-    description: 'Deep liquidity for organic market demand and ecosystem stability',
+    description: 'Deep liquidity for organic market demand and ecosystem stability.',
     icon: Wallet,
     color: 'hsl(190, 95%, 50%)',
     tailwindColor: 'bg-cyan-500',
@@ -28,7 +28,7 @@ const distributions = [
     label: 'Ecosystem Growth',
     percentage: 15,
     tokens: '3,150,000',
-    description: 'Pillar expansion and strategic partnerships',
+    description: 'Pillar expansion and strategic partnerships.',
     icon: Building,
     color: 'hsl(160, 80%, 45%)',
     tailwindColor: 'bg-emerald-500',
@@ -37,7 +37,7 @@ const distributions = [
     label: 'Core Team & Advisors',
     percentage: 15,
     tokens: '3,150,000',
-    description: '4-year lock with 1-year cliff',
+    description: '4-year lock with 1-year cliff.',
     icon: Users,
     color: 'hsl(270, 80%, 60%)',
     tailwindColor: 'bg-violet-500',
@@ -48,7 +48,7 @@ const distributions = [
     label: 'Treasury Reserve',
     percentage: 5,
     tokens: '1,050,000',
-    description: 'Strategic operations and ecosystem security',
+    description: 'Strategic operations and ecosystem security.',
     icon: Lock,
     color: 'hsl(38, 92%, 50%)',
     tailwindColor: 'bg-amber-500',
@@ -61,7 +61,6 @@ const pieData = distributions.map((d) => ({
   color: d.color,
 }));
 
-// Custom tooltip component for better mobile visibility - wrapped in forwardRef for Recharts
 const CustomTooltip = forwardRef<HTMLDivElement, any>(function CustomTooltip({ active, payload }, ref) {
   if (active && payload && payload.length) {
     return (
@@ -123,10 +122,9 @@ export function TokenomicsSection() {
           </StaggerItem>
         </StaggerContainer>
 
-        {/* Distribution Table - Hidden on mobile, shown on tablet+ */}
+        {/* Distribution Table - Hidden on mobile */}
         <ScrollReveal delay={0.2} className="hidden sm:block">
           <div className="rounded-xl sm:rounded-2xl border border-border bg-card overflow-hidden">
-            {/* Table Header */}
             <div className="grid grid-cols-12 gap-4 px-4 sm:px-6 py-3 sm:py-4 border-b border-border bg-secondary/30">
               <div className="col-span-4 sm:col-span-3 text-xs sm:text-sm font-medium text-muted-foreground">Allocation</div>
               <div className="col-span-2 text-xs sm:text-sm font-medium text-muted-foreground text-right">%</div>
@@ -134,7 +132,6 @@ export function TokenomicsSection() {
               <div className="col-span-4 sm:col-span-5 text-xs sm:text-sm font-medium text-muted-foreground hidden sm:block">Description</div>
             </div>
 
-            {/* Table Body */}
             {distributions.map((item, index) => (
               <div
                 key={item.label}
@@ -180,10 +177,7 @@ export function TokenomicsSection() {
         {/* Mobile Distribution Cards */}
         <ScrollReveal delay={0.2} className="sm:hidden space-y-3">
           {distributions.map((item) => (
-            <div
-              key={item.label}
-              className="rounded-lg border border-border bg-card p-4"
-            >
+            <div key={item.label} className="rounded-lg border border-border bg-card p-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", item.tailwindColor, "bg-opacity-20")}>
@@ -215,22 +209,12 @@ export function TokenomicsSection() {
           ))}
         </ScrollReveal>
 
-        {/* Pie Chart Distribution */}
+        {/* Pie Chart */}
         <ScrollReveal delay={0.3} className="mt-6 sm:mt-8 flex flex-col items-center">
           <div className="w-full max-w-xs sm:max-w-sm h-48 sm:h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={40}
-                  outerRadius={70}
-                  paddingAngle={2}
-                  dataKey="value"
-                  stroke="hsl(222, 47%, 4%)"
-                  strokeWidth={2}
-                >
+                <Pie data={pieData} cx="50%" cy="50%" innerRadius={40} outerRadius={70} paddingAngle={2} dataKey="value" stroke="hsl(222, 47%, 4%)" strokeWidth={2}>
                   {pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
@@ -247,6 +231,13 @@ export function TokenomicsSection() {
               </div>
             ))}
           </div>
+        </ScrollReveal>
+
+        {/* Treasury Note */}
+        <ScrollReveal delay={0.35} className="mt-6 sm:mt-8 text-center">
+          <p className="text-[10px] sm:text-xs text-muted-foreground/70 italic">
+            The treasury reserve is controlled by the Ecosystem & Strategic OPS wallet.
+          </p>
         </ScrollReveal>
 
         {/* Zero Tax Highlight */}

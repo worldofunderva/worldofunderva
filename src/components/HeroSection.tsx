@@ -1,6 +1,7 @@
-import { ArrowDown, Zap, Lock, Shield } from 'lucide-react';
+import { ArrowDown, Zap, Lock, Shield, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export function HeroSection() {
   return (
@@ -8,7 +9,7 @@ export function HeroSection() {
       {/* Background Grid Pattern */}
       <div className="absolute inset-0 grid-pattern opacity-30" />
       
-      {/* Gradient Orbs - Adjusted for mobile */}
+      {/* Gradient Orbs */}
       <div className="absolute top-1/4 left-0 sm:left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-slow" />
       <div className="absolute bottom-1/4 right-0 sm:right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-slow delay-1000" />
       
@@ -33,51 +34,53 @@ export function HeroSection() {
           transition={{ duration: 0.7, delay: 0.4 }}
           className="mb-4 sm:mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]"
         >
-          <span className="text-foreground">The Corporate Tender</span>
+          <span className="text-foreground">The Institutional Standard</span>
           <br />
           <span className="text-foreground">For </span>
           <span className="gradient-text">Disciplined RWA Consumption</span>
         </motion.h1>
 
-        {/* Sub-headline */}
+        {/* Description */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="mx-auto mb-6 sm:mb-8 max-w-2xl text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground px-2"
+          className="mx-auto mb-8 sm:mb-10 max-w-2xl text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground px-2"
         >
-          A fixed supply of <span className="font-mono text-foreground">21,000,000</span> tokens 
-          powering institutional-grade Real-World Asset tokenization across Fashion, Sportswear, and Logistics.
-          <span className="block mt-2 text-primary font-medium">Pay with $WOU or local currency — your choice.</span>
+          An immutable ecosystem with a fixed supply of <span className="font-mono text-foreground">21,000,000</span> tokens 
+          engineered for multi-layer security. Powering global Real-World Asset tokenization across{' '}
+          <span className="text-foreground font-semibold">Fashion</span>,{' '}
+          <span className="text-foreground font-semibold">Sportswear</span> and{' '}
+          <span className="text-foreground font-semibold">Logistics</span>.
         </motion.p>
 
-        {/* Stats Row - Three metrics */}
+        {/* Stats Row */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mb-8 sm:mb-10 flex flex-row items-center justify-center gap-3 sm:gap-6 lg:gap-8"
+          className="mb-8 sm:mb-10 flex flex-row items-center justify-center gap-4 sm:gap-8 lg:gap-10"
         >
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Lock className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
             <div className="text-left">
-              <p className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap">21M Fixed</p>
+              <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">21M Fixed</p>
               <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Total Supply</p>
             </div>
           </div>
-          <div className="h-8 w-px bg-border shrink-0" />
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
+          <div className="h-10 w-px bg-border shrink-0" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
             <div className="text-left">
-              <p className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap">Zero Tax</p>
+              <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">Zero Tax</p>
               <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">No Fees</p>
             </div>
           </div>
-          <div className="h-8 w-px bg-border shrink-0" />
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
+          <div className="h-10 w-px bg-border shrink-0" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
             <div className="text-left">
-              <p className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap">2.0% Rewards</p>
+              <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">2.0% Rewards</p>
               <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Automated</p>
             </div>
           </div>
@@ -90,15 +93,17 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 1 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
         >
-          <Button variant="sentinel" size="lg" className="w-full sm:w-auto text-sm sm:text-base h-12 sm:h-14 px-6 sm:px-8" asChild>
+          <Button variant="sentinel" size="lg" className="w-full sm:w-auto text-sm sm:text-base h-12 sm:h-14 px-6 sm:px-8 rounded-full" asChild>
             <a href="#sentinel">
+              <Shield className="h-4 w-4 sm:h-5 sm:w-5" />
               Mint Sentinel NFT
             </a>
           </Button>
-          <Button variant="sentinel-outline" size="lg" className="w-full sm:w-auto text-sm sm:text-base h-12 sm:h-14 px-6 sm:px-8" asChild>
-            <a href="https://drive.google.com/file/d/1BB6S4S7Hn_FjsQdyrAGEZM6pgMYJ7uzQ/view" target="_blank" rel="noopener noreferrer">
-              Read Whitepaper
-            </a>
+          <Button variant="sentinel-outline" size="lg" className="w-full sm:w-auto text-sm sm:text-base h-12 sm:h-14 px-6 sm:px-8 rounded-full" asChild>
+            <Link to="/docs">
+              <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
+              Explore Documentation
+            </Link>
           </Button>
         </motion.div>
 
