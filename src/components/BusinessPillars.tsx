@@ -25,7 +25,7 @@ const pillars = [
     icon: Truck,
     title: 'Underva Express',
     subtitle: 'Logistics Division',
-    description: 'B2B supply chain solutions and secure warehousing. Enterprise-grade logistics with full on-chain transparency.',
+    description: 'B2B supply chain solutions and secure warehousing. Enterprise grade logistics with full on-chain transparency.',
     features: ['B2B Supply Chain', 'Secure Warehousing', 'Chain Transparency'],
     gradient: 'from-cyan-500/20 to-emerald-500/20',
     url: 'https://undervaexpress.com/',
