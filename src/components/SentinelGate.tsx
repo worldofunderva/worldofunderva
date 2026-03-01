@@ -1,34 +1,27 @@
-import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock } from 'lucide-react';
+import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAccount } from 'wagmi';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useWalletConnection } from '@/hooks/useWalletConnection';
 import { useSentinel } from '@/contexts/SentinelContext';
 import { cn } from '@/lib/utils';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { useEthPrice } from '@/hooks/useEthPrice';
 
-// Fixed USD price for Sentinel NFT
 const MINT_PRICE_USD = 500;
-
-// Liquidity trigger threshold
 const LIQUIDITY_TRIGGER_THRESHOLD = 2000;
 
 export function SentinelGate() {
   const { isConnected } = useAccount();
-  const { openConnectModal } = useConnectModal();
+  const { handleConnect } = useWalletConnection();
   const { hasSentinelNFT, isCheckingOwnership, isNFTContractReady } = useSentinel();
   const { ethPrice, getEthEquivalent, isLoading: isPriceLoading } = useEthPrice();
 
-  // Mint function - will be implemented when NFT contract is deployed
   const handleMint = () => {
-    // TODO: Implement actual mint transaction when contract is ready
-    // Will use wagmi useWriteContract hook
-    console.log('Mint functionality pending - NFT contract not yet deployed');
+    console.log('Mint functionality pending — NFT contract not yet deployed');
   };
 
   return (
     <section id="sentinel" className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
-      {/* Background Elements */}
       <div className="absolute inset-0 grid-pattern opacity-20" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-primary/5 rounded-full blur-3xl" />
 
@@ -46,6 +39,21 @@ export function SentinelGate() {
                 to unlock the full benefits of the World of Underva ecosystem.
               </p>
 
+              {/* UNDO Protocol Agent */}
+              <div className="mb-6 sm:mb-8 rounded-xl border border-primary/30 bg-primary/5 p-4 sm:p-5 text-left">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-primary">
+                    <Bot className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs sm:text-sm font-semibold text-foreground mb-1">UNDO — Underva Digital Overseer</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground leading-relaxed">
+                      Our AI Protocol Agent ensures total transparency by logging all payments monthly and every 6 months. The team approves transactions while UNDO handles the calculations and audit trail.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               {/* Three Main Perks */}
               <div className="space-y-4 sm:space-y-5 text-left">
                 {/* 2.0% Automated Reward Engine */}
@@ -56,16 +64,16 @@ export function SentinelGate() {
                   <div>
                     <p className="text-xs sm:text-sm font-semibold text-foreground">2.0% Automated Reward Engine</p>
                     <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
-                      Powered by the RWA Engagement Pool (UEP). Every Underva purchase triggers an automatic $WOU cashback to your wallet—instant on Base L2.
+                      Powered by the WOU Engagement Pool (WEP). UNDO calculates and logs the 2.0% cashback on every transaction at the end of each month.
                     </p>
                     <ul className="mt-2 space-y-1">
                       <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
                         <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>2.0% instant cashback on all $WOU purchases</span>
+                        <span>Monthly: 2.0% cashback on all $WOU purchases, logged by UNDO</span>
                       </li>
                       <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
                         <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>2.0% semi-annual loyalty dividend for holders</span>
+                        <span>Every 6 months: 2.0% rewards for all token holders (NFT not required)</span>
                       </li>
                     </ul>
                   </div>
@@ -84,7 +92,7 @@ export function SentinelGate() {
                     <ul className="mt-2 space-y-1">
                       <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
                         <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>Early access to limited drops & private auctions</span>
+                        <span>Early access to limited drops and private auctions</span>
                       </li>
                       <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
                         <Check className="h-3 w-3 text-primary shrink-0" />
@@ -92,21 +100,21 @@ export function SentinelGate() {
                       </li>
                       <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
                         <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>Private events hosted by Underva & Stride</span>
+                        <span>Private events hosted by Underva and Stride</span>
                       </li>
                     </ul>
                   </div>
                 </div>
 
-                {/* Lifetime Ownership */}
+                {/* Lifetime Ownership + Succession */}
                 <div className="flex items-start gap-3">
                   <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
                     <Check className="h-3 w-3" />
                   </div>
                   <div>
-                    <p className="text-xs sm:text-sm font-semibold text-foreground">Lifetime Ownership</p>
+                    <p className="text-xs sm:text-sm font-semibold text-foreground">Lifetime Ownership & Succession</p>
                     <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
-                      Mint once, benefit forever. No subscriptions. Your Sentinel is a tradeable asset with secondary market value on OpenSea & Blur.
+                      Mint once, benefit forever. No subscriptions. Your Sentinel is a tradeable asset with secondary market value on OpenSea and Blur.
                     </p>
                     <ul className="mt-2 space-y-1">
                       <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
@@ -115,7 +123,11 @@ export function SentinelGate() {
                       </li>
                       <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
                         <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span>Exclusive utility airdrops & ecosystem rewards</span>
+                        <span>Exclusive utility airdrops and ecosystem rewards</span>
+                      </li>
+                      <li className="flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                        <Check className="h-3 w-3 text-amber-500 shrink-0" />
+                        <span className="text-foreground/80 font-medium">Succession Policy: If the NFT is sold, all rights and perks transfer to the new owner</span>
                       </li>
                     </ul>
                   </div>
@@ -251,48 +263,28 @@ export function SentinelGate() {
                   <Button 
                     variant="sentinel" 
                     size="lg" 
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm"
-                    onClick={openConnectModal}
+                    className="w-full h-10 sm:h-12 text-xs sm:text-sm rounded-full"
+                    onClick={handleConnect}
                   >
                     Connect Wallet to Mint
                   </Button>
                 ) : isCheckingOwnership ? (
-                  <Button 
-                    variant="secondary" 
-                    size="lg" 
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm"
-                    disabled
-                  >
+                  <Button variant="secondary" size="lg" className="w-full h-10 sm:h-12 text-xs sm:text-sm" disabled>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                     Checking Ownership...
                   </Button>
                 ) : hasSentinelNFT ? (
-                  <Button 
-                    variant="secondary" 
-                    size="lg" 
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm"
-                    disabled
-                  >
+                  <Button variant="secondary" size="lg" className="w-full h-10 sm:h-12 text-xs sm:text-sm" disabled>
                     <Check className="h-4 w-4 mr-2" />
                     Already Enrolled
                   </Button>
                 ) : isNFTContractReady ? (
-                  <Button 
-                    variant="sentinel" 
-                    size="lg" 
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm animate-glow"
-                    onClick={handleMint}
-                  >
+                  <Button variant="sentinel" size="lg" className="w-full h-10 sm:h-12 text-xs sm:text-sm animate-glow rounded-full" onClick={handleMint}>
                     <Shield className="h-4 w-4 mr-2" />
                     Mint Sentinel NFT
                   </Button>
                 ) : (
-                  <Button 
-                    variant="secondary" 
-                    size="lg" 
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm"
-                    disabled
-                  >
+                  <Button variant="secondary" size="lg" className="w-full h-10 sm:h-12 text-xs sm:text-sm" disabled>
                     <Clock className="h-4 w-4 mr-2" />
                     Minting Opens Soon
                   </Button>

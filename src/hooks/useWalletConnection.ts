@@ -1,64 +1,44 @@
-import { useAccount, useDisconnect } from 'wagmi';
-import { useConnectModal, useAccountModal } from '@rainbow-me/rainbowkit';
-import { useCallback } from 'react';
+import { useAccount, useDisconnect, useConnect } from 'wagmi';
+import { useCallback, useState } from 'react';
 import { clearWalletSessionData } from '@/lib/walletSession';
 
 /**
- * Hook that provides wallet connection utilities with safeguards
- * to prevent multiple simultaneous wallet connections.
- * 
- * Security features:
- * - Uses sessionStorage (cleared on tab/browser close)
- * - Explicit session cleanup on disconnect
- * - No auto-reconnect on page refresh
+ * Hook that provides wallet connection utilities.
+ * Uses wagmi native connectors (no RainbowKit).
  */
 export function useWalletConnection() {
   const { address, isConnected, connector } = useAccount();
   const { disconnect: wagmiDisconnect } = useDisconnect();
-  const { openConnectModal } = useConnectModal();
-  const { openAccountModal } = useAccountModal();
+  const { connect, connectors } = useConnect();
+  const [showConnectModal, setShowConnectModal] = useState(false);
 
   const truncatedAddress = address 
     ? `${address.slice(0, 6)}...${address.slice(-4)}`
     : null;
 
-  /**
-   * Secure disconnect that clears all session data.
-   * User will need to reconnect on their next visit.
-   */
   const disconnect = useCallback(async () => {
     await wagmiDisconnect();
     clearWalletSessionData();
   }, [wagmiDisconnect]);
 
-  /**
-   * Safely open the connect modal.
-   * If already connected, opens account modal instead to prevent multiple connections.
-   */
   const handleConnect = useCallback(() => {
     if (isConnected) {
-      // Already connected - open account modal to manage existing connection
-      openAccountModal?.();
-    } else {
-      openConnectModal?.();
+      return;
     }
-  }, [isConnected, openConnectModal, openAccountModal]);
+    setShowConnectModal(true);
+  }, [isConnected]);
 
-  /**
-   * Disconnect the current wallet before allowing a new connection.
-   * This prevents the issue of having multiple wallets connected.
-   */
-  const handleDisconnectAndConnect = useCallback(async () => {
-    if (isConnected) {
-      await disconnect();
-      // Small delay to ensure disconnection is complete
-      setTimeout(() => {
-        openConnectModal?.();
-      }, 100);
-    } else {
-      openConnectModal?.();
+  const connectWithConnector = useCallback((connectorId: number) => {
+    const c = connectors[connectorId];
+    if (c) {
+      connect({ connector: c });
+      setShowConnectModal(false);
     }
-  }, [isConnected, disconnect, openConnectModal]);
+  }, [connectors, connect]);
+
+  const closeConnectModal = useCallback(() => {
+    setShowConnectModal(false);
+  }, []);
 
   return {
     address,
@@ -67,8 +47,9 @@ export function useWalletConnection() {
     truncatedAddress,
     disconnect,
     handleConnect,
-    handleDisconnectAndConnect,
-    openAccountModal,
-    openConnectModal,
+    connectWithConnector,
+    closeConnectModal,
+    showConnectModal,
+    connectors,
   };
 }
