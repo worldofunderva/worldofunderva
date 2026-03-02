@@ -35,8 +35,8 @@ export function ContractSection() {
     : null;
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 border-t border-border">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="py-16 sm:py-20 lg:py-24 border-t border-border">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
         <ScrollReveal className="text-center mb-6 sm:mb-8">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight">
             Contract

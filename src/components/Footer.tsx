@@ -36,42 +36,37 @@ const ecosystemLinks = [
 
 const resourceLinks = [
   { label: 'Documentation', url: '/docs', isRoute: true },
+  { label: 'Litepaper', url: '#', disabled: true },
   { label: 'Audit Report', url: '#', disabled: true },
   { label: 'GitHub', url: 'https://github.com/worldofunderva' },
-];
-
-const legalLinks = [
-  { label: 'Terms of Service', url: '#' },
-  { label: 'Privacy Policy', url: '#' },
-  { label: 'Disclaimer', url: '#' },
 ];
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
   return (
     <footer ref={ref} className="border-t border-border bg-card/30">
       {/* Main Footer */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-16 sm:py-20">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 sm:gap-8 lg:gap-12">
           {/* Brand Column */}
-          <div className="sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="h-8 w-8 flex items-center justify-center rounded-lg bg-primary">
-                <Shield className="h-4 w-4 text-primary-foreground" />
+          <div>
+            <div className="flex items-center gap-2.5 mb-5">
+              <div className="h-9 w-9 flex items-center justify-center rounded-lg bg-primary">
+                <Shield className="h-4.5 w-4.5 text-primary-foreground" />
               </div>
               <span className="text-base font-semibold">World of Underva</span>
             </div>
-            <p className="text-sm text-muted-foreground mb-5 max-w-xs leading-relaxed">
-              Institutional-grade RWA tokenization for Fashion, Sportswear, and Logistics.
+            <p className="text-sm text-muted-foreground mb-6 max-w-xs leading-relaxed">
+              Securing Fashion, Sportswear, and Logistics via a multichain RWA network. Powered by MPC and the UNDO AI protocol.
             </p>
             {/* Social Icons */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center h-9 w-9 rounded-lg bg-secondary/60 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  className="flex items-center justify-center h-10 w-10 rounded-lg bg-secondary/60 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                   aria-label={social.label}
                 >
                   <social.icon />
@@ -82,8 +77,8 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
 
           {/* Ecosystem */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4">Ecosystem</h4>
-            <ul className="space-y-3">
+            <h4 className="text-sm font-semibold text-foreground mb-5">Ecosystem</h4>
+            <ul className="space-y-3.5">
               {ecosystemLinks.map((link) => (
                 <li key={link.label}>
                   <a
@@ -101,8 +96,8 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
 
           {/* Resources */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4">Resources</h4>
-            <ul className="space-y-3">
+            <h4 className="text-sm font-semibold text-foreground mb-5">Resources</h4>
+            <ul className="space-y-3.5">
               {resourceLinks.map((link) => (
                 <li key={link.label}>
                   {'isRoute' in link && link.isRoute ? (
@@ -130,42 +125,31 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               ))}
             </ul>
           </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4">Legal</h4>
-            <ul className="space-y-3">
-              {legalLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.url}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="border-t border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-muted-foreground">
-              © 2025 World of Underva. All rights reserved.
-            </p>
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-amber-500" />
-                Ethereum L1
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-primary" />
-                Base L2
-              </span>
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
+              <p className="text-xs text-muted-foreground">
+                © 2025 World of Underva. All rights reserved.
+              </p>
+              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-amber-500" />
+                  Ethereum L1
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-primary" />
+                  Base L2
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-5 text-xs text-muted-foreground">
+              <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
+              <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
             </div>
           </div>
         </div>

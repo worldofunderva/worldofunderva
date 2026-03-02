@@ -231,6 +231,29 @@
     display: none;
   }
 
+  /* Docs styled scrollbar */
+  .docs-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.4) transparent;
+  }
+
+  .docs-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .docs-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .docs-scrollbar::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary) / 0.4);
+    border-radius: 3px;
+  }
+
+  .docs-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--primary) / 0.6);
+  }
+
   /* Safe area insets for mobile */
   .safe-area-inset-bottom {
     padding-bottom: env(safe-area-inset-bottom);
