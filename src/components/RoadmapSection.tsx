@@ -38,7 +38,7 @@ const phases: Phase[] = [
     milestones: [
       'Underva Fashion Launch',
       'Hybrid Payment Integration (Stripe + $WOU)',
-      '2.0% Reward Engine activation',
+      'Dual-Yield engine activation',
       'Token-gated collections',
     ],
   },

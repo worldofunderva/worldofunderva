@@ -47,10 +47,10 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mx-auto mb-8 sm:mb-10 max-w-2xl text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground px-2"
         >
-          An immutable ecosystem with a fixed supply of <span className="font-mono text-foreground">21,000,000</span> tokens 
-          engineered for multi-layer security. Powering global Real-World Asset tokenization across{' '}
+          An immutable ecosystem with a fixed <span className="font-mono text-foreground">21,000,000</span> supply 
+          engineered for multi-layer RWA security across{' '}
           <span className="text-foreground font-semibold">Fashion</span>,{' '}
-          <span className="text-foreground font-semibold">Sportswear</span> and{' '}
+          <span className="text-foreground font-semibold">Sportswear</span>, and{' '}
           <span className="text-foreground font-semibold">Logistics</span>.
         </motion.p>
 
@@ -80,7 +80,7 @@ export function HeroSection() {
           <div className="flex items-center gap-2 sm:gap-3">
             <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
             <div className="text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">2.0% Rewards</p>
+              <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">Dual-Yield</p>
               <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Automated</p>
             </div>
           </div>

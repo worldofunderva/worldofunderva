@@ -6,7 +6,7 @@ import { TokenomicsSection } from '@/components/TokenomicsSection';
 import { ContractSection } from '@/components/ContractSection';
 import { RoadmapSection } from '@/components/RoadmapSection';
 import { BridgeSection } from '@/components/BridgeSection';
-import { TransparencyBar } from '@/components/TransparencyBar';
+import { ArchitectureSection } from '@/components/ArchitectureSection';
 import { Footer } from '@/components/Footer';
 
 const Index = () => {
@@ -21,8 +21,8 @@ const Index = () => {
         <ContractSection />
         <RoadmapSection />
         <BridgeSection />
+        <ArchitectureSection />
       </main>
-      <TransparencyBar />
       <Footer />
     </div>
   );

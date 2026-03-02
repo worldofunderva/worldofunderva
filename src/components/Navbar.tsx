@@ -51,7 +51,7 @@ export function Navbar() {
           ? "border-b border-border/50 bg-background/90 backdrop-blur-xl shadow-lg shadow-background/20"
           : "bg-transparent"
       )}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
           <div className="flex h-16 sm:h-18 items-center justify-between">
             {/* Logo */}
             <motion.div
@@ -197,22 +197,22 @@ export function Navbar() {
                       )}
                     </motion.div>
                   ))}
-                </div>
 
-                {/* Wallet Button - Mobile */}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="pt-4">
-                  {isConnected ? (
-                    <Button variant="wallet-connected" size="lg" onClick={() => { disconnect(); setIsOpen(false); }} className="w-full gap-2 h-14 text-base">
-                      <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
-                      {truncatedAddress}
-                    </Button>
-                  ) : (
-                    <Button variant="wallet" size="lg" onClick={() => { handleConnect(); setIsOpen(false); }} className="w-full gap-2 h-14 text-base">
-                      <Wallet className="h-5 w-5" />
-                      Connect Wallet
-                    </Button>
-                  )}
-                </motion.div>
+                  {/* Wallet Button - directly below Tokenomics with refined gap */}
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="pt-6">
+                    {isConnected ? (
+                      <Button variant="wallet-connected" size="lg" onClick={() => { disconnect(); setIsOpen(false); }} className="w-full gap-2 h-14 text-base">
+                        <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
+                        {truncatedAddress}
+                      </Button>
+                    ) : (
+                      <Button variant="wallet" size="lg" onClick={() => { handleConnect(); setIsOpen(false); }} className="w-full gap-2 h-14 text-base">
+                        <Wallet className="h-5 w-5" />
+                        Connect Wallet
+                      </Button>
+                    )}
+                  </motion.div>
+                </div>
 
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="flex items-center justify-center gap-6 pt-6 text-xs text-muted-foreground">
                   <span className="flex items-center gap-2">
