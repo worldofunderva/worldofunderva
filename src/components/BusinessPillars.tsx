@@ -34,8 +34,8 @@ const pillars = [
 
 export function BusinessPillars() {
   return (
-    <section id="pillars" className="relative py-16 sm:py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="pillars" className="relative py-20 sm:py-28 lg:py-36">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
         {/* Section Header */}
         <ScrollReveal className="mx-auto max-w-2xl text-center mb-10 sm:mb-16">
           <p className="text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">RWA ECOSYSTEM</p>

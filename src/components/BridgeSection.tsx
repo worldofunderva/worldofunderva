@@ -28,8 +28,8 @@ const bridgeOptions = [
 
 export function BridgeSection() {
   return (
-    <section id="bridge" className="py-12 sm:py-16 lg:py-20 border-t border-border bg-card/20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="bridge" className="py-16 sm:py-20 lg:py-24 border-t border-border bg-card/20">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
         <ScrollReveal className="text-center mb-8 sm:mb-10">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight mb-2">
             Bridge
