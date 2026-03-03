@@ -120,6 +120,7 @@ export function SentinelGate() {
                     </ul>
                   </div>
                 </div>
+                </div>
               </div>
             </div>
           </ScrollReveal>
