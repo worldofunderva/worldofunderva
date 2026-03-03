@@ -46,7 +46,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
     <footer ref={ref} className="border-t border-border bg-card/30">
       {/* Main Footer */}
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-16 sm:py-20">
-        <div className="grid grid-cols-1 sm:grid-cols-[40%_30%_30%] gap-12 sm:gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-[50%_25%_25%] gap-12 sm:gap-6 lg:gap-8">
           {/* Brand Column */}
           <div>
             <div className="flex items-center gap-2.5 mb-5">
