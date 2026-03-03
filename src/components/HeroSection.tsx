@@ -61,28 +61,22 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.8 }}
           className="mb-8 sm:mb-10 flex flex-row items-center justify-center gap-4 sm:gap-8 lg:gap-10"
         >
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Lock className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
-            <div className="text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">21M Fixed</p>
-              <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Total Supply</p>
-            </div>
+          <div className="flex flex-col items-center gap-1.5">
+            <Lock className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+            <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">21M Fixed</p>
+            <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Total Supply</p>
           </div>
-          <div className="h-10 w-px bg-border shrink-0" />
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
-            <div className="text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">Zero Tax</p>
-              <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">No Fees</p>
-            </div>
+          <div className="h-14 w-px bg-border shrink-0" />
+          <div className="flex flex-col items-center gap-1.5">
+            <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+            <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">Zero Tax</p>
+            <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">No Fees</p>
           </div>
-          <div className="h-10 w-px bg-border shrink-0" />
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
-            <div className="text-left">
-              <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">Dual-Yield</p>
-              <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Automated</p>
-            </div>
+          <div className="h-14 w-px bg-border shrink-0" />
+          <div className="flex flex-col items-center gap-1.5">
+            <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+            <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">Dual-Yield</p>
+            <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Automated</p>
           </div>
         </motion.div>
 
@@ -93,13 +87,13 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 1 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
         >
-          <Button variant="sentinel" size="lg" className="w-full sm:w-auto text-sm sm:text-base h-12 sm:h-14 px-6 sm:px-8 rounded-full" asChild>
+          <Button variant="sentinel" size="lg" className="w-full sm:w-auto text-sm sm:text-base h-12 sm:h-14 px-6 sm:px-8 rounded-xl" asChild>
             <a href="#sentinel">
               <Shield className="h-4 w-4 sm:h-5 sm:w-5" />
               Mint Sentinel NFT
             </a>
           </Button>
-          <Button variant="sentinel-outline" size="lg" className="w-full sm:w-auto text-sm sm:text-base h-12 sm:h-14 px-6 sm:px-8 rounded-full" asChild>
+          <Button variant="sentinel-outline" size="lg" className="w-full sm:w-auto text-sm sm:text-base h-12 sm:h-14 px-6 sm:px-8 rounded-xl" asChild>
             <Link to="/docs">
               <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
               Explore Documentation

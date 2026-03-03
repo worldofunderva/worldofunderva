@@ -168,7 +168,8 @@ export function Navbar() {
                 transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
                 className="relative h-full flex flex-col px-6 py-8"
               >
-                <div className="flex-1 space-y-2">
+                <div className="flex-1 flex flex-col">
+                  <div className="space-y-2">
                   {navItems.map((item, index) => (
                     <motion.div
                       key={item.label}
@@ -197,8 +198,9 @@ export function Navbar() {
                       )}
                     </motion.div>
                   ))}
+                  </div>
 
-                  {/* Wallet Button - directly below Tokenomics with refined gap */}
+                  {/* Wallet Button - directly below Tokenomics */}
                   <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="pt-6">
                     {isConnected ? (
                       <Button variant="wallet-connected" size="lg" onClick={() => { disconnect(); setIsOpen(false); }} className="w-full gap-2 h-14 text-base">
@@ -214,7 +216,8 @@ export function Navbar() {
                   </motion.div>
                 </div>
 
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="flex items-center justify-center gap-6 pt-6 text-xs text-muted-foreground">
+                {/* L1 & L2 badge directly under Connect Wallet */}
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex items-center justify-center gap-6 pt-4 text-xs text-muted-foreground">
                   <span className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-amber-500" />
                     Ethereum L1

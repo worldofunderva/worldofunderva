@@ -38,27 +38,12 @@ export function SentinelGate() {
           </p>
         </ScrollReveal>
 
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-14 xl:gap-18 items-start">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-14 xl:gap-18 items-stretch">
           {/* Content Side */}
           <ScrollReveal variant="fade-right">
-            <div>
-              {/* UNDO Protocol Agent */}
-              <div className="mb-8 rounded-xl border border-primary/30 bg-primary/5 p-5 sm:p-6">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-primary">
-                    <Bot className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs sm:text-sm font-semibold text-foreground mb-1.5">UNDO — Underva Digital Overseer</p>
-                    <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed">
-                      Our AI Protocol Agent ensures total transparency by logging all payments monthly and every 6 months. The team approves transactions while UNDO handles the calculations and audit trail.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
+            <div className="h-full flex flex-col">
               {/* Perks */}
-              <div className="space-y-6">
+              <div className="space-y-6 flex-1">
                 {/* Dual-Yield Protocol */}
                 <div className="flex items-start gap-3">
                   <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/20 text-success mt-0.5">
