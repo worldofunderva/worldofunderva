@@ -249,7 +249,7 @@ export default function DocsPage() {
 
               {/* Scrollable Nav */}
               <div className="overflow-y-auto h-[calc(100vh-120px)] px-5 py-6 docs-scrollbar">
-                <SidebarContent />
+                <SidebarContent isMobile={true} />
               </div>
             </motion.div>
           )}
