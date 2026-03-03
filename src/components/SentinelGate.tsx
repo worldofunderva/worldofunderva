@@ -1,4 +1,4 @@
-import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock, Bot } from 'lucide-react';
+import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAccount } from 'wagmi';
 import { useWalletConnection } from '@/hooks/useWalletConnection';
