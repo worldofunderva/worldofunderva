@@ -74,7 +74,7 @@ export default function DocsPage() {
     );
   };
 
-  const SidebarContent = () => (
+  const SidebarContent = ({ isMobile = false }: { isMobile?: boolean }) => (
     <nav className="space-y-5">
       {filteredGroups.map((group) => {
         const sections = filterSections(group);
@@ -86,24 +86,47 @@ export default function DocsPage() {
               <GroupIcon className="h-3.5 w-3.5 text-primary/70" />
               {group}
             </h3>
-            <ul className="space-y-0.5">
-              {sections.map((section) => (
-                <li key={section.id}>
-                  <Link
-                    to={`/docs/${section.id}`}
-                    onClick={() => setSidebarOpen(false)}
-                    className={cn(
-                      "block px-3 py-2 text-sm rounded-xl transition-colors",
-                      currentSection === section.id
-                        ? "bg-primary/10 text-primary font-medium"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                    )}
-                  >
-                    {section.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {isMobile ? (
+              <div className="relative ml-[1.1rem] pl-4 border-l border-border">
+                <ul className="space-y-0.5">
+                  {sections.map((section) => (
+                    <li key={section.id}>
+                      <Link
+                        to={`/docs/${section.id}`}
+                        onClick={() => setSidebarOpen(false)}
+                        className={cn(
+                          "block px-3 py-2 text-sm rounded-xl transition-colors",
+                          currentSection === section.id
+                            ? "bg-primary/10 text-primary font-medium"
+                            : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                        )}
+                      >
+                        {section.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <ul className="space-y-0.5">
+                {sections.map((section) => (
+                  <li key={section.id}>
+                    <Link
+                      to={`/docs/${section.id}`}
+                      onClick={() => setSidebarOpen(false)}
+                      className={cn(
+                        "block px-3 py-2 text-sm rounded-xl transition-colors",
+                        currentSection === section.id
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                      )}
+                    >
+                      {section.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         );
       })}
@@ -196,7 +219,7 @@ export default function DocsPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="lg:hidden fixed inset-0 z-[60] bg-background"
+              className="lg:hidden fixed inset-0 z-[60] bg-background w-full"
             >
               {/* Sticky Header */}
               <div className="sticky top-0 z-10 bg-background border-b border-border px-5 py-4 space-y-4">
