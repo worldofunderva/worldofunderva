@@ -46,7 +46,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
     <footer ref={ref} className="border-t border-border bg-card/30">
       {/* Main Footer */}
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-16 sm:py-20">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 sm:gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-[40%_30%_30%] gap-12 sm:gap-6 lg:gap-8">
           {/* Brand Column */}
           <div>
             <div className="flex items-center gap-2.5 mb-5">
@@ -59,17 +59,17 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               Securing Fashion, Sportswear, and Logistics via a multichain RWA network. Powered by MPC and the UNDO AI protocol.
             </p>
             {/* Social Icons */}
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-3">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center h-10 w-10 rounded-lg bg-secondary/60 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  className="flex items-center justify-center h-9 w-9 rounded-lg bg-secondary/60 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                   aria-label={social.label}
                 >
-                  <social.icon />
+                  <social.icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
