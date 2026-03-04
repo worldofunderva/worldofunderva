@@ -91,13 +91,13 @@ export function TokenomicsSection() {
         {/* Key Metrics */}
         <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12" staggerDelay={0.1}>
           <StaggerItem>
-            <div className="rounded-lg sm:rounded-xl border border-border bg-card p-4 sm:p-6 text-center">
+            <div className="rounded-lg sm:rounded-xl border border-primary/10 bg-card p-4 sm:p-6 text-center">
               <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono text-primary mb-0.5 sm:mb-1">21M</p>
               <p className="text-[10px] sm:text-sm text-muted-foreground">Fixed Supply</p>
             </div>
           </StaggerItem>
           <StaggerItem>
-            <div className="rounded-lg sm:rounded-xl border border-border bg-card p-4 sm:p-6 text-center">
+            <div className="rounded-lg sm:rounded-xl border border-primary/10 bg-card p-4 sm:p-6 text-center">
               <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
                 <Zap className="h-4 w-4 sm:h-6 sm:w-6 text-success" />
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono text-success">0%</p>
@@ -106,13 +106,13 @@ export function TokenomicsSection() {
             </div>
           </StaggerItem>
           <StaggerItem>
-            <div className="rounded-lg sm:rounded-xl border border-border bg-card p-4 sm:p-6 text-center">
-              <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono text-primary mb-0.5 sm:mb-1">2.0%</p>
+            <div className="rounded-lg sm:rounded-xl border border-primary/10 bg-card p-4 sm:p-6 text-center">
+              <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono text-primary mb-0.5 sm:mb-1">2.0% | 5.0%</p>
               <p className="text-[10px] sm:text-sm text-muted-foreground">Automated Rewards</p>
             </div>
           </StaggerItem>
           <StaggerItem>
-            <div className="rounded-lg sm:rounded-xl border border-border bg-card p-4 sm:p-6 text-center">
+            <div className="rounded-lg sm:rounded-xl border border-primary/10 bg-card p-4 sm:p-6 text-center">
               <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
                 <Lock className="h-4 w-4 sm:h-6 sm:w-6 text-amber-500" />
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono">4Y/1Y</p>
@@ -124,8 +124,8 @@ export function TokenomicsSection() {
 
         {/* Distribution Table - Hidden on mobile */}
         <ScrollReveal delay={0.2} className="hidden sm:block">
-          <div className="rounded-xl sm:rounded-2xl border border-border bg-card overflow-hidden">
-            <div className="grid grid-cols-12 gap-4 px-4 sm:px-6 py-3 sm:py-4 border-b border-border bg-secondary/30">
+          <div className="rounded-xl sm:rounded-2xl border border-primary/10 bg-card overflow-hidden">
+            <div className="grid grid-cols-12 gap-4 px-4 sm:px-6 py-3 sm:py-4 border-b border-primary/10 bg-secondary/30">
               <div className="col-span-4 sm:col-span-3 text-xs sm:text-sm font-medium text-muted-foreground">Allocation</div>
               <div className="col-span-2 text-xs sm:text-sm font-medium text-muted-foreground text-right">%</div>
               <div className="col-span-2 text-xs sm:text-sm font-medium text-muted-foreground text-right">Tokens</div>
@@ -137,7 +137,7 @@ export function TokenomicsSection() {
                 key={item.label}
                 className={cn(
                   "grid grid-cols-12 gap-4 px-4 sm:px-6 py-4 sm:py-5 items-center transition-colors hover:bg-secondary/20",
-                  index !== distributions.length - 1 && "border-b border-border"
+                  index !== distributions.length - 1 && "border-b border-primary/5"
                 )}
               >
                 <div className="col-span-4 sm:col-span-3 flex items-center gap-2 sm:gap-3">
@@ -177,7 +177,7 @@ export function TokenomicsSection() {
         {/* Mobile Distribution Cards */}
         <ScrollReveal delay={0.2} className="sm:hidden space-y-3">
           {distributions.map((item) => (
-            <div key={item.label} className="rounded-lg border border-border bg-card p-4">
+            <div key={item.label} className="rounded-lg border border-primary/10 bg-card p-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", item.tailwindColor, "bg-opacity-20")}>

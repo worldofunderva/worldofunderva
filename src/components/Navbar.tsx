@@ -48,11 +48,11 @@ export function Navbar() {
       <nav className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled 
-          ? "border-b border-border/50 bg-background/90 backdrop-blur-xl shadow-lg shadow-background/20"
+          ? "border-b border-primary/10 bg-background/90 backdrop-blur-xl shadow-lg shadow-background/20"
           : "bg-transparent"
       )}>
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
-          <div className="flex h-16 sm:h-18 items-center justify-between">
+          <div className="flex h-14 items-center justify-between">
             {/* Logo */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -158,7 +158,7 @@ export function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden fixed inset-0 top-16 z-40"
+              className="lg:hidden fixed inset-0 top-14 z-40"
             >
               <motion.div className="absolute inset-0 bg-background/95 backdrop-blur-xl" onClick={() => setIsOpen(false)} />
               <motion.div
@@ -180,7 +180,7 @@ export function Navbar() {
                       {item.isRoute ? (
                         <Link
                           to={item.href}
-                          className="flex items-center justify-between py-4 text-lg font-medium text-foreground border-b border-border/50 hover:text-primary transition-colors"
+                          className="flex items-center justify-between py-4 text-lg font-medium text-foreground border-b border-primary/10 hover:text-primary transition-colors"
                           onClick={() => setIsOpen(false)}
                         >
                           {item.label}
@@ -189,7 +189,7 @@ export function Navbar() {
                       ) : (
                         <a
                           href={item.href}
-                          className="flex items-center justify-between py-4 text-lg font-medium text-foreground border-b border-border/50 hover:text-primary transition-colors"
+                          className="flex items-center justify-between py-4 text-lg font-medium text-foreground border-b border-primary/10 hover:text-primary transition-colors"
                           onClick={() => setIsOpen(false)}
                         >
                           {item.label}
@@ -201,7 +201,7 @@ export function Navbar() {
                   </div>
 
                   {/* Wallet Button - directly below Tokenomics */}
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="pt-6">
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="pt-4">
                     {isConnected ? (
                       <Button variant="wallet-connected" size="lg" onClick={() => { disconnect(); setIsOpen(false); }} className="w-full gap-2 h-14 text-base">
                         <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
@@ -213,20 +213,20 @@ export function Navbar() {
                         Connect Wallet
                       </Button>
                     )}
+
+                    {/* L1 & L2 badge directly under Connect Wallet */}
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex items-center justify-center gap-6 pt-3 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-amber-500" />
+                        Ethereum L1
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-primary" />
+                        Base L2
+                      </span>
+                    </motion.div>
                   </motion.div>
                 </div>
-
-                {/* L1 & L2 badge directly under Connect Wallet */}
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex items-center justify-center gap-6 pt-4 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-amber-500" />
-                    Ethereum L1
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-primary" />
-                    Base L2
-                  </span>
-                </motion.div>
               </motion.div>
             </motion.div>
           )}

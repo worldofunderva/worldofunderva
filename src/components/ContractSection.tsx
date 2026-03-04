@@ -2,17 +2,12 @@ import { useState } from 'react';
 import { Copy, Check, ExternalLink, TrendingUp, TrendingDown, Clock } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
-// Contract address - set to null until token launch, then replace with actual address
-// Example: '0x1234567890abcdef1234567890abcdef12345678'
 const CONTRACT_ADDRESS: string | null = null;
-
-// Set to true when token is launched and price data is available
 const IS_TOKEN_LAUNCHED = false;
 
 export function ContractSection() {
   const [copied, setCopied] = useState(false);
 
-  // Price data - will be fetched from CoinMarketCap/DEX API after launch
   const priceData = IS_TOKEN_LAUNCHED ? {
     price: 0.0847,
     change24h: 3.42,
@@ -26,7 +21,6 @@ export function ContractSection() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Generate explorer URLs only when contract address exists
   const etherscanUrl = CONTRACT_ADDRESS 
     ? `https://etherscan.io/address/${CONTRACT_ADDRESS}` 
     : null;
@@ -35,7 +29,7 @@ export function ContractSection() {
     : null;
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 border-t border-border">
+    <section className="py-16 sm:py-20 lg:py-24 bg-card/20">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
         <ScrollReveal className="text-center mb-6 sm:mb-8">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight">
@@ -45,8 +39,8 @@ export function ContractSection() {
 
         <ScrollReveal delay={0.1}>
           <div className="glass-card p-4 sm:p-6 max-w-2xl mx-auto">
-            {/* Price Display - Shows TBA if not launched */}
-            <div className="flex items-center justify-center gap-3 sm:gap-4 pb-4 sm:pb-5 mb-4 sm:mb-5 border-b border-border">
+            {/* Price Display */}
+            <div className="flex items-center justify-center gap-3 sm:gap-4 pb-4 sm:pb-5 mb-4 sm:mb-5 border-b border-primary/10">
               {priceData ? (
                 <>
                   <span className="text-xl sm:text-2xl font-mono font-semibold text-foreground">

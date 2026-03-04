@@ -34,7 +34,7 @@ const pillars = [
 
 export function BusinessPillars() {
   return (
-    <section id="pillars" className="relative py-20 sm:py-28 lg:py-36">
+    <section id="pillars" className="relative py-20 sm:py-28 lg:py-36 bg-secondary/20">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
         {/* Section Header */}
         <ScrollReveal className="mx-auto max-w-2xl text-center mb-10 sm:mb-16">
@@ -53,8 +53,8 @@ export function BusinessPillars() {
             <StaggerItem key={pillar.title}>
               <div
                 className={cn(
-                  "group relative rounded-xl sm:rounded-2xl border border-border bg-card p-5 sm:p-6 lg:p-8 transition-all duration-300 h-full",
-                  "hover:border-primary/50 hover:sentinel-glow active:scale-[0.98]"
+                  "group relative rounded-xl sm:rounded-2xl border border-primary/10 bg-card p-5 sm:p-6 lg:p-8 transition-all duration-300 h-full",
+                  "hover:border-primary/30 hover:sentinel-glow active:scale-[0.98]"
                 )}
               >
                 {/* Gradient Background */}

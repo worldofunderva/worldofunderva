@@ -28,7 +28,7 @@ const bridgeOptions = [
 
 export function BridgeSection() {
   return (
-    <section id="bridge" className="py-16 sm:py-20 lg:py-24 border-t border-border bg-card/20">
+    <section id="bridge" className="py-16 sm:py-20 lg:py-24 bg-secondary/10">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
         <ScrollReveal className="text-center mb-8 sm:mb-10">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight mb-2">
@@ -60,7 +60,7 @@ export function BridgeSection() {
                 href={bridge.url}
                 className={cn(
                   "glass-card p-4 sm:p-5 flex items-center sm:block gap-3 sm:gap-0",
-                  "hover:border-primary/50 transition-all duration-300 group active:scale-[0.98]"
+                  "hover:border-primary/30 transition-all duration-300 group active:scale-[0.98]"
                 )}
               >
                 <div className="flex items-start justify-between sm:mb-3">

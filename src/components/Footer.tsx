@@ -43,9 +43,9 @@ const resourceLinks = [
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
   return (
-    <footer ref={ref} className="border-t border-border bg-card/30">
+    <footer ref={ref} className="bg-card/30">
       {/* Main Footer */}
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-20 sm:py-24">
         <div className="grid grid-cols-1 sm:grid-cols-[50%_25%_25%] gap-12 sm:gap-6 lg:gap-8">
           {/* Brand Column */}
           <div>
@@ -58,15 +58,15 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             <p className="text-sm text-muted-foreground mb-6 max-w-xs leading-relaxed">
               Securing Fashion, Sportswear, and Logistics via a multichain RWA network. Powered by MPC and the UNDO AI protocol.
             </p>
-            {/* Social Icons */}
-            <div className="flex items-center gap-3">
+            {/* Social Icons - White color */}
+            <div className="flex items-center gap-4">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center h-9 w-9 rounded-lg bg-secondary/60 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  className="flex items-center justify-center h-10 w-10 rounded-lg bg-secondary/60 text-foreground hover:text-primary-foreground hover:bg-primary/80 transition-colors"
                   aria-label={social.label}
                 >
                   <social.icon className="h-4 w-4" />
@@ -129,7 +129,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-border">
+      <div className="border-t border-border/50">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
