@@ -21,7 +21,7 @@ export function SentinelGate() {
   };
 
   return (
-    <section id="sentinel" className="relative py-20 sm:py-28 lg:py-36 overflow-hidden">
+    <section id="sentinel" className="relative py-20 sm:py-28 lg:py-36 overflow-hidden bg-card/40">
       <div className="absolute inset-0 grid-pattern opacity-20" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-primary/5 rounded-full blur-3xl" />
 
@@ -133,7 +133,7 @@ export function SentinelGate() {
                   ? "border-success/50 bg-success/5 sentinel-glow"
                   : isConnected
                     ? "border-warning/50 bg-warning/5"
-                    : "border-border bg-card"
+                    : "border-primary/10 bg-card"
               )}>
                 {/* Card Header */}
                 <div className="flex items-center justify-between mb-6 sm:mb-8">
@@ -215,7 +215,7 @@ export function SentinelGate() {
                       key={item.label}
                       className={cn(
                         "flex items-center justify-between py-2.5",
-                        index !== 2 && "border-b border-border"
+                        index !== 2 && "border-b border-border/50"
                       )}
                     >
                       <span className="text-[11px] sm:text-xs text-muted-foreground">{item.label}</span>
@@ -246,7 +246,7 @@ export function SentinelGate() {
                   </div>
                 </div>
 
-                {/* Action Button — Horizontal with slightly rounded edges */}
+                {/* Action Button */}
                 {!isConnected ? (
                   <Button 
                     variant="sentinel" 

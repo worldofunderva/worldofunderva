@@ -19,7 +19,7 @@ const vault2Items = [
 
 export function ArchitectureSection() {
   return (
-    <section className="relative py-20 sm:py-28 lg:py-36 overflow-hidden border-t border-border">
+    <section className="relative py-20 sm:py-28 lg:py-36 overflow-hidden bg-secondary/15">
       <div className="absolute inset-0 grid-pattern opacity-15" />
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/3 rounded-full blur-3xl" />
@@ -39,7 +39,7 @@ export function ArchitectureSection() {
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
           {/* Part A: UNDO AI Protocol */}
           <ScrollReveal variant="fade-right">
-            <div className="rounded-xl sm:rounded-2xl border border-primary/30 bg-card p-6 sm:p-8 h-full">
+            <div className="rounded-xl sm:rounded-2xl border border-primary/20 bg-card p-6 sm:p-8 h-full">
               <div className="flex items-center gap-3 mb-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary">
                   <Bot className="h-6 w-6" />
@@ -57,14 +57,14 @@ export function ArchitectureSection() {
               </p>
 
               <div className="space-y-4">
-                <div className="rounded-lg border border-border bg-secondary/30 p-4">
+                <div className="rounded-lg border border-primary/10 bg-secondary/30 p-4">
                   <p className="text-xs font-semibold text-foreground mb-1.5">Monthly Operations</p>
                   <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed">
                     UNDO autonomously logs all payments, transaction data, and financial records at the close of each calendar month. 
                     Every entry is timestamped and immutably recorded.
                   </p>
                 </div>
-                <div className="rounded-lg border border-border bg-secondary/30 p-4">
+                <div className="rounded-lg border border-primary/10 bg-secondary/30 p-4">
                   <p className="text-xs font-semibold text-foreground mb-1.5">Semi-Annual Audit Cycle</p>
                   <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed">
                     Every 6 months, UNDO compiles a comprehensive financial log covering all ecosystem transactions, 
@@ -86,7 +86,7 @@ export function ArchitectureSection() {
           <ScrollReveal variant="fade-left" delay={0.2}>
             <div className="space-y-6 h-full flex flex-col">
               {/* Vault 1 */}
-              <div className="rounded-xl sm:rounded-2xl border border-border bg-card p-6 sm:p-8 flex-1">
+              <div className="rounded-xl sm:rounded-2xl border border-primary/10 bg-card p-6 sm:p-8 flex-1">
                 <div className="flex items-center gap-3 mb-5">
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/15 text-primary">
                     <Shield className="h-5 w-5" />
@@ -99,7 +99,7 @@ export function ArchitectureSection() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                   {vault1Items.map((item) => (
-                    <div key={item.label} className="flex items-center gap-2 rounded-lg border border-border bg-secondary/30 px-3 py-2.5">
+                    <div key={item.label} className="flex items-center gap-2 rounded-lg border border-primary/10 bg-secondary/30 px-3 py-2.5">
                       <item.icon className="h-3.5 w-3.5 text-primary shrink-0" />
                       <span className="text-[10px] sm:text-xs text-muted-foreground font-medium truncate">{item.label}</span>
                     </div>
@@ -108,7 +108,7 @@ export function ArchitectureSection() {
               </div>
 
               {/* Vault 2 */}
-              <div className="rounded-xl sm:rounded-2xl border border-amber-500/30 bg-card p-6 sm:p-8 flex-1">
+              <div className="rounded-xl sm:rounded-2xl border border-amber-500/20 bg-card p-6 sm:p-8 flex-1">
                 <div className="flex items-center gap-3 mb-5">
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500/15 text-amber-500">
                     <Lock className="h-5 w-5" />
@@ -121,7 +121,7 @@ export function ArchitectureSection() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   {vault2Items.map((item) => (
-                    <div key={item.label} className="flex items-center gap-2 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2.5">
+                    <div key={item.label} className="flex items-center gap-2 rounded-lg border border-amber-500/15 bg-amber-500/5 px-3 py-2.5">
                       <item.icon className="h-3.5 w-3.5 text-amber-500 shrink-0" />
                       <span className="text-[10px] sm:text-xs text-muted-foreground font-medium">{item.label}</span>
                     </div>
