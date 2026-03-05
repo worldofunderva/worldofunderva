@@ -205,7 +205,7 @@ export default function DocsPage() {
         {sidebarCollapsed && (
           <button
             onClick={() => setSidebarCollapsed(false)}
-            className="hidden lg:flex fixed top-[4.25rem] left-4 z-30 items-center gap-1.5 px-3 py-2 text-xs text-muted-foreground hover:text-foreground border border-primary/10 rounded-xl bg-card/80 backdrop-blur-sm hover:bg-secondary/50 transition-colors"
+            className="hidden lg:flex fixed top-[4.5rem] left-4 z-30 items-center gap-1.5 px-3 py-2 text-xs text-muted-foreground hover:text-foreground border border-primary/10 rounded-xl bg-card/80 backdrop-blur-sm hover:bg-secondary/50 transition-colors"
           >
             <PanelLeft className="h-4 w-4" />
             <span>Menu</span>
