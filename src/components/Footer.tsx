@@ -71,10 +71,10 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center h-10 w-10 rounded-lg bg-secondary/80 text-primary-foreground hover:bg-primary/80 hover:scale-110 hover:shadow-lg hover:shadow-primary/30 transition-all duration-200"
+                  className="flex items-center justify-center h-10 w-10 rounded-lg bg-secondary/80 text-primary-foreground hover:bg-primary/80 hover:scale-110 hover:shadow-lg hover:shadow-primary/30 transition-all duration-200 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:shrink-0"
                   aria-label={social.label}
                 >
-                  <social.icon className="h-4 w-4" />
+                  <social.icon aria-hidden="true" />
                 </a>
               ))}
             </div>
