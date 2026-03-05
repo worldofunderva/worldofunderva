@@ -71,7 +71,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center h-10 w-10 rounded-lg bg-[hsl(222,30%,12%)]/80 text-white hover:bg-primary/80 hover:scale-110 hover:shadow-[0_0_15px_hsl(212,100%,48%/0.4)] transition-all duration-200"
+                  className="flex items-center justify-center h-10 w-10 rounded-lg bg-secondary/80 text-primary-foreground hover:bg-primary/80 hover:scale-110 hover:shadow-lg hover:shadow-primary/30 transition-all duration-200"
                   aria-label={social.label}
                 >
                   <social.icon className="h-4 w-4" />
