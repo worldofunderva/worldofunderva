@@ -28,7 +28,7 @@ const optimizedBase = {
   },
 } as const;
 
-const projectId = 'b8b0d345dc3ec1a6f26d12331973af0f';
+const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'b8b0d345dc3ec1a6f26d12331973af0f';
 
 export const config = createConfig({
   chains: [optimizedBase],
