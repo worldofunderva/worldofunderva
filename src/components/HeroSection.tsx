@@ -54,7 +54,7 @@ export function HeroSection() {
           <span className="text-foreground font-semibold">Logistics</span>.
         </motion.p>
 
-        {/* Stats Row - Icons on left, text center-aligned */}
+        {/* Stats Row - Icons on left, sub-text center-aligned under titles */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -63,7 +63,7 @@ export function HeroSection() {
         >
           <div className="flex items-center gap-2.5 sm:gap-3">
             <Lock className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
-            <div className="text-left">
+            <div className="text-center">
               <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">21M Fixed</p>
               <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Total Supply</p>
             </div>
@@ -71,7 +71,7 @@ export function HeroSection() {
           <div className="h-10 w-px bg-border shrink-0" />
           <div className="flex items-center gap-2.5 sm:gap-3">
             <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
-            <div className="text-left">
+            <div className="text-center">
               <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">Zero Tax</p>
               <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">No Fees</p>
             </div>
@@ -79,7 +79,7 @@ export function HeroSection() {
           <div className="h-10 w-px bg-border shrink-0" />
           <div className="flex items-center gap-2.5 sm:gap-3">
             <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
-            <div className="text-left">
+            <div className="text-center">
               <p className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">Dual-Yield</p>
               <p className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Automated</p>
             </div>

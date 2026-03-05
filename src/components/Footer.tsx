@@ -43,9 +43,14 @@ const resourceLinks = [
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
   return (
-    <footer ref={ref} className="bg-card/30">
+    <footer ref={ref} className="relative overflow-hidden">
+      {/* Hero-matching background */}
+      <div className="absolute inset-0 bg-background" />
+      <div className="absolute top-1/4 left-0 sm:left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-primary/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-0 sm:right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-primary/5 rounded-full blur-3xl" />
+
       {/* Main Footer */}
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-20 sm:py-24">
+      <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-20 sm:py-24">
         <div className="grid grid-cols-1 sm:grid-cols-[50%_25%_25%] gap-12 sm:gap-6 lg:gap-8">
           {/* Brand Column */}
           <div>
@@ -58,15 +63,15 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             <p className="text-sm text-muted-foreground mb-6 max-w-xs leading-relaxed">
               Securing Fashion, Sportswear, and Logistics via a multichain RWA network. Powered by MPC and the UNDO AI protocol.
             </p>
-            {/* Social Icons - White color */}
-            <div className="flex items-center gap-4">
+            {/* Social Icons - Pure white, consistent */}
+            <div className="flex items-center gap-3">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center h-10 w-10 rounded-lg bg-secondary/60 text-foreground hover:text-primary-foreground hover:bg-primary/80 transition-colors"
+                  className="flex items-center justify-center h-10 w-10 rounded-lg bg-[hsl(222,30%,12%)]/80 text-white hover:bg-primary/80 hover:scale-110 hover:shadow-[0_0_15px_hsl(212,100%,48%/0.4)] transition-all duration-200"
                   aria-label={social.label}
                 >
                   <social.icon className="h-4 w-4" />
@@ -129,7 +134,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-border/50">
+      <div className="relative z-10 border-t border-border/50">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">

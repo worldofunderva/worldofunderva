@@ -107,7 +107,7 @@ export function TokenomicsSection() {
           </StaggerItem>
           <StaggerItem>
             <div className="rounded-lg sm:rounded-xl border border-primary/10 bg-card p-4 sm:p-6 text-center">
-              <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono text-primary mb-0.5 sm:mb-1">2.0% | 5.0%</p>
+              <p className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono text-primary mb-0.5 sm:mb-1 whitespace-nowrap">2%/5%</p>
               <p className="text-[10px] sm:text-sm text-muted-foreground">Automated Rewards</p>
             </div>
           </StaggerItem>

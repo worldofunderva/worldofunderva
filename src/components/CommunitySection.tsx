@@ -29,7 +29,7 @@ const socialLinks = [
 
 export function CommunitySection() {
   return (
-    <section id="community" className="py-12 sm:py-16 lg:py-20 border-t border-border">
+    <section id="community" className="py-12 sm:py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <ScrollReveal className="text-center mb-8 sm:mb-10">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight mb-2">
