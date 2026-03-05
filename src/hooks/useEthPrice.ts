@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
+import { z } from 'zod';
 
-interface PriceData {
-  ethereum: {
-    usd: number;
-  };
-}
+const PriceSchema = z.object({
+  ethereum: z.object({
+    usd: z.number().positive().finite().min(100).max(1_000_000),
+  }),
+});
 
 async function fetchEthPrice(): Promise<number> {
   const response = await fetch(
@@ -16,8 +17,11 @@ async function fetchEthPrice(): Promise<number> {
     throw new Error('Failed to fetch ETH price');
   }
   
-  const data: PriceData = await response.json();
-  return data.ethereum.usd;
+  const parsed = PriceSchema.safeParse(await response.json());
+  if (!parsed.success) {
+    throw new Error('Unexpected ETH price data shape');
+  }
+  return parsed.data.ethereum.usd;
 }
 
 export function useEthPrice() {
