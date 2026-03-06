@@ -33,13 +33,15 @@ if (!projectId) {
   console.warn('VITE_WALLETCONNECT_PROJECT_ID is not set. WalletConnect will not work until it is configured.');
 }
 
+const connectors = [
+  injected(),
+  coinbaseWallet({ appName: 'World of Underva' }),
+  ...(projectId ? [walletConnect({ projectId })] : []),
+];
+
 export const config = createConfig({
   chains: [optimizedBase],
-  connectors: [
-    injected(),
-    walletConnect({ projectId }),
-    coinbaseWallet({ appName: 'World of Underva' }),
-  ],
+  connectors,
   storage: sessionStorageConfig,
   transports: {
     [base.id]: http(undefined, {
