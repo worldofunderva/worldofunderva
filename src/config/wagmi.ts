@@ -28,8 +28,10 @@ const optimizedBase = {
   },
 } as const;
 
-const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
-if (!projectId) throw new Error('VITE_WALLETCONNECT_PROJECT_ID is not set. Add it to your environment variables.');
+const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID ?? '';
+if (!projectId) {
+  console.warn('VITE_WALLETCONNECT_PROJECT_ID is not set. WalletConnect will not work until it is configured.');
+}
 
 export const config = createConfig({
   chains: [optimizedBase],
