@@ -1,24 +1,16 @@
-import { lazy, Suspense } from 'react';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from '@/components/ui/toaster';
+import { Toaster as Sonner } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { SentinelProvider } from '@/contexts/SentinelContext';
 import { config } from '@/config/wagmi';
 import { useWalletSessionPolicy } from '@/hooks/useWalletSessionPolicy';
 import { NetworkWarningBanner } from '@/components/NetworkWarningBanner';
-
-// Lazy load pages for code splitting
-const Index = lazy(() => import("./pages/Index"));
-const DocsPage = lazy(() => import("./pages/Docs"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-
-// Minimal loading fallback
-const PageLoader = () => (
-  <div className="min-h-screen bg-background" />
-);
+import Index from './pages/Index';
+import DocsPage from './pages/Docs';
+import NotFound from './pages/NotFound';
 
 function WalletSecurityManager() {
   useWalletSessionPolicy();
@@ -54,14 +46,12 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/docs" element={<DocsPage />} />
-                <Route path="/docs/:section" element={<DocsPage />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/docs" element={<DocsPage />} />
+              <Route path="/docs/:section" element={<DocsPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </BrowserRouter>
         </TooltipProvider>
       </SentinelProvider>
