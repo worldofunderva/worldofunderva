@@ -30,7 +30,7 @@ export default defineConfig(({ mode }) => ({
     },
     chunkSizeWarningLimit: 1000,
     minify: 'esbuild',
-    sourcemap: mode === 'development',
+    sourcemap: true,
     target: 'esnext',
   },
   optimizeDeps: {
