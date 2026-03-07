@@ -28,7 +28,7 @@
 
     /* Muted surfaces */
     --muted: 222 30% 10%;
-    --muted-foreground: 215 20% 55%;
+    --muted-foreground: 215 20% 65%;
 
     /* Accent - Sentinel glow */
     --accent: 212 100% 48%;
@@ -61,7 +61,7 @@
     --sentinel-dark: 212 80% 35%;
     --surface-elevated: 222 40% 8%;
     --surface-glass: 222 40% 10%;
-    --text-dim: 215 20% 45%;
+    --text-dim: 215 20% 60%;
     --success: 142 72% 45%;
     --warning: 38 92% 50%;
   }
