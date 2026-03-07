@@ -1,9 +1,25 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Menu, X, Home, ChevronRight, ChevronLeft, Shield, BookOpen, Search, FileText, Globe, Coins, Vote, Cpu, Image, Scale, HelpCircle, PanelLeftClose, PanelLeft } from 'lucide-react';
+import { Menu, X, Home, ChevronRight, ChevronLeft, Shield, Search, FileText, Globe, Coins, Vote, Cpu, Image, Scale, HelpCircle, PanelLeftClose, PanelLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
+
+// Content components
+import { DocExecutiveSummary } from '@/components/docs/DocExecutiveSummary';
+import { DocStoryVision } from '@/components/docs/DocStoryVision';
+import { DocEcosystemOverview } from '@/components/docs/DocEcosystemOverview';
+import { DocThreePillars } from '@/components/docs/DocThreePillars';
+import { DocTokenOverview } from '@/components/docs/DocTokenOverview';
+import { DocTokenUtility } from '@/components/docs/DocTokenUtility';
+import { DocGovernance } from '@/components/docs/DocGovernance';
+import { DocTechArchitecture } from '@/components/docs/DocTechArchitecture';
+import { DocRoadmap } from '@/components/docs/DocRoadmap';
+import { DocOriginSentinel } from '@/components/docs/DocOriginSentinel';
+import { DocStandardSentinel } from '@/components/docs/DocStandardSentinel';
+import { DocLegalSuccession } from '@/components/docs/DocLegalSuccession';
+import { DocFAQ } from '@/components/docs/DocFAQ';
+import { DocSupportChannels } from '@/components/docs/DocSupportChannels';
 
 interface DocSection {
   id: string;
@@ -45,6 +61,23 @@ function getSectionsByGroup(group: string) {
   return docSections.filter(s => s.group === group);
 }
 
+const sectionContentMap: Record<string, React.ComponentType> = {
+  'executive-summary': DocExecutiveSummary,
+  'story-and-vision': DocStoryVision,
+  'ecosystem-overview': DocEcosystemOverview,
+  'three-pillars': DocThreePillars,
+  'wou-token-overview': DocTokenOverview,
+  'token-utility': DocTokenUtility,
+  'governance': DocGovernance,
+  'technology-architecture': DocTechArchitecture,
+  'roadmap': DocRoadmap,
+  'origin-sentinel': DocOriginSentinel,
+  'standard-sentinel': DocStandardSentinel,
+  'legal-succession': DocLegalSuccession,
+  'faq': DocFAQ,
+  'support-channels': DocSupportChannels,
+};
+
 export default function DocsPage() {
   const { section: activeSection } = useParams();
   const currentSection = activeSection || 'executive-summary';
@@ -56,6 +89,8 @@ export default function DocsPage() {
   const currentIndex = docSections.findIndex(s => s.id === currentSection);
   const prevDoc = currentIndex > 0 ? docSections[currentIndex - 1] : null;
   const nextDoc = currentIndex < docSections.length - 1 ? docSections[currentIndex + 1] : null;
+
+  const ContentComponent = sectionContentMap[currentSection] || null;
 
   const filteredGroups = useMemo(() => {
     if (!searchQuery.trim()) return groups;
@@ -75,7 +110,7 @@ export default function DocsPage() {
   };
 
   const SidebarContent = ({ isMobile = false }: { isMobile?: boolean }) => (
-    <nav className="space-y-5">
+    <nav className="space-y-5" aria-label="Documentation navigation">
       {filteredGroups.map((group) => {
         const sections = filterSections(group);
         if (sections.length === 0) return null;
@@ -135,7 +170,7 @@ export default function DocsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Top Bar - h-14 to match main site navbar */}
+      {/* Top Bar */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-primary/10 bg-background/90 backdrop-blur-xl">
         <div className="flex items-center justify-between h-14 px-4 sm:px-6">
           <div className="flex items-center gap-3">
@@ -152,7 +187,6 @@ export default function DocsPage() {
             </div>
           </div>
 
-          {/* Desktop Search */}
           <div className="hidden lg:flex items-center flex-1 max-w-md mx-8">
             <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -161,6 +195,7 @@ export default function DocsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9 h-9 bg-secondary/50 border-primary/10 text-sm rounded-xl"
+                aria-label="Search documentation"
               />
             </div>
           </div>
@@ -201,7 +236,6 @@ export default function DocsPage() {
           )}
         </AnimatePresence>
 
-        {/* Sidebar collapsed toggle - properly positioned below header */}
         {sidebarCollapsed && (
           <button
             onClick={() => setSidebarCollapsed(false)}
@@ -212,11 +246,10 @@ export default function DocsPage() {
           </button>
         )}
 
-        {/* Mobile Sidebar - 80% width overlay */}
+        {/* Mobile Sidebar */}
         <AnimatePresence>
           {sidebarOpen && (
             <>
-              {/* Backdrop */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -231,7 +264,6 @@ export default function DocsPage() {
                 transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
                 className="lg:hidden fixed inset-y-0 left-0 z-[60] w-[80%] max-w-sm bg-background border-r border-primary/10"
               >
-                {/* Sticky Header */}
                 <div className="sticky top-0 z-10 bg-background border-b border-primary/10 px-5 py-4 space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -253,11 +285,10 @@ export default function DocsPage() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-9 h-10 bg-secondary/50 border-primary/10 text-sm rounded-xl"
+                      aria-label="Search documentation"
                     />
                   </div>
                 </div>
-
-                {/* Scrollable Nav */}
                 <div className="overflow-y-auto h-[calc(100vh-120px)] px-5 py-6 docs-scrollbar">
                   <SidebarContent isMobile={true} />
                 </div>
@@ -273,13 +304,13 @@ export default function DocsPage() {
         )}>
           <div className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-10 py-10 sm:py-14">
             {/* Breadcrumbs */}
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-8">
+            <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-8" aria-label="Breadcrumb">
               <Link to="/docs" className="hover:text-foreground transition-colors">Docs</Link>
-              <ChevronRight className="h-3 w-3" />
+              <ChevronRight className="h-3 w-3" aria-hidden="true" />
               <span className="text-muted-foreground">{currentDoc.group}</span>
-              <ChevronRight className="h-3 w-3" />
+              <ChevronRight className="h-3 w-3" aria-hidden="true" />
               <span className="text-foreground font-medium">{currentDoc.title}</span>
-            </div>
+            </nav>
 
             {/* Page Title */}
             <div className="mb-10">
@@ -291,25 +322,19 @@ export default function DocsPage() {
               </h1>
             </div>
 
-            {/* Placeholder Content */}
-            <div className="rounded-xl border border-primary/10 bg-card/50 p-6 sm:p-8">
-              <div className="flex items-start gap-3">
-                <BookOpen className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                    The technical team is working on the information for this page.
-                  </p>
-                  <p className="text-xs text-muted-foreground/60 mt-3">
-                    Check back soon for the complete documentation.
-                  </p>
-                </div>
+            {/* Dynamic Content */}
+            {ContentComponent ? (
+              <ContentComponent />
+            ) : (
+              <div className="rounded-xl border border-primary/10 bg-card/50 p-6 sm:p-8">
+                <p className="text-sm text-muted-foreground">Content coming soon.</p>
               </div>
-            </div>
+            )}
 
             {/* Divider before pagination */}
             <div className="border-t border-primary/10 mt-12" />
 
-            {/* Pagination - Boxed Card Layout */}
+            {/* Pagination */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
               {prevDoc ? (
                 <Link
