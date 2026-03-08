@@ -34,7 +34,7 @@ const undoAgents = [
   {
     icon: Megaphone,
     title: 'Announcer Agent',
-    description: 'Acts as the communication bridge. It autonomously broadcasts verified logs, audit summaries, and distribution status directly to the Sentinel Assembly on Discord, ensuring radical transparency. It also sends calculated distribution data to the team for review and approval before payments are executed.',
+    description: 'Serves as the protocol\'s communication layer. It delivers verified audit logs, distribution summaries, and cycle status reports to the Sentinel Assembly via Discord in real time. Prior to any payment execution, the Announcer submits finalized distribution data to the core team for formal review and approval, maintaining full operational transparency and governance oversight.',
     color: 'text-emerald-400',
     bg: 'bg-emerald-400/10',
   },
