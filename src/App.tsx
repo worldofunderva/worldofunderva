@@ -10,6 +10,7 @@ import { useWalletSessionPolicy } from '@/hooks/useWalletSessionPolicy';
 import { NetworkWarningBanner } from '@/components/NetworkWarningBanner';
 import Index from './pages/Index';
 import DocsPage from './pages/Docs';
+import SentryGuardPage from './pages/SentryGuard';
 import NotFound from './pages/NotFound';
 
 function WalletSecurityManager() {
@@ -50,6 +51,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/docs" element={<DocsPage />} />
               <Route path="/docs/:section" element={<DocsPage />} />
+              <Route path="/sentry-guard" element={<SentryGuardPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
