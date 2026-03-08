@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useWalletConnection } from '@/hooks/useWalletConnection';
-import { WalletConnectModal } from '@/components/WalletConnectModal';
 import { Link } from 'react-router-dom';
 
 const navItems = [
@@ -23,10 +22,6 @@ export function Navbar() {
     truncatedAddress, 
     handleConnect,
     disconnect,
-    showConnectModal,
-    closeConnectModal,
-    connectWithConnector,
-    connectors,
   } = useWalletConnection();
   
   useEffect(() => {
@@ -48,12 +43,6 @@ export function Navbar() {
 
   return (
     <>
-      <WalletConnectModal
-        open={showConnectModal}
-        onClose={closeConnectModal}
-        connectors={connectors}
-        onSelectConnector={connectWithConnector}
-      />
       <nav className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled 
