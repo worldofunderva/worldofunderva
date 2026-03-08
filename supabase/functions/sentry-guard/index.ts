@@ -198,6 +198,7 @@ Deno.serve(async (req) => {
       ].join("\n");
 
       try {
+        console.log("Sending Telegram alert to chat:", telegramChatId);
         const tgResponse = await fetch(
           `https://api.telegram.org/bot${telegramToken}/sendMessage`,
           {
@@ -211,12 +212,17 @@ Deno.serve(async (req) => {
           }
         );
         const tgResult = await tgResponse.json();
+        console.log("Telegram response:", JSON.stringify(tgResult));
         if (tgResult.ok) {
           alertRecord.telegram_sent = true;
+        } else {
+          console.error("Telegram API error:", tgResult.description || JSON.stringify(tgResult));
         }
       } catch (tgError) {
         console.error("Telegram notification failed:", tgError);
       }
+    } else {
+      console.warn("Telegram not configured. Token present:", !!telegramToken, "ChatId present:", !!telegramChatId);
     }
 
     await supabase.from("sentry_alerts").insert(alertRecord);
