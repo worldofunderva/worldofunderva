@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Users, Ban, Trash2, ShieldCheck, RefreshCw } from 'lucide-react';
+import { Users, Ban, Trash2, ShieldCheck, RefreshCw, UserPlus, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import {
   AlertDialog,
@@ -51,6 +53,126 @@ async function callAdmin(action: string, data: Record<string, unknown> = {}) {
   return json;
 }
 
+function CreateMemberForm({ onCreated }: { onCreated: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [form, setForm] = useState({ email: '', password: '', display_name: '', roles: [] as string[] });
+
+  function toggleRole(role: string) {
+    setForm(prev => ({
+      ...prev,
+      roles: prev.roles.includes(role)
+        ? prev.roles.filter(r => r !== role)
+        : [...prev.roles, role],
+    }));
+  }
+
+  async function handleCreate() {
+    if (!form.email || !form.password) {
+      toast({ title: 'Missing fields', description: 'Email and password are required.', variant: 'destructive' });
+      return;
+    }
+    if (form.password.length < 8) {
+      toast({ title: 'Weak password', description: 'Password must be at least 8 characters.', variant: 'destructive' });
+      return;
+    }
+    setCreating(true);
+    try {
+      await callAdmin('create_user', {
+        email: form.email,
+        password: form.password,
+        display_name: form.display_name || undefined,
+        roles: form.roles,
+      });
+      toast({ title: 'Team Member Created', description: `${form.email} can now sign in.` });
+      setForm({ email: '', password: '', display_name: '', roles: [] });
+      setOpen(false);
+      onCreated();
+    } catch (err) {
+      toast({ title: 'Creation Failed', description: err instanceof Error ? err.message : 'Unknown error', variant: 'destructive' });
+    }
+    setCreating(false);
+  }
+
+  if (!open) {
+    return (
+      <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
+        <UserPlus className="h-3.5 w-3.5 mr-1" />
+        <span className="hidden sm:inline">Add Member</span>
+        <span className="sm:hidden">Add</span>
+      </Button>
+    );
+  }
+
+  return (
+    <div className="mb-4 p-3 sm:p-4 rounded-lg border border-primary/10 bg-secondary/20 space-y-3">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold">Create Team Member</h3>
+        <Button variant="ghost" size="sm" onClick={() => setOpen(false)} className="h-7 text-xs">Cancel</Button>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <Label className="text-xs">Email *</Label>
+          <Input
+            type="email"
+            value={form.email}
+            onChange={e => setForm({ ...form, email: e.target.value })}
+            placeholder="team@example.com"
+            className="mt-1"
+          />
+        </div>
+        <div>
+          <Label className="text-xs">Display Name</Label>
+          <Input
+            value={form.display_name}
+            onChange={e => setForm({ ...form, display_name: e.target.value })}
+            placeholder="John Doe"
+            className="mt-1"
+          />
+        </div>
+      </div>
+      <div>
+        <Label className="text-xs">Password *</Label>
+        <div className="relative mt-1">
+          <Input
+            type={showPassword ? 'text' : 'password'}
+            value={form.password}
+            onChange={e => setForm({ ...form, password: e.target.value })}
+            placeholder="Minimum 8 characters"
+            className="pr-10"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+          >
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </button>
+        </div>
+      </div>
+      <div>
+        <Label className="text-xs">Assign Roles</Label>
+        <div className="flex items-center gap-4 mt-1.5">
+          {AVAILABLE_ROLES.map(role => (
+            <label key={role} className="flex items-center gap-1.5 cursor-pointer text-sm">
+              <Checkbox
+                checked={form.roles.includes(role)}
+                onCheckedChange={() => toggleRole(role)}
+              />
+              <span className="capitalize">{role}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+      <Button size="sm" onClick={handleCreate} disabled={creating}>
+        {creating ? <RefreshCw className="h-3.5 w-3.5 mr-1 animate-spin" /> : <UserPlus className="h-3.5 w-3.5 mr-1" />}
+        {creating ? 'Creating...' : 'Create Account'}
+      </Button>
+    </div>
+  );
+}
+
 function MemberCard({ member, actionLoading, onBan, onDelete, onRoleToggle }: {
   member: Member;
   actionLoading: string | null;
@@ -62,7 +184,6 @@ function MemberCard({ member, actionLoading, onBan, onDelete, onRoleToggle }: {
 
   return (
     <div className={`rounded-lg border border-primary/10 bg-secondary/10 p-3 space-y-3 ${member.banned ? 'opacity-60' : ''}`}>
-      {/* Top row: name + status */}
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="text-sm font-medium truncate">{member.display_name}</p>
@@ -78,7 +199,6 @@ function MemberCard({ member, actionLoading, onBan, onDelete, onRoleToggle }: {
         </div>
       </div>
 
-      {/* Middle row: roles + dates */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
         <div className="flex items-center gap-3">
           {AVAILABLE_ROLES.map((role) => (
@@ -96,7 +216,6 @@ function MemberCard({ member, actionLoading, onBan, onDelete, onRoleToggle }: {
         <span>Last in: {member.last_sign_in_at ? new Date(member.last_sign_in_at).toLocaleDateString() : 'Never'}</span>
       </div>
 
-      {/* Bottom row: actions */}
       <div className="flex items-center gap-1 pt-1 border-t border-primary/5">
         <Button
           variant="ghost"
@@ -200,10 +319,13 @@ export default function TeamMembers() {
           <Users className="h-4 w-4 text-primary" />
           <h2 className="text-sm font-semibold">Team Members</h2>
         </div>
-        <Button variant="outline" size="sm" onClick={fetchMembers} disabled={loading}>
-          <RefreshCw className={`h-3 w-3 mr-1 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-2">
+          <CreateMemberForm onCreated={fetchMembers} />
+          <Button variant="outline" size="sm" onClick={fetchMembers} disabled={loading}>
+            <RefreshCw className={`h-3 w-3 mr-1 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </div>
       </div>
 
       {loading ? (
