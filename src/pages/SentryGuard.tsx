@@ -43,10 +43,20 @@ export default function SentryGuardPage() {
   const [running, setRunning] = useState(false);
   const [showNewWindow, setShowNewWindow] = useState(false);
   const [newWindow, setNewWindow] = useState({ label: '', starts_at: '', ends_at: '' });
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     fetchData();
+    checkAdmin();
   }, []);
+
+  async function checkAdmin() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      const { data } = await supabase.rpc('has_role', { _user_id: session.user.id, _role: 'admin' });
+      setIsAdmin(data === true);
+    }
+  }
 
   async function fetchData() {
     setLoading(true);
