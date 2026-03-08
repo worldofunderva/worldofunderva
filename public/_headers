@@ -46,5 +46,5 @@
   X-Frame-Options: DENY
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://mainnet.base.org https://base.llamarpc.com https://cloudflare-eth.com https://api.coingecko.com https://relay.walletconnect.com https://rpc.walletconnect.com wss://relay.walletconnect.com https://*.walletconnect.com https://*.walletconnect.org; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://auth.privy.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://mainnet.base.org https://base.llamarpc.com https://cloudflare-eth.com https://api.coingecko.com https://relay.walletconnect.com https://rpc.walletconnect.com wss://relay.walletconnect.com https://*.walletconnect.com https://*.walletconnect.org https://auth.privy.io https://*.privy.io; frame-src https://auth.privy.io; frame-ancestors 'none'
   Permissions-Policy: camera=(), microphone=(), geolocation=()
