@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
-import { Shield, LogIn, UserPlus, ArrowLeft } from 'lucide-react';
+import { Shield, LogIn, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,18 +9,12 @@ import { Card } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 
-const signupSchema = z.object({
-  displayName: z.string().trim().min(2, 'Display name must be at least 2 characters').max(50, 'Display name is too long'),
-  email: z.string().trim().email('Enter a valid email address').max(255, 'Email is too long'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-});
-
 const loginSchema = z.object({
   email: z.string().trim().email('Enter a valid email address').max(255, 'Email is too long'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-function getFriendlyAuthError(error: unknown, mode: 'login' | 'signup') {
+function getFriendlyAuthError(error: unknown) {
   const message = error instanceof Error ? error.message : 'Unknown error';
   const lower = message.toLowerCase();
 
@@ -28,20 +22,14 @@ function getFriendlyAuthError(error: unknown, mode: 'login' | 'signup') {
     return 'Connection failed. Please open the app from your Lovable preview/published URL and try again.';
   }
 
-  if (mode === 'login') {
-    return lower.includes('email not confirmed')
-      ? 'Please verify your email first, then sign in.'
-      : 'Invalid email/password. If you are new, click Create account first.';
-  }
-
-  return message;
+  return lower.includes('email not confirmed')
+    ? 'Please verify your email first, then sign in.'
+    : 'Invalid email or password.';
 }
 
 export default function SentryAuthPage() {
-  const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -62,52 +50,13 @@ export default function SentryAuthPage() {
       });
 
       if (error) {
-        toast({ title: 'Login Failed', description: getFriendlyAuthError(error, 'login'), variant: 'destructive' });
+        toast({ title: 'Login Failed', description: getFriendlyAuthError(error), variant: 'destructive' });
       } else {
         toast({ title: 'Signed in successfully' });
         navigate('/sentry-guard');
       }
     } catch (error) {
-      toast({ title: 'Login Failed', description: getFriendlyAuthError(error, 'login'), variant: 'destructive' });
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleSignup(e: React.FormEvent) {
-    e.preventDefault();
-
-    const parsed = signupSchema.safeParse({ displayName, email, password });
-    if (!parsed.success) {
-      toast({ title: 'Invalid Input', description: parsed.error.issues[0]?.message, variant: 'destructive' });
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email: parsed.data.email,
-        password: parsed.data.password,
-        options: {
-          data: { display_name: parsed.data.displayName.trim() },
-          emailRedirectTo: window.location.origin + '/sentry-guard',
-        },
-      });
-
-      if (error) {
-        toast({ title: 'Signup Failed', description: getFriendlyAuthError(error, 'signup'), variant: 'destructive' });
-      } else if (data.session) {
-        toast({ title: 'Account Created', description: 'You are now signed in.' });
-        navigate('/sentry-guard');
-      } else {
-        toast({
-          title: 'Verification Email Sent',
-          description: 'Check your inbox, verify your email, then sign in.',
-        });
-        setMode('login');
-      }
-    } catch (error) {
-      toast({ title: 'Signup Failed', description: getFriendlyAuthError(error, 'signup'), variant: 'destructive' });
+      toast({ title: 'Login Failed', description: getFriendlyAuthError(error), variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -123,24 +72,11 @@ export default function SentryAuthPage() {
             </div>
           </div>
           <h1 className="text-xl font-bold text-foreground">Sentry Guard Access</h1>
-          <p className="text-sm text-muted-foreground">Team-only access. Register or sign in with your credentials.</p>
+          <p className="text-sm text-muted-foreground">Authorized personnel only. Sign in with your credentials.</p>
         </div>
 
         <Card className="p-6 border-primary/20">
-          <form onSubmit={mode === 'login' ? handleLogin : handleSignup} className="space-y-4">
-            {mode === 'signup' && (
-              <div>
-                <Label className="text-xs">Display Name</Label>
-                <Input
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder="Your name"
-                  required
-                  maxLength={50}
-                  className="mt-1"
-                />
-              </div>
-            )}
+          <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <Label className="text-xs">Email Address</Label>
               <Input
@@ -161,30 +97,14 @@ export default function SentryAuthPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                minLength={mode === 'signup' ? 8 : 6}
+                minLength={6}
                 className="mt-1"
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? (
-                'Processing...'
-              ) : mode === 'login' ? (
-                <><LogIn className="h-4 w-4 mr-2" /> Sign In</>
-              ) : (
-                <><UserPlus className="h-4 w-4 mr-2" /> Create Account</>
-              )}
+              {loading ? 'Processing...' : <><LogIn className="h-4 w-4 mr-2" /> Sign In</>}
             </Button>
           </form>
-
-          <div className="mt-4 text-center">
-            <button
-              type="button"
-              className="text-xs text-muted-foreground hover:text-primary transition-colors"
-              onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-            >
-              {mode === 'login' ? 'New here? Create account' : 'Already have an account? Sign in'}
-            </button>
-          </div>
         </Card>
 
         <div className="text-center">
