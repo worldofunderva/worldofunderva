@@ -133,6 +133,14 @@ Deno.serve(async (req) => {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+      // Prevent operators from deleting admins
+      const { data: targetRolesD } = await supabase.from("user_roles").select("role").eq("user_id", user_id);
+      const isTargetAdminD = (targetRolesD || []).some((r: { role: string }) => r.role === "admin");
+      if (isTargetAdminD && !isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can action admin accounts" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       const { error } = await supabase.auth.admin.deleteUser(user_id);
       if (error) throw error;
       return new Response(JSON.stringify({ success: true }), {
