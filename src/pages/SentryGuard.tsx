@@ -23,6 +23,8 @@ interface SentryAlertRow {
   details: string;
   maintenance_mode_engaged: boolean;
   telegram_sent: boolean;
+  resolved: boolean;
+  resolved_at: string | null;
   created_at: string;
 }
 
@@ -368,15 +370,29 @@ export default function SentryGuardPage() {
           ) : (
             <div className="space-y-2">
               {alerts.map((a) => (
-                <div key={a.id} className="rounded-lg border border-destructive/20 bg-destructive/5 p-3">
+                <div
+                  key={a.id}
+                  className={`rounded-lg border p-3 ${
+                    a.resolved
+                      ? 'border-primary/10 bg-secondary/10 opacity-70'
+                      : 'border-destructive/20 bg-destructive/5'
+                  }`}
+                >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-1">
                     <div className="flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-destructive shrink-0" />
-                      <span className="text-sm font-semibold text-destructive">
+                      {a.resolved ? (
+                        <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0" />
+                      ) : (
+                        <AlertTriangle className="h-4 w-4 text-destructive shrink-0" />
+                      )}
+                      <span className={`text-sm font-semibold ${a.resolved ? 'text-muted-foreground line-through' : 'text-destructive'}`}>
                         {a.alert_type.replace('_', ' ').toUpperCase()}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 ml-6 sm:ml-0">
+                      {a.resolved && (
+                        <Badge variant="outline" className="text-xs border-emerald-500/30 text-emerald-500">Resolved</Badge>
+                      )}
                       {a.telegram_sent && (
                         <Badge variant="outline" className="text-xs">Telegram Sent</Badge>
                       )}
@@ -386,6 +402,11 @@ export default function SentryGuardPage() {
                     </div>
                   </div>
                   <p className="text-xs text-muted-foreground ml-6 sm:ml-0">{a.details}</p>
+                  {a.resolved && a.resolved_at && (
+                    <p className="text-xs text-emerald-500/70 ml-6 sm:ml-0 mt-1">
+                      Resolved: {new Date(a.resolved_at).toLocaleString()}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>

@@ -241,6 +241,15 @@ Deno.serve(async (req) => {
           status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+      // Mark all unresolved alerts as resolved
+      await supabase
+        .from("sentry_alerts")
+        .update({
+          resolved: true,
+          resolved_at: new Date().toISOString(),
+        })
+        .eq("resolved", false);
+
       const { error } = await supabase
         .from("sentry_status")
         .update({
