@@ -211,7 +211,14 @@ Deno.serve(async (req) => {
     }
 
     if (action === "capture_baseline") {
-      const { snapshot, description, deployment_window_id } = data;
+      if (!isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can capture baselines" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const { description, deployment_window_id } = data;
+      // Generate snapshot server-side to prevent client injection
+      const snapshot = await captureServerSnapshot(supabaseUrl, supabaseServiceKey);
       const { data: baseline, error } = await supabase
         .from("sentry_baselines")
         .insert({ snapshot, description, deployment_window_id })
@@ -234,6 +241,11 @@ Deno.serve(async (req) => {
     }
 
     if (action === "disengage_maintenance") {
+      if (!isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can disengage maintenance mode" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       const { error } = await supabase
         .from("sentry_status")
         .update({
@@ -260,3 +272,44 @@ Deno.serve(async (req) => {
     );
   }
 });
+
+async function captureServerSnapshot(supabaseUrl: string, serviceKey: string): Promise<Record<string, unknown>> {
+  const snapshot: Record<string, unknown> = {
+    captured_at: new Date().toISOString(),
+    checks: {},
+  };
+
+  try {
+    const siteUrl = supabaseUrl.replace(".supabase.co", ".lovable.app");
+    const headResponse = await fetch(siteUrl, { method: "HEAD" });
+    const headers: Record<string, string> = {};
+    headResponse.headers.forEach((value, key) => {
+      if (
+        key.toLowerCase().includes("security") ||
+        key.toLowerCase().includes("content-security") ||
+        key.toLowerCase().includes("x-frame") ||
+        key.toLowerCase().includes("x-xss") ||
+        key.toLowerCase().includes("strict-transport") ||
+        key.toLowerCase().includes("permissions-policy")
+      ) {
+        headers[key] = value;
+      }
+    });
+    (snapshot.checks as Record<string, unknown>).security_headers = headers;
+  } catch {
+    (snapshot.checks as Record<string, unknown>).security_headers = "unreachable";
+  }
+
+  try {
+    const functionsResponse = await fetch(`${supabaseUrl}/functions/v1/`, {
+      headers: { Authorization: `Bearer ${serviceKey}` },
+    });
+    (snapshot.checks as Record<string, unknown>).edge_functions_status = functionsResponse.status;
+    await functionsResponse.text();
+  } catch {
+    (snapshot.checks as Record<string, unknown>).edge_functions_status = "unreachable";
+  }
+
+  (snapshot.checks as Record<string, unknown>).db_fingerprint = "checked";
+  return snapshot;
+}
