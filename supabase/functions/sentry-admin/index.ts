@@ -49,7 +49,8 @@ Deno.serve(async (req) => {
     .eq("user_id", userId);
 
   const userRoles = (roles || []).map((r: { role: string }) => r.role);
-  const isAuthorized = userRoles.includes("operator") || userRoles.includes("admin");
+  const isAdmin = userRoles.includes("admin");
+  const isAuthorized = userRoles.includes("operator") || isAdmin;
 
   if (!isAuthorized) {
     return new Response(
