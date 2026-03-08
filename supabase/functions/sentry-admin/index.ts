@@ -4,7 +4,6 @@ function getCorsHeaders(req: Request): Record<string, string> {
   const origin = req.headers.get("Origin") || "";
   const allowedRaw = Deno.env.get("ALLOWED_ORIGINS") || "";
   const allowedOrigins = allowedRaw.split(",").map((s) => s.trim()).filter(Boolean);
-  // Allow Lovable preview/project origins dynamically
   const isLovableOrigin = origin.endsWith(".lovableproject.com") || origin.endsWith(".lovable.app");
   const isAllowed = isLovableOrigin || allowedOrigins.includes(origin);
   return {
@@ -27,7 +26,6 @@ Deno.serve(async (req) => {
   const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
 
-  // Authenticate the caller
   const authHeader = req.headers.get("Authorization");
   if (!authHeader?.startsWith("Bearer ")) {
     return new Response(
@@ -36,7 +34,6 @@ Deno.serve(async (req) => {
     );
   }
 
-  // Verify JWT and extract user identity
   const authClient = createClient(supabaseUrl, supabaseAnonKey, {
     global: { headers: { Authorization: authHeader } },
   });
@@ -52,7 +49,6 @@ Deno.serve(async (req) => {
 
   const userId = claimsData.claims.sub;
 
-  // Verify operator or admin role using service role client
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   const { data: roles } = await supabase
@@ -75,11 +71,12 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { action, data } = body;
 
+    // ─── User Management ───────────────────────────────────────────
+
     if (action === "list_users") {
       const { data: { users }, error } = await supabase.auth.admin.listUsers({ perPage: 100 });
       if (error) throw error;
 
-      // Enrich with roles
       const { data: allRoles } = await supabase.from("user_roles").select("user_id, role");
       const roleMap: Record<string, string[]> = {};
       (allRoles || []).forEach((r: { user_id: string; role: string }) => {
@@ -110,7 +107,6 @@ Deno.serve(async (req) => {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      // Prevent operators from banning admins
       const { data: targetRoles } = await supabase.from("user_roles").select("role").eq("user_id", user_id);
       const isTargetAdmin = (targetRoles || []).some((r: { role: string }) => r.role === "admin");
       if (isTargetAdmin && !isAdmin) {
@@ -118,9 +114,7 @@ Deno.serve(async (req) => {
           status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const { error } = await supabase.auth.admin.updateUserById(user_id, {
-        ban_duration: "876000h",
-      });
+      const { error } = await supabase.auth.admin.updateUserById(user_id, { ban_duration: "876000h" });
       if (error) throw error;
       return new Response(JSON.stringify({ success: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -129,7 +123,6 @@ Deno.serve(async (req) => {
 
     if (action === "unban_user") {
       const { user_id } = data;
-      // Prevent operators from unbanning admins
       const { data: targetRoles } = await supabase.from("user_roles").select("role").eq("user_id", user_id);
       const isTargetAdmin = (targetRoles || []).some((r: { role: string }) => r.role === "admin");
       if (isTargetAdmin && !isAdmin) {
@@ -137,9 +130,7 @@ Deno.serve(async (req) => {
           status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const { error } = await supabase.auth.admin.updateUserById(user_id, {
-        ban_duration: "none",
-      });
+      const { error } = await supabase.auth.admin.updateUserById(user_id, { ban_duration: "none" });
       if (error) throw error;
       return new Response(JSON.stringify({ success: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -153,10 +144,9 @@ Deno.serve(async (req) => {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      // Prevent operators from deleting admins
-      const { data: targetRolesD } = await supabase.from("user_roles").select("role").eq("user_id", user_id);
-      const isTargetAdminD = (targetRolesD || []).some((r: { role: string }) => r.role === "admin");
-      if (isTargetAdminD && !isAdmin) {
+      const { data: targetRoles } = await supabase.from("user_roles").select("role").eq("user_id", user_id);
+      const isTargetAdmin = (targetRoles || []).some((r: { role: string }) => r.role === "admin");
+      if (isTargetAdmin && !isAdmin) {
         return new Response(JSON.stringify({ error: "Forbidden: only admins can action admin accounts" }), {
           status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -175,7 +165,6 @@ Deno.serve(async (req) => {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      // Only admins can grant or revoke the admin role
       if (role === "admin" && !isAdmin) {
         return new Response(JSON.stringify({ error: "Forbidden: only admins can manage the admin role" }), {
           status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -199,6 +188,8 @@ Deno.serve(async (req) => {
       });
     }
 
+    // ─── Deployment Windows ────────────────────────────────────────
+
     if (action === "create_window") {
       const { label, starts_at, ends_at } = data;
       const { data: result, error } = await supabase
@@ -206,12 +197,13 @@ Deno.serve(async (req) => {
         .insert({ label, starts_at, ends_at, created_by: claimsData.claims.email || "operator" })
         .select()
         .single();
-
       if (error) throw error;
       return new Response(JSON.stringify(result), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    // ─── Baseline Capture ──────────────────────────────────────────
 
     if (action === "capture_baseline") {
       if (!isAdmin) {
@@ -220,14 +212,12 @@ Deno.serve(async (req) => {
         });
       }
       const { description, deployment_window_id } = data;
-      // Generate snapshot server-side to prevent client injection
       const snapshot = await captureServerSnapshot(supabaseUrl, supabaseServiceKey);
       const { data: baseline, error } = await supabase
         .from("sentry_baselines")
         .insert({ snapshot, description, deployment_window_id })
         .select()
         .single();
-
       if (error) throw error;
 
       await supabase
@@ -243,6 +233,8 @@ Deno.serve(async (req) => {
       });
     }
 
+    // ─── Maintenance Mode ──────────────────────────────────────────
+
     if (action === "disengage_maintenance") {
       if (!isAdmin) {
         return new Response(JSON.stringify({ error: "Forbidden: only admins can disengage maintenance mode" }), {
@@ -256,7 +248,6 @@ Deno.serve(async (req) => {
           updated_at: new Date().toISOString(),
         })
         .not("id", "is", null);
-
       if (error) throw error;
       return new Response(JSON.stringify({ success: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -276,43 +267,84 @@ Deno.serve(async (req) => {
   }
 });
 
+// ─── Server Snapshot (same logic as sentry-guard) ────────────────────
+
 async function captureServerSnapshot(supabaseUrl: string, serviceKey: string): Promise<Record<string, unknown>> {
   const snapshot: Record<string, unknown> = {
     captured_at: new Date().toISOString(),
-    checks: {},
+    checks: {} as Record<string, unknown>,
+  };
+  const checks = snapshot.checks as Record<string, unknown>;
+
+  // 1. Security headers from real production site(s)
+  const allowedOrigins = (Deno.env.get("ALLOWED_ORIGINS") || "").split(",").map(s => s.trim()).filter(Boolean);
+  const headerResults: Record<string, unknown> = {};
+
+  for (const origin of allowedOrigins) {
+    try {
+      const response = await fetch(origin, { method: "HEAD" });
+      const headers: Record<string, string> = {};
+      const securityHeaderKeys = [
+        "content-security-policy", "x-frame-options", "x-xss-protection",
+        "strict-transport-security", "permissions-policy", "x-content-type-options", "referrer-policy",
+      ];
+      response.headers.forEach((value, key) => {
+        if (securityHeaderKeys.includes(key.toLowerCase())) {
+          headers[key.toLowerCase()] = value;
+        }
+      });
+      await response.text();
+      headerResults[origin] = { status: response.status, headers };
+    } catch {
+      headerResults[origin] = { status: "unreachable", headers: {} };
+    }
+  }
+  checks.security_headers = headerResults;
+
+  // 2. DB schema fingerprint
+  const client = createClient(supabaseUrl, serviceKey);
+  const knownTables = [
+    "profiles", "user_roles", "sentry_status", "sentry_alerts",
+    "sentry_baselines", "sentry_deployment_windows"
+  ];
+  const tableChecks: Record<string, string> = {};
+  for (const table of knownTables) {
+    try {
+      const { count, error } = await client
+        .from(table)
+        .select("*", { count: "exact", head: true });
+      tableChecks[table] = error ? "error" : `exists:${count ?? 0}`;
+    } catch {
+      tableChecks[table] = "missing";
+    }
+  }
+  checks.db_schema = {
+    table_checks: tableChecks,
+    fingerprint: JSON.stringify(tableChecks),
   };
 
-  try {
-    const siteUrl = supabaseUrl.replace(".supabase.co", ".lovable.app");
-    const headResponse = await fetch(siteUrl, { method: "HEAD" });
-    const headers: Record<string, string> = {};
-    headResponse.headers.forEach((value, key) => {
-      if (
-        key.toLowerCase().includes("security") ||
-        key.toLowerCase().includes("content-security") ||
-        key.toLowerCase().includes("x-frame") ||
-        key.toLowerCase().includes("x-xss") ||
-        key.toLowerCase().includes("strict-transport") ||
-        key.toLowerCase().includes("permissions-policy")
-      ) {
-        headers[key] = value;
-      }
-    });
-    (snapshot.checks as Record<string, unknown>).security_headers = headers;
-  } catch {
-    (snapshot.checks as Record<string, unknown>).security_headers = "unreachable";
+  // 3. Edge function health
+  const functions = ["sentry-guard", "sentry-admin"];
+  const fnResults: Record<string, unknown> = {};
+  for (const fn of functions) {
+    try {
+      const response = await fetch(`${supabaseUrl}/functions/v1/${fn}`, {
+        method: "OPTIONS",
+        headers: {
+          "Authorization": `Bearer ${serviceKey}`,
+          "Content-Type": "application/json",
+        },
+      });
+      await response.text();
+      fnResults[fn] = {
+        status: response.status,
+        healthy: response.status === 200 || response.status === 204,
+      };
+    } catch {
+      fnResults[fn] = { status: "unreachable", healthy: false };
+    }
   }
+  checks.edge_functions = fnResults;
 
-  try {
-    const functionsResponse = await fetch(`${supabaseUrl}/functions/v1/`, {
-      headers: { Authorization: `Bearer ${serviceKey}` },
-    });
-    (snapshot.checks as Record<string, unknown>).edge_functions_status = functionsResponse.status;
-    await functionsResponse.text();
-  } catch {
-    (snapshot.checks as Record<string, unknown>).edge_functions_status = "unreachable";
-  }
-
-  (snapshot.checks as Record<string, unknown>).db_fingerprint = "checked";
   return snapshot;
 }

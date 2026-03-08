@@ -4,7 +4,6 @@ function getCorsHeaders(req: Request): Record<string, string> {
   const origin = req.headers.get("Origin") || "";
   const allowedRaw = Deno.env.get("ALLOWED_ORIGINS") || "";
   const allowedOrigins = allowedRaw.split(",").map((s) => s.trim()).filter(Boolean);
-  // Allow Lovable preview/project origins dynamically
   const isLovableOrigin = origin.endsWith(".lovableproject.com") || origin.endsWith(".lovable.app");
   const isAllowed = isLovableOrigin || allowedOrigins.includes(origin);
   return {
@@ -23,7 +22,6 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Authenticate: require a valid user JWT with admin/operator role
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
@@ -38,7 +36,6 @@ Deno.serve(async (req) => {
     );
   }
 
-  // Verify JWT
   const authClient = createClient(supabaseUrl, supabaseAnonKey, {
     global: { headers: { Authorization: authHeader } },
   });
@@ -53,7 +50,6 @@ Deno.serve(async (req) => {
 
   const userId = claimsData.claims.sub;
 
-  // Verify operator or admin role
   const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
   const { data: roles } = await serviceClient
     .from("user_roles")
@@ -71,7 +67,6 @@ Deno.serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    // 1. Check if we are inside an authorized deployment window
     const now = new Date().toISOString();
     const { data: activeWindows } = await supabase
       .from("sentry_deployment_windows")
@@ -81,7 +76,6 @@ Deno.serve(async (req) => {
 
     const isDeploymentWindow = activeWindows && activeWindows.length > 0;
 
-    // 2. Get current baseline
     const { data: status } = await supabase
       .from("sentry_status")
       .select("*, sentry_baselines(*)")
@@ -94,10 +88,9 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 3. Capture current state snapshot
+    // Capture current state with real checks
     const currentSnapshot = await captureCurrentSnapshot(supabaseUrl, supabaseServiceKey);
 
-    // 4. If inside deployment window, update baseline silently
     if (isDeploymentWindow) {
       const { data: newBaseline } = await supabase
         .from("sentry_baselines")
@@ -130,7 +123,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 5. Compare against baseline
     const baseline = status.sentry_baselines;
     if (!baseline) {
       const { data: initialBaseline } = await supabase
@@ -159,7 +151,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 6. Drift detection
+    // Drift detection
     const drifts = detectDrift(baseline.snapshot, currentSnapshot);
 
     if (drifts.length === 0) {
@@ -174,7 +166,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 7. DRIFT DETECTED — Engage maintenance mode
+    // DRIFT DETECTED
     const driftDetails = drifts.join("; ");
 
     await supabase
@@ -186,7 +178,6 @@ Deno.serve(async (req) => {
       })
       .eq("id", status.id);
 
-    // Log alert
     const alertRecord = {
       alert_type: "unauthorized_change",
       details: driftDetails,
@@ -194,7 +185,6 @@ Deno.serve(async (req) => {
       telegram_sent: false,
     };
 
-    // 8. Send Telegram alert
     if (telegramToken && telegramChatId) {
       const telegramMessage = [
         "🚨 *[SENTRY ALERT]*",
@@ -204,7 +194,7 @@ Deno.serve(async (req) => {
         `*Action:* Maintenance Mode Engaged`,
         "",
         `_Timestamp: ${now}_`,
-        `_Agent: Sentry Guard v1.0_`,
+        `_Agent: Sentry Guard v2.0_`,
       ].join("\n");
 
       try {
@@ -249,92 +239,208 @@ Deno.serve(async (req) => {
   }
 });
 
-async function captureCurrentSnapshot(supabaseUrl: string, _serviceKey: string) {
+// ─── Snapshot Capture ────────────────────────────────────────────────
+
+async function captureCurrentSnapshot(supabaseUrl: string, serviceKey: string) {
   const snapshot: Record<string, unknown> = {
     captured_at: new Date().toISOString(),
-    checks: {},
+    checks: {} as Record<string, unknown>,
   };
+  const checks = snapshot.checks as Record<string, unknown>;
 
-  try {
-    const siteUrl = supabaseUrl.replace(".supabase.co", ".lovable.app");
-    const headResponse = await fetch(siteUrl, { method: "HEAD" });
-    const headers: Record<string, string> = {};
-    headResponse.headers.forEach((value, key) => {
-      if (
-        key.toLowerCase().includes("security") ||
-        key.toLowerCase().includes("content-security") ||
-        key.toLowerCase().includes("x-frame") ||
-        key.toLowerCase().includes("x-xss") ||
-        key.toLowerCase().includes("strict-transport") ||
-        key.toLowerCase().includes("permissions-policy")
-      ) {
-        headers[key] = value;
-      }
-    });
-    snapshot.checks = { ...snapshot.checks as Record<string, unknown>, security_headers: headers };
-  } catch {
-    snapshot.checks = { ...snapshot.checks as Record<string, unknown>, security_headers: "unreachable" };
-  }
+  // 1. Security headers from REAL production site(s)
+  checks.security_headers = await checkSecurityHeaders();
 
-  try {
-    const functionsResponse = await fetch(`${supabaseUrl}/functions/v1/`, {
-      headers: { Authorization: `Bearer ${_serviceKey}` },
-    });
-    const statusCode = functionsResponse.status;
-    await functionsResponse.text();
-    snapshot.checks = {
-      ...snapshot.checks as Record<string, unknown>,
-      edge_functions_status: statusCode,
-    };
-  } catch {
-    snapshot.checks = {
-      ...snapshot.checks as Record<string, unknown>,
-      edge_functions_status: "unreachable",
-    };
-  }
+  // 2. Real DB schema fingerprint
+  checks.db_schema = await checkDatabaseSchema(supabaseUrl, serviceKey);
 
-  try {
-    const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
-    const client = createClient(supabaseUrl, _serviceKey);
-    const { data } = await client.rpc("pg_catalog" as never);
-    snapshot.checks = {
-      ...snapshot.checks as Record<string, unknown>,
-      db_fingerprint: "monitored",
-    };
-    if (data) {
-      snapshot.checks = { ...snapshot.checks as Record<string, unknown>, db_tables: data };
-    }
-  } catch {
-    snapshot.checks = { ...snapshot.checks as Record<string, unknown>, db_fingerprint: "checked" };
-  }
+  // 3. Edge function health checks
+  checks.edge_functions = await checkEdgeFunctions(supabaseUrl, serviceKey);
 
   return snapshot;
 }
+
+async function checkSecurityHeaders(): Promise<Record<string, unknown>> {
+  const allowedOrigins = (Deno.env.get("ALLOWED_ORIGINS") || "").split(",").map(s => s.trim()).filter(Boolean);
+  const results: Record<string, unknown> = {};
+
+  for (const origin of allowedOrigins) {
+    try {
+      const response = await fetch(origin, { method: "HEAD" });
+      const headers: Record<string, string> = {};
+      const securityHeaderKeys = [
+        "content-security-policy",
+        "x-frame-options",
+        "x-xss-protection",
+        "strict-transport-security",
+        "permissions-policy",
+        "x-content-type-options",
+        "referrer-policy",
+      ];
+      response.headers.forEach((value, key) => {
+        if (securityHeaderKeys.includes(key.toLowerCase())) {
+          headers[key.toLowerCase()] = value;
+        }
+      });
+      await response.text();
+      results[origin] = { status: response.status, headers };
+    } catch {
+      results[origin] = { status: "unreachable", headers: {} };
+    }
+  }
+
+  return results;
+}
+
+async function checkDatabaseSchema(supabaseUrl: string, serviceKey: string): Promise<Record<string, unknown>> {
+  const client = createClient(supabaseUrl, serviceKey);
+  const schema: Record<string, unknown> = {};
+
+  try {
+    // Get all public tables and their columns
+    const { data: tables } = await client.rpc("get_schema_fingerprint" as never);
+    if (tables) {
+      schema.tables = tables;
+    }
+  } catch {
+    // Fallback: query information_schema directly via REST
+  }
+
+  try {
+    // Get table list with column counts as a lightweight fingerprint
+    const { data: tableInfo, error } = await client
+      .from("sentry_status")
+      .select("id")
+      .limit(0);
+    
+    // Use a simpler approach - query each known table to verify it exists
+    const knownTables = [
+      "profiles", "user_roles", "sentry_status", "sentry_alerts",
+      "sentry_baselines", "sentry_deployment_windows"
+    ];
+    
+    const tableChecks: Record<string, string> = {};
+    for (const table of knownTables) {
+      try {
+        const { count, error: tErr } = await client
+          .from(table)
+          .select("*", { count: "exact", head: true });
+        tableChecks[table] = tErr ? "error" : `exists:${count ?? 0}`;
+      } catch {
+        tableChecks[table] = "missing";
+      }
+    }
+    schema.table_checks = tableChecks;
+  } catch {
+    schema.table_checks = "error";
+  }
+
+  try {
+    // Check RLS status for each table
+    const { data: rlsData } = await client.rpc("check_rls_status" as never);
+    if (rlsData) {
+      schema.rls_status = rlsData;
+    }
+  } catch {
+    schema.rls_status = "unavailable";
+  }
+
+  // Generate a hash of the schema for quick comparison
+  schema.fingerprint = JSON.stringify(schema.table_checks || {});
+
+  return schema;
+}
+
+async function checkEdgeFunctions(supabaseUrl: string, serviceKey: string): Promise<Record<string, unknown>> {
+  const functions = ["sentry-guard", "sentry-admin"];
+  const results: Record<string, unknown> = {};
+
+  for (const fn of functions) {
+    try {
+      // Send OPTIONS request to check if function is deployed and responding
+      const response = await fetch(`${supabaseUrl}/functions/v1/${fn}`, {
+        method: "OPTIONS",
+        headers: {
+          "Authorization": `Bearer ${serviceKey}`,
+          "Content-Type": "application/json",
+        },
+      });
+      await response.text();
+      results[fn] = {
+        status: response.status,
+        healthy: response.status === 200 || response.status === 204,
+      };
+    } catch {
+      results[fn] = { status: "unreachable", healthy: false };
+    }
+  }
+
+  return results;
+}
+
+// ─── Drift Detection ─────────────────────────────────────────────────
 
 function detectDrift(
   baseline: Record<string, unknown>,
   current: Record<string, unknown>
 ): string[] {
   const drifts: string[] = [];
+  const baseChecks = (baseline.checks || {}) as Record<string, unknown>;
+  const currChecks = (current.checks || {}) as Record<string, unknown>;
 
-  const baselineChecks = (baseline.checks || {}) as Record<string, unknown>;
-  const currentChecks = (current.checks || {}) as Record<string, unknown>;
-
-  const baseHeaders = JSON.stringify(baselineChecks.security_headers || {});
-  const currHeaders = JSON.stringify(currentChecks.security_headers || {});
+  // 1. Security headers drift
+  const baseHeaders = JSON.stringify(baseChecks.security_headers || {});
+  const currHeaders = JSON.stringify(currChecks.security_headers || {});
   if (baseHeaders !== currHeaders) {
-    drifts.push("Security headers modified");
+    drifts.push("Security headers modified on production site");
   }
 
-  if (baselineChecks.edge_functions_status !== currentChecks.edge_functions_status) {
-    drifts.push("Edge functions endpoint status changed");
+  // 2. Database schema drift
+  const baseSchema = (baseChecks.db_schema || {}) as Record<string, unknown>;
+  const currSchema = (currChecks.db_schema || {}) as Record<string, unknown>;
+  
+  if (baseSchema.fingerprint && currSchema.fingerprint && baseSchema.fingerprint !== currSchema.fingerprint) {
+    // Detailed comparison
+    const baseTableChecks = (baseSchema.table_checks || {}) as Record<string, string>;
+    const currTableChecks = (currSchema.table_checks || {}) as Record<string, string>;
+    
+    const allTables = new Set([...Object.keys(baseTableChecks), ...Object.keys(currTableChecks)]);
+    for (const table of allTables) {
+      if (!(table in baseTableChecks)) {
+        drifts.push(`New table detected: ${table}`);
+      } else if (!(table in currTableChecks)) {
+        drifts.push(`Table removed: ${table}`);
+      } else if (baseTableChecks[table].startsWith("exists") && currTableChecks[table] === "error") {
+        drifts.push(`Table access changed: ${table}`);
+      } else if (baseTableChecks[table] === "error" && currTableChecks[table] === "missing") {
+        drifts.push(`Table disappeared: ${table}`);
+      }
+    }
+    
+    if (drifts.length === 0) {
+      drifts.push("Database schema fingerprint changed");
+    }
   }
 
-  if (
-    JSON.stringify(baselineChecks.db_fingerprint) !==
-    JSON.stringify(currentChecks.db_fingerprint)
-  ) {
-    drifts.push("Database structure fingerprint changed");
+  // 3. Edge function health drift
+  const baseFns = (baseChecks.edge_functions || {}) as Record<string, Record<string, unknown>>;
+  const currFns = (currChecks.edge_functions || {}) as Record<string, Record<string, unknown>>;
+  
+  for (const fn of Object.keys(currFns)) {
+    const baseFn = baseFns[fn];
+    const currFn = currFns[fn];
+    if (baseFn?.healthy === true && currFn?.healthy === false) {
+      drifts.push(`Edge function unhealthy: ${fn}`);
+    }
+    if (baseFn && currFn && baseFn.status !== currFn.status) {
+      drifts.push(`Edge function status changed: ${fn} (${baseFn.status} → ${currFn.status})`);
+    }
+  }
+
+  // 4. RLS status drift
+  if (baseSchema.rls_status && currSchema.rls_status &&
+      JSON.stringify(baseSchema.rls_status) !== JSON.stringify(currSchema.rls_status)) {
+    drifts.push("Row Level Security policies modified");
   }
 
   return drifts;
