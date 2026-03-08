@@ -11,7 +11,9 @@ import { NetworkWarningBanner } from '@/components/NetworkWarningBanner';
 import Index from './pages/Index';
 import DocsPage from './pages/Docs';
 import SentryGuardPage from './pages/SentryGuard';
+import SentryAuthPage from './pages/SentryAuth';
 import NotFound from './pages/NotFound';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 function WalletSecurityManager() {
   useWalletSessionPolicy();
