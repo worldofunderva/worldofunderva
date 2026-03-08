@@ -10,10 +10,8 @@
 
 // Patterns that match wallet SDK storage keys
 const WALLET_KEY_PATTERNS = [
-  // wagmi / RainbowKit
+  // wagmi
   'wagmi',
-  'rainbowkit',
-  'rk-',
   
   // WalletConnect v2
   'wc@',

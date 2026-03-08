@@ -5,7 +5,7 @@ import { injected, walletConnect, coinbaseWallet } from 'wagmi/connectors';
 /**
  * World of Underva - Strict Base-Only Configuration
  * 
- * Uses wagmi native connectors (no RainbowKit dependency).
+ * Uses wagmi native connectors only.
  * - ONLY Base chain supported
  * - Session storage only (cleared on tab close)
  * - No auto-reconnect on page refresh

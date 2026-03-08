@@ -4,7 +4,7 @@ import { clearWalletSessionData } from '@/lib/walletSession';
 
 /**
  * Hook that provides wallet connection utilities.
- * Uses wagmi native connectors (no RainbowKit).
+ * Uses wagmi native connectors.
  */
 export function useWalletConnection() {
   const { address, isConnected, connector } = useAccount();
