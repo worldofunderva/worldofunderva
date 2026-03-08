@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
   // Authenticate: require a valid user JWT with admin/operator role
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  const supabaseAnonKey = Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
+  const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
   const telegramToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
   const telegramChatId = Deno.env.get("TELEGRAM_CHAT_ID");
 
