@@ -191,10 +191,35 @@ Deno.serve(async (req) => {
     // ─── Deployment Windows ────────────────────────────────────────
 
     if (action === "create_window") {
+      if (!isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can create deployment windows" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       const { label, starts_at, ends_at } = data;
+
+      // Input validation
+      if (!label || typeof label !== "string" || label.trim().length === 0 || label.length > 200) {
+        return new Response(JSON.stringify({ error: "Invalid label: must be a non-empty string up to 200 characters" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const startDate = new Date(starts_at);
+      const endDate = new Date(ends_at);
+      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        return new Response(JSON.stringify({ error: "Invalid timestamps: starts_at and ends_at must be valid dates" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (endDate <= startDate) {
+        return new Response(JSON.stringify({ error: "Invalid window: ends_at must be after starts_at" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       const { data: result, error } = await supabase
         .from("sentry_deployment_windows")
-        .insert({ label, starts_at, ends_at, created_by: claimsData.claims.email || "operator" })
+        .insert({ label: label.trim(), starts_at, ends_at, created_by: claimsData.claims.email || "admin" })
         .select()
         .single();
       if (error) throw error;
