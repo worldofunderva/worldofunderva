@@ -319,7 +319,7 @@ Deno.serve(async (req) => {
   }
 });
 
-// ─── Server Snapshot (same logic as sentry-guard) ────────────────────
+// ─── Server Snapshot (must match sentry-cron format exactly) ─────────
 
 async function captureServerSnapshot(supabaseUrl: string, serviceKey: string): Promise<Record<string, unknown>> {
   const snapshot: Record<string, unknown> = {
@@ -328,10 +328,9 @@ async function captureServerSnapshot(supabaseUrl: string, serviceKey: string): P
   };
   const checks = snapshot.checks as Record<string, unknown>;
 
-  // 1. Security headers from real production site(s)
+  // 1. Security headers
   const allowedOrigins = (Deno.env.get("ALLOWED_ORIGINS") || "").split(",").map(s => s.trim()).filter(Boolean);
   const headerResults: Record<string, unknown> = {};
-
   for (const origin of allowedOrigins) {
     try {
       const response = await fetch(origin, { method: "HEAD" });
@@ -341,9 +340,7 @@ async function captureServerSnapshot(supabaseUrl: string, serviceKey: string): P
         "strict-transport-security", "permissions-policy", "x-content-type-options", "referrer-policy",
       ];
       response.headers.forEach((value, key) => {
-        if (securityHeaderKeys.includes(key.toLowerCase())) {
-          headers[key.toLowerCase()] = value;
-        }
+        if (securityHeaderKeys.includes(key.toLowerCase())) headers[key.toLowerCase()] = value;
       });
       await response.text();
       headerResults[origin] = { status: response.status, headers };
@@ -353,45 +350,55 @@ async function captureServerSnapshot(supabaseUrl: string, serviceKey: string): P
   }
   checks.security_headers = headerResults;
 
-  // 2. DB schema fingerprint
+  // 2. DB schema fingerprint (matches sentry-cron's checkDatabaseSchema)
   const client = createClient(supabaseUrl, serviceKey);
-  const knownTables = [
-    "profiles", "user_roles", "sentry_status", "sentry_alerts",
-    "sentry_baselines", "sentry_deployment_windows"
-  ];
-  const tableChecks: Record<string, string> = {};
-  for (const table of knownTables) {
-    try {
-      const { count, error } = await client
-        .from(table)
-        .select("*", { count: "exact", head: true });
-      tableChecks[table] = error ? "error" : "exists";
-    } catch {
-      tableChecks[table] = "missing";
-    }
-  }
-  checks.db_schema = {
-    table_checks: tableChecks,
-    fingerprint: JSON.stringify(tableChecks),
-  };
+  const schema: Record<string, unknown> = {};
 
-  // 3. Edge function health
-  const functions = ["sentry-guard", "sentry-admin"];
+  try {
+    const { data: tables } = await client.rpc("get_schema_fingerprint" as never);
+    if (tables) schema.tables = tables;
+  } catch {}
+
+  try {
+    const knownTables = [
+      "profiles", "user_roles", "sentry_status", "sentry_alerts",
+      "sentry_baselines", "sentry_deployment_windows",
+    ];
+    const tableChecks: Record<string, string> = {};
+    for (const table of knownTables) {
+      try {
+        const { error: tErr } = await client.from(table).select("*", { count: "exact", head: true });
+        tableChecks[table] = tErr ? "error" : "exists";
+      } catch {
+        tableChecks[table] = "missing";
+      }
+    }
+    schema.table_checks = tableChecks;
+  } catch {
+    schema.table_checks = "error";
+  }
+
+  try {
+    const { data: rlsData } = await client.rpc("check_rls_status" as never);
+    if (rlsData) schema.rls_status = rlsData;
+  } catch {
+    schema.rls_status = "unavailable";
+  }
+
+  schema.fingerprint = JSON.stringify(schema.table_checks || {});
+  checks.db_schema = schema;
+
+  // 3. Edge function health (matches sentry-cron's list)
+  const functions = ["sentry-guard", "sentry-admin", "sentry-cron"];
   const fnResults: Record<string, unknown> = {};
   for (const fn of functions) {
     try {
       const response = await fetch(`${supabaseUrl}/functions/v1/${fn}`, {
         method: "OPTIONS",
-        headers: {
-          "Authorization": `Bearer ${serviceKey}`,
-          "Content-Type": "application/json",
-        },
+        headers: { Authorization: `Bearer ${serviceKey}`, "Content-Type": "application/json" },
       });
       await response.text();
-      fnResults[fn] = {
-        status: response.status,
-        healthy: response.status === 200 || response.status === 204,
-      };
+      fnResults[fn] = { status: response.status, healthy: response.status === 200 || response.status === 204 };
     } catch {
       fnResults[fn] = { status: "unreachable", healthy: false };
     }
