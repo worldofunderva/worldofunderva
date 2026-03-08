@@ -20,14 +20,14 @@ const undoAgents = [
   {
     icon: Scan,
     title: 'Scanner Agent',
-    description: 'Performs real-time ingestion of blockchain activity for $WOU transactions across every pillar wallet. Before logging a transaction to the "Golden Record," the Scanner verifies that the transacting wallet holds a Sentinel NFT — only verified holders are recorded, ensuring the Calculator Agent exclusively processes cashback and semi-annual yield for eligible participants.',
+    description: 'Conducts real-time blockchain surveillance across all pillar wallets for $WOU transaction activity. Prior to recording any entry in the "Golden Record," the Scanner validates that the transacting wallet holds a Sentinel NFT — ensuring only verified holders are eligible for downstream reward processing by the Calculator Agent.',
     color: 'text-cyan-400',
     bg: 'bg-cyan-400/10',
   },
   {
     icon: Calculator,
     title: 'Calculator Agent',
-    description: 'Executes the computational logic for the ecosystem. It autonomously calculates cashback rewards, loyalty dividends, and treasury status at the end of each monthly and semi-annual cycle.',
+    description: 'Operates as the protocol\'s computational engine. At the close of each monthly and semi-annual cycle, it autonomously processes verified Golden Record entries to derive precise cashback allocations, loyalty dividend distributions, and consolidated treasury performance metrics for governance reporting.',
     color: 'text-primary',
     bg: 'bg-primary/10',
   },
