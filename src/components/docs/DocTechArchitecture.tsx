@@ -20,7 +20,7 @@ const undoAgents = [
   {
     icon: Scan,
     title: 'Scanner Agent',
-    description: 'Performs real-time ingestion of blockchain activity for $WOU transactions across every pillar wallet. It logs every on-chain movement into the "Golden Record," ensuring no transaction goes unrecorded.',
+    description: 'Performs real-time ingestion of blockchain activity for $WOU transactions across every pillar wallet. Before logging a transaction to the "Golden Record," the Scanner verifies that the transacting wallet holds a Sentinel NFT — only verified holders are recorded, ensuring the Calculator Agent exclusively processes cashback and semi-annual yield for eligible participants.',
     color: 'text-cyan-400',
     bg: 'bg-cyan-400/10',
   },
