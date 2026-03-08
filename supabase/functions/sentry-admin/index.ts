@@ -124,6 +124,14 @@ Deno.serve(async (req) => {
 
     if (action === "unban_user") {
       const { user_id } = data;
+      // Prevent operators from unbanning admins
+      const { data: targetRolesU } = await supabase.from("user_roles").select("role").eq("user_id", user_id);
+      const isTargetAdminU = (targetRolesU || []).some((r: { role: string }) => r.role === "admin");
+      if (isTargetAdminU && !isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can unban admin accounts" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       const { error } = await supabase.auth.admin.updateUserById(user_id, {
         ban_duration: "none",
       });
