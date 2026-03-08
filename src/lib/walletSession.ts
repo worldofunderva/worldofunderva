@@ -5,15 +5,13 @@
  * that ALL wallet providers/connectors use, to prevent unintended auto-
  * reconnection across refreshes or revisits.
  *
- * Covers: MetaMask SDK, Coinbase Wallet SDK, WalletConnect, RainbowKit, wagmi
+ * Covers: MetaMask SDK, Coinbase Wallet SDK, WalletConnect, wagmi
  */
 
 // Patterns that match wallet SDK storage keys
 const WALLET_KEY_PATTERNS = [
-  // wagmi / RainbowKit
+  // wagmi
   'wagmi',
-  'rainbowkit',
-  'rk-',
   
   // WalletConnect v2
   'wc@',

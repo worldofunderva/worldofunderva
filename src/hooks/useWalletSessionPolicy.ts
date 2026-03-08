@@ -9,7 +9,7 @@ import { clearWalletSessionData } from '@/lib/walletSession';
  * - Wallet only stays connected while actively on the page without refresh
  * 
  * Network enforcement is handled by wagmi config (Base-only in chains array).
- * wagmi/RainbowKit will automatically prompt users to switch to Base.
+ * wagmi will automatically prompt users to switch to Base.
  */
 export function useWalletSessionPolicy() {
   const { disconnect: wagmiDisconnect } = useDisconnect();

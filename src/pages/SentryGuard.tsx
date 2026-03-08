@@ -233,7 +233,7 @@ export default function SentryGuardPage() {
                 <Input
                   value={newWindow.label}
                   onChange={(e) => setNewWindow({ ...newWindow, label: e.target.value })}
-                  placeholder="e.g. RainbowKit Integration"
+                  placeholder="e.g. Contract Upgrade v2"
                   className="mt-1"
                 />
               </div>
