@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
+import TeamMembers from '@/components/sentry/TeamMembers';
 
 interface SentryStatusRow {
   id: string;
@@ -269,6 +270,9 @@ export default function SentryGuardPage() {
             </div>
           )}
         </Card>
+
+        {/* Team Members & Access Log */}
+        <TeamMembers />
 
         {/* Alert Log */}
         <Card className="p-6 border-primary/10">

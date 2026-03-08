@@ -62,6 +62,75 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { action, data } = body;
 
+    if (action === "list_users") {
+      const { data: { users }, error } = await supabase.auth.admin.listUsers({ perPage: 100 });
+      if (error) throw error;
+
+      // Enrich with roles
+      const { data: allRoles } = await supabase.from("user_roles").select("user_id, role");
+      const roleMap: Record<string, string[]> = {};
+      (allRoles || []).forEach((r: { user_id: string; role: string }) => {
+        if (!roleMap[r.user_id]) roleMap[r.user_id] = [];
+        roleMap[r.user_id].push(r.role);
+      });
+
+      const members = users.map((u: any) => ({
+        id: u.id,
+        email: u.email,
+        display_name: u.user_metadata?.display_name || u.user_metadata?.full_name || u.email?.split("@")[0],
+        provider: u.app_metadata?.provider || "email",
+        created_at: u.created_at,
+        last_sign_in_at: u.last_sign_in_at,
+        banned: !!u.banned_until && new Date(u.banned_until) > new Date(),
+        roles: roleMap[u.id] || [],
+      }));
+
+      return new Response(JSON.stringify(members), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (action === "ban_user") {
+      const { user_id } = data;
+      if (user_id === userId) {
+        return new Response(JSON.stringify({ error: "Cannot ban yourself" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const { error } = await supabase.auth.admin.updateUserById(user_id, {
+        ban_duration: "876000h", // ~100 years
+      });
+      if (error) throw error;
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (action === "unban_user") {
+      const { user_id } = data;
+      const { error } = await supabase.auth.admin.updateUserById(user_id, {
+        ban_duration: "none",
+      });
+      if (error) throw error;
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (action === "delete_user") {
+      const { user_id } = data;
+      if (user_id === userId) {
+        return new Response(JSON.stringify({ error: "Cannot delete yourself" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const { error } = await supabase.auth.admin.deleteUser(user_id);
+      if (error) throw error;
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (action === "create_window") {
       const { label, starts_at, ends_at } = data;
       const { data: result, error } = await supabase
