@@ -3,19 +3,19 @@ import { HelpCircle } from 'lucide-react';
 const faqs = [
   {
     question: 'General Participation',
-    answer: 'Participants may query the Announcer Agent for status updates on rewards, distribution cycles, or general ecosystem information.',
+    answer: 'Participants can query the Announcer Agent for status updates on rewards, distribution cycles, or general ecosystem information.',
   },
   {
     question: 'Reward Verification',
-    answer: 'Users can request verification of individual wallet calculations directly through the AI-managed interface to confirm specific cashback or dividend distributions.',
+    answer: 'Users can request verification of individual wallet calculations directly through the AI managed interface to confirm specific cashback or dividend distributions.',
   },
   {
     question: 'Technical Support',
-    answer: 'For issues related to Sentinel NFT transfers or smart contract interactions, users are directed to the official technical support documentation maintained by the protocol.',
+    answer: 'For issues related to Sentinel NFT transfers or smart contract interactions, users should refer to the official technical support documentation maintained by the protocol.',
   },
   {
     question: 'Operational Inquiries',
-    answer: 'For questions regarding payment logging or audit status, participants can review the automated logs broadcast in the private Sentinel Assembly Discord.',
+    answer: 'For questions about payment logging or audit status, participants can review the automated logs broadcast in the private Sentinel Assembly Discord.',
   },
 ];
 
@@ -23,7 +23,7 @@ export function DocFAQ() {
   return (
     <div className="space-y-8">
       <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-        The World of Underva utilizes an automated support framework to ensure rapid, transparent, and accurate 
+        World of Underva uses an automated support framework to ensure rapid, transparent, and accurate 
         resolution of participant queries.
       </p>
 

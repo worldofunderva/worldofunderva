@@ -29,7 +29,7 @@ export function DocStandardSentinel() {
 
         {/* Yield */}
         <div className="mb-5">
-          <h4 className="text-sm font-semibold text-foreground mb-3">Dual-Yield Protocol</h4>
+          <h4 className="text-sm font-semibold text-foreground mb-3">Dual Yield Protocol</h4>
           <div className="flex items-start gap-2.5 rounded-lg bg-secondary/30 border border-primary/10 p-3">
             <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
             <div>
@@ -44,9 +44,9 @@ export function DocStandardSentinel() {
           <h4 className="text-sm font-semibold text-foreground mb-3">Strong Holder VIP Status</h4>
           <div className="space-y-1.5">
             {[
-              '7-day early access to limited drops',
+              '7 day early access to limited drops',
               'Governance voting rights',
-              'Sentinels-Only community access',
+              'Sentinels only community access',
               'Exclusive utility airdrops',
               'Early access to private auctions',
               'Private events hosted by Underva and Stride',
@@ -63,8 +63,8 @@ export function DocStandardSentinel() {
         <div className="rounded-lg bg-secondary/30 border border-primary/10 p-4">
           <h4 className="text-sm font-semibold text-foreground mb-2">Lifetime Ownership & Succession</h4>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Mint once, benefit forever. No subscriptions. Asset is tradeable on OpenSea and Blur. 
-            Includes priority "Express" shipment processing.
+            Mint once, benefit forever. No subscriptions. The asset is tradeable on OpenSea and Blur, 
+            and includes priority Express shipment processing.
           </p>
         </div>
       </div>

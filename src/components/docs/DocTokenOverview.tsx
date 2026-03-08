@@ -4,7 +4,7 @@ export function DocTokenOverview() {
       <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
         The <span className="font-mono text-foreground font-semibold">$WOU</span> token is the foundational 
         "Corporate Tender" of the World of Underva ecosystem. It is engineered as a non-inflationary instrument 
-        to facilitate industrial-scale commerce, utilizing a multichain architecture that balances security with performance.
+        to facilitate industrial scale commerce, using a multichain architecture that balances security with performance.
       </p>
 
       {/* Specification Table */}
@@ -30,10 +30,10 @@ export function DocTokenOverview() {
       </div>
 
       <p className="text-sm text-muted-foreground leading-relaxed">
-        The fixed maximum supply of <span className="font-mono text-foreground">21,000,000</span> ensures scarcity, 
-        preventing inflationary pressure. By anchoring the ecosystem across both L1 and L2, we ensure that the system 
+        The fixed maximum supply of <span className="font-mono text-foreground">21,000,000</span> ensures scarcity 
+        and prevents inflationary pressure. By anchoring the ecosystem across both L1 and L2, the system 
         maintains the decentralization and robust security of the Ethereum Canonical Chain while leveraging the 
-        high-speed, low-cost throughput of the Base Velocity Chain for daily operations.
+        high speed, low cost throughput of the Base Velocity Chain for daily operations.
       </p>
     </div>
   );

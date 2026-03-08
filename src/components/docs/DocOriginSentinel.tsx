@@ -4,9 +4,9 @@ export function DocOriginSentinel() {
   return (
     <div className="space-y-8">
       <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-        The Sentinel NFT serves as the mandatory, one-time compliance credential required to participate in the 
+        The Sentinel NFT serves as the mandatory, one time compliance credential required to participate in the 
         ecosystem and access rewards. It acts as the "<span className="text-foreground font-medium">Bearer Instrument</span>" for 
-        all rights, perks, and yield-earning capabilities within the World of Underva.
+        all rights, perks, and yield earning capabilities within World of Underva.
       </p>
 
       {/* Origin Sentinel Card */}
@@ -35,7 +35,7 @@ export function DocOriginSentinel() {
 
         {/* Dual-Yield */}
         <div className="mb-5">
-          <h4 className="text-sm font-semibold text-foreground mb-3">Dual-Yield Protocol</h4>
+          <h4 className="text-sm font-semibold text-foreground mb-3">Dual Yield Protocol</h4>
           <div className="space-y-2">
             <div className="flex items-start gap-2.5 rounded-lg bg-card/80 border border-primary/10 p-3">
               <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
@@ -61,9 +61,9 @@ export function DocOriginSentinel() {
           <h4 className="text-sm font-semibold text-foreground mb-3">Strong Holder VIP Status</h4>
           <div className="space-y-1.5">
             {[
-              '7-day early access to limited drops',
+              '7 day early access to limited drops',
               'Governance voting rights',
-              'Sentinels-Only community access',
+              'Sentinels only community access',
               'Exclusive utility airdrops',
               'Early access to private auctions',
               'Private events hosted by Underva and Stride',
@@ -80,8 +80,8 @@ export function DocOriginSentinel() {
         <div className="rounded-lg bg-card/80 border border-primary/10 p-4">
           <h4 className="text-sm font-semibold text-foreground mb-2">Lifetime Ownership & Succession</h4>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Mint once, benefit forever. No subscriptions. Asset is tradeable on OpenSea and Blur. 
-            Includes priority "Express" shipment processing.
+            Mint once, benefit forever. No subscriptions. The asset is tradeable on OpenSea and Blur, 
+            and includes priority Express shipment processing.
           </p>
         </div>
       </div>
