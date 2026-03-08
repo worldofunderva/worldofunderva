@@ -106,7 +106,7 @@ export function Navbar() {
             <motion.div 
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="hidden lg:flex lg:items-center lg:gap-2"
+              className="hidden lg:flex lg:items-center lg:gap-2 relative"
             >
               {isConnected ? (
                 <Button
@@ -124,11 +124,22 @@ export function Navbar() {
                   size="sm"
                   onClick={handleConnect}
                   className="gap-2"
+                  disabled={isPending}
                 >
                   <Wallet className="h-4 w-4" />
-                  Connect Wallet
+                  {isPending ? 'Connecting...' : 'Connect Wallet'}
                 </Button>
               )}
+              <AnimatePresence>
+                {showConnectors && !isConnected && (
+                  <WalletConnectorList
+                    connectors={connectors}
+                    onSelect={connectWith}
+                    onClose={() => setShowConnectors(false)}
+                    isPending={isPending}
+                  />
+                )}
+              </AnimatePresence>
             </motion.div>
 
             {/* Mobile Menu Button */}
