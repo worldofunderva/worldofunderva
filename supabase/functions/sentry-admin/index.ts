@@ -131,6 +131,31 @@ Deno.serve(async (req) => {
       });
     }
 
+    if (action === "set_role") {
+      const { user_id, role, grant } = data;
+      if (!["admin", "operator"].includes(role)) {
+        return new Response(JSON.stringify({ error: "Invalid role" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (grant) {
+        const { error } = await supabase
+          .from("user_roles")
+          .upsert({ user_id, role }, { onConflict: "user_id,role" });
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("user_roles")
+          .delete()
+          .eq("user_id", user_id)
+          .eq("role", role);
+        if (error) throw error;
+      }
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (action === "create_window") {
       const { label, starts_at, ends_at } = data;
       const { data: result, error } = await supabase

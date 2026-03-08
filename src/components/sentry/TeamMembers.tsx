@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Users, Ban, Trash2, ShieldCheck, ShieldOff, RefreshCw } from 'lucide-react';
+import { Users, Ban, Trash2, ShieldCheck, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from '@/hooks/use-toast';
 import {
   AlertDialog,
@@ -35,6 +36,8 @@ interface Member {
   banned: boolean;
   roles: string[];
 }
+
+const AVAILABLE_ROLES = ['admin', 'operator'] as const;
 
 async function callAdmin(action: string, data: Record<string, unknown> = {}) {
   const { data: { session } } = await supabase.auth.getSession();
@@ -98,6 +101,18 @@ export default function TeamMembers() {
     setActionLoading(null);
   }
 
+  async function handleRoleToggle(userId: string, role: string, grant: boolean) {
+    setActionLoading(userId);
+    try {
+      await callAdmin('set_role', { user_id: userId, role, grant });
+      toast({ title: grant ? `Granted ${role}` : `Revoked ${role}` });
+      await fetchMembers();
+    } catch (err) {
+      toast({ title: 'Role Update Failed', description: err instanceof Error ? err.message : 'Unknown error', variant: 'destructive' });
+    }
+    setActionLoading(null);
+  }
+
   return (
     <Card className="p-6 border-primary/10">
       <div className="flex items-center justify-between mb-4">
@@ -144,9 +159,16 @@ export default function TeamMembers() {
                     <Badge variant="outline" className="text-xs capitalize">{m.provider}</Badge>
                   </TableCell>
                   <TableCell>
-                    <div className="flex gap-1 flex-wrap">
-                      {m.roles.map((r) => (
-                        <Badge key={r} variant="secondary" className="text-xs">{r}</Badge>
+                    <div className="flex flex-col gap-1.5">
+                      {AVAILABLE_ROLES.map((role) => (
+                        <label key={role} className="flex items-center gap-1.5 cursor-pointer">
+                          <Checkbox
+                            checked={m.roles.includes(role)}
+                            disabled={actionLoading === m.id}
+                            onCheckedChange={(checked) => handleRoleToggle(m.id, role, !!checked)}
+                          />
+                          <span className="text-xs capitalize">{role}</span>
+                        </label>
                       ))}
                     </div>
                   </TableCell>
@@ -162,7 +184,7 @@ export default function TeamMembers() {
                     {m.banned ? (
                       <Badge variant="destructive" className="text-xs">Banned</Badge>
                     ) : (
-                      <Badge className="text-xs bg-emerald-500/15 text-emerald-500 border-emerald-500/20">Active</Badge>
+                      <Badge variant="secondary" className="text-xs">Active</Badge>
                     )}
                   </TableCell>
                   <TableCell className="text-right">
@@ -174,7 +196,7 @@ export default function TeamMembers() {
                         onClick={() => handleBan(m.id, !m.banned)}
                         title={m.banned ? 'Unban user' : 'Ban user'}
                       >
-                        {m.banned ? <ShieldCheck className="h-4 w-4 text-emerald-500" /> : <Ban className="h-4 w-4 text-destructive" />}
+                        {m.banned ? <ShieldCheck className="h-4 w-4 text-primary" /> : <Ban className="h-4 w-4 text-destructive" />}
                       </Button>
 
                       <AlertDialog>
