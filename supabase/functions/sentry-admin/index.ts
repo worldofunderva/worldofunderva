@@ -188,6 +188,60 @@ Deno.serve(async (req) => {
       });
     }
 
+    // ─── Create User ──────────────────────────────────────────────
+
+    if (action === "create_user") {
+      if (!isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can create users" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const { email, password, display_name, roles: assignRoles } = data;
+
+      // Validate inputs
+      if (!email || typeof email !== "string" || !email.includes("@") || email.length > 255) {
+        return new Response(JSON.stringify({ error: "Invalid email address" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (!password || typeof password !== "string" || password.length < 8 || password.length > 128) {
+        return new Response(JSON.stringify({ error: "Password must be 8-128 characters" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const trimmedName = (display_name || email.split("@")[0]).trim().slice(0, 100);
+
+      // Create user via admin API (auto-confirms email)
+      const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
+        email: email.trim().toLowerCase(),
+        password,
+        email_confirm: true,
+        user_metadata: { display_name: trimmedName },
+      });
+
+      if (createError) {
+        return new Response(JSON.stringify({ error: createError.message }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // Assign roles if provided
+      if (assignRoles && Array.isArray(assignRoles) && newUser.user) {
+        for (const role of assignRoles) {
+          if (["admin", "operator"].includes(role)) {
+            await supabase
+              .from("user_roles")
+              .upsert({ user_id: newUser.user.id, role }, { onConflict: "user_id,role" });
+          }
+        }
+      }
+
+      return new Response(JSON.stringify({ success: true, user_id: newUser.user?.id }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // ─── Deployment Windows ────────────────────────────────────────
 
     if (action === "create_window") {
