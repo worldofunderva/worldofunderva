@@ -8,37 +8,17 @@
  * Covers: MetaMask SDK, Coinbase Wallet SDK, WalletConnect, wagmi
  */
 
+const SESSION_CONNECTED_AT_KEY = 'underva_wallet_connected_at';
+const SESSION_TIMEOUT_MS = 60 * 60 * 1000; // 1 hour
+
 // Patterns that match wallet SDK storage keys
 const WALLET_KEY_PATTERNS = [
-  // wagmi
   'wagmi',
-  
-  // WalletConnect v2
-  'wc@',
-  'walletconnect',
-  'wc_',
-  
-  // MetaMask SDK
-  'metamask',
-  'MMSDK',
-  '@metamask',
-  'mm-sdk',
-  
-  // Coinbase Wallet SDK
-  'coinbase',
-  '-walletlink',
-  'walletlink',
-  'cbw-',
-  
-  // Safe/Gnosis
-  'safe',
-  'gnosis',
-  
-  // Generic patterns
-  'wallet',
-  'connector',
-  'ethereum',
-  'web3',
+  'wc@', 'walletconnect', 'wc_',
+  'metamask', 'MMSDK', '@metamask', 'mm-sdk',
+  'coinbase', '-walletlink', 'walletlink', 'cbw-',
+  'safe', 'gnosis',
+  'wallet', 'connector', 'ethereum', 'web3',
 ];
 
 function matchesWalletPattern(key: string): boolean {
@@ -69,6 +49,9 @@ export function clearWalletSessionData() {
   }
   localKeysToRemove.forEach((key) => localStorage.removeItem(key));
 
+  // Clear connection timestamp
+  sessionStorage.removeItem(SESSION_CONNECTED_AT_KEY);
+
   // Clear IndexedDB databases used by wallet SDKs (best-effort)
   if (typeof indexedDB !== 'undefined') {
     const dbNames = [
@@ -85,4 +68,21 @@ export function clearWalletSessionData() {
       }
     });
   }
+}
+
+/** Record the moment the wallet connected (call once on connect). */
+export function setConnectedTimestamp() {
+  if (typeof window === 'undefined') return;
+  sessionStorage.setItem(SESSION_CONNECTED_AT_KEY, Date.now().toString());
+}
+
+/** Returns ms remaining before session expires, or 0 if already expired / no timestamp. */
+export function getSessionTimeRemaining(): number {
+  if (typeof window === 'undefined') return 0;
+  const raw = sessionStorage.getItem(SESSION_CONNECTED_AT_KEY);
+  if (!raw) return 0;
+  const connectedAt = parseInt(raw, 10);
+  if (isNaN(connectedAt)) return 0;
+  const remaining = SESSION_TIMEOUT_MS - (Date.now() - connectedAt);
+  return Math.max(0, remaining);
 }
