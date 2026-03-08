@@ -22,7 +22,12 @@ export function Navbar() {
     isConnected, 
     truncatedAddress, 
     handleConnect,
+    connectWith,
     disconnect,
+    connectors,
+    showConnectors,
+    setShowConnectors,
+    isPending,
   } = useWalletConnection();
   
   useEffect(() => {
