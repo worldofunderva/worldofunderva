@@ -36,9 +36,11 @@ const queryClient = new QueryClient({
   },
 });
 
+const PRIVY_APP_ID = import.meta.env.VITE_PRIVY_APP_ID || 'cmmhpeqt600jb0dlbd3erefb4';
+
 const App = () => (
   <PrivyProvider
-    appId="cmmhpeqt600jb0dlbd3erefb4"
+    appId={PRIVY_APP_ID}
     config={{
       appearance: {
         theme: 'dark',

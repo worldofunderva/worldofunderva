@@ -19,6 +19,12 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     rollupOptions: {
+      onwarn(warning, warn) {
+        // Suppress Privy annotation warnings that flood the build log
+        if (warning.message?.includes('contains an annotation that Rollup cannot interpret')) return;
+        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+        warn(warning);
+      },
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
@@ -37,6 +43,6 @@ export default defineConfig(({ mode }) => ({
     target: 'esnext',
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'wagmi', 'viem'],
+    include: ['react', 'react-dom', 'react-router-dom', 'wagmi', 'viem', '@privy-io/react-auth', '@privy-io/wagmi'],
   },
 }));
