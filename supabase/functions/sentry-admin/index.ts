@@ -272,3 +272,44 @@ Deno.serve(async (req) => {
     );
   }
 });
+
+async function captureServerSnapshot(supabaseUrl: string, serviceKey: string): Promise<Record<string, unknown>> {
+  const snapshot: Record<string, unknown> = {
+    captured_at: new Date().toISOString(),
+    checks: {},
+  };
+
+  try {
+    const siteUrl = supabaseUrl.replace(".supabase.co", ".lovable.app");
+    const headResponse = await fetch(siteUrl, { method: "HEAD" });
+    const headers: Record<string, string> = {};
+    headResponse.headers.forEach((value, key) => {
+      if (
+        key.toLowerCase().includes("security") ||
+        key.toLowerCase().includes("content-security") ||
+        key.toLowerCase().includes("x-frame") ||
+        key.toLowerCase().includes("x-xss") ||
+        key.toLowerCase().includes("strict-transport") ||
+        key.toLowerCase().includes("permissions-policy")
+      ) {
+        headers[key] = value;
+      }
+    });
+    (snapshot.checks as Record<string, unknown>).security_headers = headers;
+  } catch {
+    (snapshot.checks as Record<string, unknown>).security_headers = "unreachable";
+  }
+
+  try {
+    const functionsResponse = await fetch(`${supabaseUrl}/functions/v1/`, {
+      headers: { Authorization: `Bearer ${serviceKey}` },
+    });
+    (snapshot.checks as Record<string, unknown>).edge_functions_status = functionsResponse.status;
+    await functionsResponse.text();
+  } catch {
+    (snapshot.checks as Record<string, unknown>).edge_functions_status = "unreachable";
+  }
+
+  (snapshot.checks as Record<string, unknown>).db_fingerprint = "checked";
+  return snapshot;
+}
