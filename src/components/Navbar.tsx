@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useWalletConnection } from '@/hooks/useWalletConnection';
+import { WalletConnectorList } from '@/components/WalletConnectorList';
 import { Link } from 'react-router-dom';
 
 const navItems = [
@@ -21,7 +22,12 @@ export function Navbar() {
     isConnected, 
     truncatedAddress, 
     handleConnect,
+    connectWith,
     disconnect,
+    connectors,
+    showConnectors,
+    setShowConnectors,
+    isPending,
   } = useWalletConnection();
   
   useEffect(() => {
@@ -100,7 +106,7 @@ export function Navbar() {
             <motion.div 
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="hidden lg:flex lg:items-center lg:gap-2"
+              className="hidden lg:flex lg:items-center lg:gap-2 relative"
             >
               {isConnected ? (
                 <Button
@@ -118,11 +124,22 @@ export function Navbar() {
                   size="sm"
                   onClick={handleConnect}
                   className="gap-2"
+                  disabled={isPending}
                 >
                   <Wallet className="h-4 w-4" />
-                  Connect Wallet
+                  {isPending ? 'Connecting...' : 'Connect Wallet'}
                 </Button>
               )}
+              <AnimatePresence>
+                {showConnectors && !isConnected && (
+                  <WalletConnectorList
+                    connectors={connectors}
+                    onSelect={connectWith}
+                    onClose={() => setShowConnectors(false)}
+                    isPending={isPending}
+                  />
+                )}
+              </AnimatePresence>
             </motion.div>
 
             {/* Mobile Menu Button */}
@@ -200,13 +217,35 @@ export function Navbar() {
 
                   {/* Wallet Button - directly below Tokenomics */}
                   <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="pt-4">
-                    {isConnected ? (
+                     {isConnected ? (
                       <Button variant="wallet-connected" size="lg" onClick={() => { disconnect(); setIsOpen(false); }} className="w-full gap-2 h-14 text-base">
                         <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
                         {truncatedAddress}
                       </Button>
+                    ) : showConnectors ? (
+                      <div className="space-y-2">
+                        <p className="text-xs font-semibold text-muted-foreground mb-2">Select Wallet</p>
+                        {connectors.reduce<typeof connectors[number][]>((acc, c) => {
+                          if (!acc.find(x => x.id === c.id)) acc.push(c);
+                          return acc;
+                        }, []).map((c) => (
+                          <Button
+                            key={c.id}
+                            variant="outline"
+                            size="lg"
+                            onClick={() => { connectWith(c); setIsOpen(false); }}
+                            disabled={isPending}
+                            className="w-full h-12 text-base justify-start gap-3"
+                          >
+                            {c.name || c.id}
+                          </Button>
+                        ))}
+                        <Button variant="ghost" size="sm" onClick={() => setShowConnectors(false)} className="w-full text-xs text-muted-foreground">
+                          Cancel
+                        </Button>
+                      </div>
                     ) : (
-                      <Button variant="wallet" size="lg" onClick={() => { handleConnect(); setIsOpen(false); }} className="w-full gap-2 h-14 text-base">
+                      <Button variant="wallet" size="lg" onClick={handleConnect} className="w-full gap-2 h-14 text-base">
                         <Wallet className="h-5 w-5" />
                         Connect Wallet
                       </Button>
