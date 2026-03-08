@@ -45,6 +45,8 @@ export type Database = {
           details: string
           id: string
           maintenance_mode_engaged: boolean
+          resolved: boolean
+          resolved_at: string | null
           telegram_sent: boolean
         }
         Insert: {
@@ -53,6 +55,8 @@ export type Database = {
           details: string
           id?: string
           maintenance_mode_engaged?: boolean
+          resolved?: boolean
+          resolved_at?: string | null
           telegram_sent?: boolean
         }
         Update: {
@@ -61,6 +65,8 @@ export type Database = {
           details?: string
           id?: string
           maintenance_mode_engaged?: boolean
+          resolved?: boolean
+          resolved_at?: string | null
           telegram_sent?: boolean
         }
         Relationships: []
