@@ -53,7 +53,11 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/docs" element={<DocsPage />} />
               <Route path="/docs/:section" element={<DocsPage />} />
-              <Route path="/sentry-guard" element={<SentryGuardPage />} />
+              <Route path="/sentry-guard" element={
+                <ProtectedRoute fallback={<SentryAuthPage />}>
+                  <SentryGuardPage />
+                </ProtectedRoute>
+              } />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
