@@ -23,6 +23,10 @@ export function Navbar() {
     truncatedAddress, 
     handleConnect,
     disconnect,
+    showConnectModal,
+    closeConnectModal,
+    connectWithConnector,
+    connectors,
   } = useWalletConnection();
   
   useEffect(() => {
