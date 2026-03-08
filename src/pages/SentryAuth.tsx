@@ -20,6 +20,23 @@ const loginSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
+function getFriendlyAuthError(error: unknown, mode: 'login' | 'signup') {
+  const message = error instanceof Error ? error.message : 'Unknown error';
+  const lower = message.toLowerCase();
+
+  if (lower.includes('load failed') || lower.includes('failed to fetch') || lower.includes('network')) {
+    return 'Connection failed. Please open the app from your Lovable preview/published URL and try again.';
+  }
+
+  if (mode === 'login') {
+    return lower.includes('email not confirmed')
+      ? 'Please verify your email first, then sign in.'
+      : 'Invalid email/password. If you are new, click Create account first.';
+  }
+
+  return message;
+}
+
 export default function SentryAuthPage() {
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [email, setEmail] = useState('');
@@ -38,21 +55,23 @@ export default function SentryAuthPage() {
     }
 
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: parsed.data.email,
-      password: parsed.data.password,
-    });
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: parsed.data.email,
+        password: parsed.data.password,
+      });
 
-    if (error) {
-      const message = error.message.toLowerCase().includes('email not confirmed')
-        ? 'Please verify your email first, then sign in.'
-        : 'Invalid email/password. If you are new, click Create account first.';
-      toast({ title: 'Login Failed', description: message, variant: 'destructive' });
-    } else {
-      toast({ title: 'Signed in successfully' });
+      if (error) {
+        toast({ title: 'Login Failed', description: getFriendlyAuthError(error, 'login'), variant: 'destructive' });
+      } else {
+        toast({ title: 'Signed in successfully' });
+        navigate('/sentry-guard');
+      }
+    } catch (error) {
+      toast({ title: 'Login Failed', description: getFriendlyAuthError(error, 'login'), variant: 'destructive' });
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   async function handleSignup(e: React.FormEvent) {
@@ -65,26 +84,33 @@ export default function SentryAuthPage() {
     }
 
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email: parsed.data.email,
-      password: parsed.data.password,
-      options: {
-        data: { display_name: parsed.data.displayName },
-        emailRedirectTo: window.location.origin + '/sentry-guard',
-      },
-    });
-
-    if (error) {
-      toast({ title: 'Signup Failed', description: error.message, variant: 'destructive' });
-    } else {
-      toast({
-        title: 'Verification Email Sent',
-        description: 'Check your inbox, verify your email, then sign in.',
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: parsed.data.email,
+        password: parsed.data.password,
+        options: {
+          data: { display_name: parsed.data.displayName.trim() },
+          emailRedirectTo: window.location.origin + '/sentry-guard',
+        },
       });
-      setMode('login');
-    }
 
-    setLoading(false);
+      if (error) {
+        toast({ title: 'Signup Failed', description: getFriendlyAuthError(error, 'signup'), variant: 'destructive' });
+      } else if (data.session) {
+        toast({ title: 'Account Created', description: 'You are now signed in.' });
+        navigate('/sentry-guard');
+      } else {
+        toast({
+          title: 'Verification Email Sent',
+          description: 'Check your inbox, verify your email, then sign in.',
+        });
+        setMode('login');
+      }
+    } catch (error) {
+      toast({ title: 'Signup Failed', description: getFriendlyAuthError(error, 'signup'), variant: 'destructive' });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
