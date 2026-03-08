@@ -20,7 +20,7 @@ const undoAgents = [
   {
     icon: Scan,
     title: 'Scanner Agent',
-    description: 'Performs real-time ingestion of blockchain activity for $WOU transactions. It logs every on-chain movement into the "Golden Record," ensuring no transaction goes unrecorded.',
+    description: 'Performs real-time ingestion of blockchain activity for $WOU transactions across every pillar wallet. It logs every on-chain movement into the "Golden Record," ensuring no transaction goes unrecorded.',
     color: 'text-cyan-400',
     bg: 'bg-cyan-400/10',
   },
