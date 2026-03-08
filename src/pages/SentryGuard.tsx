@@ -44,6 +44,7 @@ export default function SentryGuardPage() {
   const [showNewWindow, setShowNewWindow] = useState(false);
   const [newWindow, setNewWindow] = useState({ label: '', starts_at: '', ends_at: '' });
   const [isAdmin, setIsAdmin] = useState(false);
+  const [disengaging, setDisengaging] = useState(false);
 
   useEffect(() => {
     fetchData();
