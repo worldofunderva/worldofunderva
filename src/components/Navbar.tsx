@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useWalletConnection } from '@/hooks/useWalletConnection';
-import { WalletConnectorList } from '@/components/WalletConnectorList';
 import { Link } from 'react-router-dom';
 
 const navItems = [
@@ -17,19 +16,15 @@ const navItems = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  
-  const { 
-    isConnected, 
-    truncatedAddress, 
-    handleConnect,
-    connectWith,
-    disconnect,
-    connectors,
-    showConnectors,
-    setShowConnectors,
-    isPending,
+
+  const {
+    isConnected,
+    truncatedAddress,
+    login,
+    logout,
+    ready,
   } = useWalletConnection();
-  
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -51,7 +46,7 @@ export function Navbar() {
     <>
       <nav className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        isScrolled 
+        isScrolled
           ? "border-b border-primary/10 bg-background/90 backdrop-blur-xl shadow-lg shadow-background/20"
           : "bg-transparent"
       )}>
@@ -103,16 +98,16 @@ export function Navbar() {
             </div>
 
             {/* Wallet Button - Desktop */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="hidden lg:flex lg:items-center lg:gap-2 relative"
+              className="hidden lg:flex lg:items-center lg:gap-2"
             >
               {isConnected ? (
                 <Button
                   variant="wallet-connected"
                   size="sm"
-                  onClick={() => disconnect()}
+                  onClick={() => logout()}
                   className="gap-2"
                 >
                   <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
@@ -122,24 +117,14 @@ export function Navbar() {
                 <Button
                   variant="wallet"
                   size="sm"
-                  onClick={handleConnect}
+                  onClick={() => login()}
+                  disabled={!ready}
                   className="gap-2"
-                  disabled={isPending}
                 >
                   <Wallet className="h-4 w-4" />
-                  {isPending ? 'Connecting...' : 'Connect Wallet'}
+                  Connect Wallet
                 </Button>
               )}
-              <AnimatePresence>
-                {showConnectors && !isConnected && (
-                  <WalletConnectorList
-                    connectors={connectors}
-                    onSelect={connectWith}
-                    onClose={() => setShowConnectors(false)}
-                    isPending={isPending}
-                  />
-                )}
-              </AnimatePresence>
             </motion.div>
 
             {/* Mobile Menu Button */}
@@ -185,73 +170,51 @@ export function Navbar() {
               >
                 <div className="flex-1 flex flex-col">
                   <div className="space-y-2">
-                  {navItems.map((item, index) => (
-                    <motion.div
-                      key={item.label}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      {item.isRoute ? (
-                        <Link
-                          to={item.href}
-                          className="flex items-center justify-between py-4 text-lg font-medium text-foreground border-b border-primary/10 hover:text-primary transition-colors"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {item.label}
-                          <span className="text-muted-foreground text-sm">→</span>
-                        </Link>
-                      ) : (
-                        <a
-                          href={item.href}
-                          className="flex items-center justify-between py-4 text-lg font-medium text-foreground border-b border-primary/10 hover:text-primary transition-colors"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {item.label}
-                          <span className="text-muted-foreground text-sm">→</span>
-                        </a>
-                      )}
-                    </motion.div>
-                  ))}
+                    {navItems.map((item, index) => (
+                      <motion.div
+                        key={item.label}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                      >
+                        {item.isRoute ? (
+                          <Link
+                            to={item.href}
+                            className="flex items-center justify-between py-4 text-lg font-medium text-foreground border-b border-primary/10 hover:text-primary transition-colors"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            {item.label}
+                            <span className="text-muted-foreground text-sm">→</span>
+                          </Link>
+                        ) : (
+                          <a
+                            href={item.href}
+                            className="flex items-center justify-between py-4 text-lg font-medium text-foreground border-b border-primary/10 hover:text-primary transition-colors"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            {item.label}
+                            <span className="text-muted-foreground text-sm">→</span>
+                          </a>
+                        )}
+                      </motion.div>
+                    ))}
                   </div>
 
-                  {/* Wallet Button - directly below Tokenomics */}
+                  {/* Wallet Button - Mobile */}
                   <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="pt-4">
-                     {isConnected ? (
-                      <Button variant="wallet-connected" size="lg" onClick={() => { disconnect(); setIsOpen(false); }} className="w-full gap-2 h-14 text-base">
+                    {isConnected ? (
+                      <Button variant="wallet-connected" size="lg" onClick={() => { logout(); setIsOpen(false); }} className="w-full gap-2 h-14 text-base">
                         <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
                         {truncatedAddress}
                       </Button>
-                    ) : showConnectors ? (
-                      <div className="space-y-2">
-                        <p className="text-xs font-semibold text-muted-foreground mb-2">Select Wallet</p>
-                        {connectors.reduce<typeof connectors[number][]>((acc, c) => {
-                          if (!acc.find(x => x.id === c.id)) acc.push(c);
-                          return acc;
-                        }, []).map((c) => (
-                          <Button
-                            key={c.id}
-                            variant="outline"
-                            size="lg"
-                            onClick={() => { connectWith(c); setIsOpen(false); }}
-                            disabled={isPending}
-                            className="w-full h-12 text-base justify-start gap-3"
-                          >
-                            {c.name || c.id}
-                          </Button>
-                        ))}
-                        <Button variant="ghost" size="sm" onClick={() => setShowConnectors(false)} className="w-full text-xs text-muted-foreground">
-                          Cancel
-                        </Button>
-                      </div>
                     ) : (
-                      <Button variant="wallet" size="lg" onClick={handleConnect} className="w-full gap-2 h-14 text-base">
+                      <Button variant="wallet" size="lg" onClick={() => { login(); setIsOpen(false); }} disabled={!ready} className="w-full gap-2 h-14 text-base">
                         <Wallet className="h-5 w-5" />
                         Connect Wallet
                       </Button>
                     )}
 
-                    {/* L1 & L2 badge directly under Connect Wallet */}
+                    {/* L1 & L2 badge */}
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex items-center justify-center gap-6 pt-3 text-xs text-muted-foreground">
                       <span className="flex items-center gap-2">
                         <span className="h-2 w-2 rounded-full bg-amber-500" />
