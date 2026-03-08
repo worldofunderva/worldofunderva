@@ -1,12 +1,21 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+function getCorsHeaders(req: Request): Record<string, string> {
+  const origin = req.headers.get("Origin") || "";
+  const allowedRaw = Deno.env.get("ALLOWED_ORIGINS") || "";
+  const allowedOrigins = allowedRaw.split(",").map((s) => s.trim()).filter(Boolean);
+  const isAllowed = allowedOrigins.includes(origin);
+  return {
+    "Access-Control-Allow-Origin": isAllowed ? origin : allowedOrigins[0] || "",
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+    "Vary": "Origin",
+  };
+}
 
 Deno.serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -83,8 +92,6 @@ Deno.serve(async (req) => {
     }
 
     // 3. Capture current state snapshot
-    // In a frontend-only environment, we monitor critical configuration fingerprints:
-    // package.json deps, index.html integrity, CSP headers, and known script entries
     const currentSnapshot = await captureCurrentSnapshot(supabaseUrl, supabaseServiceKey);
 
     // 4. If inside deployment window, update baseline silently
@@ -123,7 +130,6 @@ Deno.serve(async (req) => {
     // 5. Compare against baseline
     const baseline = status.sentry_baselines;
     if (!baseline) {
-      // No baseline yet, capture initial
       const { data: initialBaseline } = await supabase
         .from("sentry_baselines")
         .insert({
@@ -240,17 +246,12 @@ Deno.serve(async (req) => {
   }
 });
 
-/**
- * Captures a snapshot of the current frontend infrastructure state.
- * Monitors: CSP headers, published site integrity, configuration fingerprints.
- */
 async function captureCurrentSnapshot(supabaseUrl: string, _serviceKey: string) {
   const snapshot: Record<string, unknown> = {
     captured_at: new Date().toISOString(),
     checks: {},
   };
 
-  // Check published site headers (CSP, X-Frame-Options, etc.)
   try {
     const siteUrl = supabaseUrl.replace(".supabase.co", ".lovable.app");
     const headResponse = await fetch(siteUrl, { method: "HEAD" });
@@ -272,7 +273,6 @@ async function captureCurrentSnapshot(supabaseUrl: string, _serviceKey: string) 
     snapshot.checks = { ...snapshot.checks as Record<string, unknown>, security_headers: "unreachable" };
   }
 
-  // Check edge functions list integrity
   try {
     const functionsResponse = await fetch(`${supabaseUrl}/functions/v1/`, {
       headers: { Authorization: `Bearer ${_serviceKey}` },
@@ -290,12 +290,10 @@ async function captureCurrentSnapshot(supabaseUrl: string, _serviceKey: string) 
     };
   }
 
-  // Database tables count as structural fingerprint
   try {
     const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
     const client = createClient(supabaseUrl, _serviceKey);
     const { data } = await client.rpc("pg_catalog" as never);
-    // Fallback: just record table count from known tables
     snapshot.checks = {
       ...snapshot.checks as Record<string, unknown>,
       db_fingerprint: "monitored",
@@ -310,9 +308,6 @@ async function captureCurrentSnapshot(supabaseUrl: string, _serviceKey: string) 
   return snapshot;
 }
 
-/**
- * Compares two snapshots and returns a list of detected drifts.
- */
 function detectDrift(
   baseline: Record<string, unknown>,
   current: Record<string, unknown>
@@ -322,19 +317,16 @@ function detectDrift(
   const baselineChecks = (baseline.checks || {}) as Record<string, unknown>;
   const currentChecks = (current.checks || {}) as Record<string, unknown>;
 
-  // Compare security headers
   const baseHeaders = JSON.stringify(baselineChecks.security_headers || {});
   const currHeaders = JSON.stringify(currentChecks.security_headers || {});
   if (baseHeaders !== currHeaders) {
     drifts.push("Security headers modified");
   }
 
-  // Compare edge functions status
   if (baselineChecks.edge_functions_status !== currentChecks.edge_functions_status) {
     drifts.push("Edge functions endpoint status changed");
   }
 
-  // Compare db fingerprint
   if (
     JSON.stringify(baselineChecks.db_fingerprint) !==
     JSON.stringify(currentChecks.db_fingerprint)
