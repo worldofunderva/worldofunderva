@@ -27,7 +27,7 @@ const undoAgents = [
   {
     icon: Calculator,
     title: 'Calculator Agent',
-    description: 'Executes the computational logic for the ecosystem. It autonomously calculates cashback rewards, loyalty dividends, and treasury status at the end of each monthly and semi-annual cycle.',
+    description: 'Operates as the protocol\'s computational engine. At the close of each monthly and semi-annual cycle, it autonomously processes verified Golden Record entries to derive precise cashback allocations, loyalty dividend distributions, and consolidated treasury performance metrics for governance reporting.',
     color: 'text-primary',
     bg: 'bg-primary/10',
   },
