@@ -19,19 +19,14 @@ export function MaintenanceGate({ children }: MaintenanceGateProps) {
 
   async function checkMaintenanceMode() {
     try {
-      const { data, error } = await supabase
-        .from('sentry_status')
-        .select('maintenance_mode')
-        .single();
+      const { data, error } = await supabase.rpc('is_maintenance_mode');
 
       if (error) {
-        // If we can't read (RLS blocks unauthenticated), assume not in maintenance
-        // so the public site works. Authenticated admin checks happen server-side.
         setIsMaintenanceMode(false);
         return;
       }
 
-      setIsMaintenanceMode(data?.maintenance_mode ?? false);
+      setIsMaintenanceMode(data === true);
     } catch {
       setIsMaintenanceMode(false);
     }

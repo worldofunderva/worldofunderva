@@ -8,6 +8,7 @@ import { SentinelProvider } from '@/contexts/SentinelContext';
 import { config } from '@/config/wagmi';
 import { useWalletSessionPolicy } from '@/hooks/useWalletSessionPolicy';
 import { NetworkWarningBanner } from '@/components/NetworkWarningBanner';
+import { MaintenanceGate } from '@/components/MaintenanceGate';
 import Index from './pages/Index';
 import DocsPage from './pages/Docs';
 import SentryGuardPage from './pages/SentryGuard';
@@ -50,15 +51,23 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/docs" element={<DocsPage />} />
-              <Route path="/docs/:section" element={<DocsPage />} />
+              {/* Sentry Guard routes are always accessible (exempt from maintenance) */}
               <Route path="/sentry-guard" element={
                 <ProtectedRoute fallback={<SentryAuthPage />}>
                   <SentryGuardPage />
                 </ProtectedRoute>
               } />
-              <Route path="*" element={<NotFound />} />
+              {/* All other routes are gated by maintenance mode */}
+              <Route path="*" element={
+                <MaintenanceGate>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/docs" element={<DocsPage />} />
+                    <Route path="/docs/:section" element={<DocsPage />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </MaintenanceGate>
+              } />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
