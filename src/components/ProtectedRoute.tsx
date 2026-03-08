@@ -1,4 +1,4 @@
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState, useRef, ReactNode, createContext, useContext } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { RefreshCw } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
@@ -8,49 +8,72 @@ interface ProtectedRouteProps {
   fallback: ReactNode;
 }
 
+interface ProtectedContext {
+  user: User;
+  isAdmin: boolean;
+  isOperator: boolean;
+}
+
+const ProtectedCtx = createContext<ProtectedContext | null>(null);
+
+/** Access the authenticated user + resolved roles from within a ProtectedRoute. */
+export function useProtectedContext() {
+  const ctx = useContext(ProtectedCtx);
+  if (!ctx) throw new Error('useProtectedContext must be used inside ProtectedRoute');
+  return ctx;
+}
+
 export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [hasRole, setHasRole] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState<{
+    user: User | null;
+    isAdmin: boolean;
+    isOperator: boolean;
+    loading: boolean;
+  }>({ user: null, isAdmin: false, isOperator: false, loading: true });
+
+  const checking = useRef(false);
 
   useEffect(() => {
-    const checkRole = async (userId: string) => {
-      // Use server-side SECURITY DEFINER function instead of direct table query
-      // This cannot be spoofed by intercepting/modifying network responses
-      const [adminResult, operatorResult] = await Promise.all([
-        supabase.rpc('has_role', { _user_id: userId, _role: 'admin' }),
-        supabase.rpc('has_role', { _user_id: userId, _role: 'operator' }),
+    const resolve = async (user: User | null) => {
+      if (!user) {
+        setState({ user: null, isAdmin: false, isOperator: false, loading: false });
+        return;
+      }
+      // Avoid duplicate concurrent checks
+      if (checking.current) return;
+      checking.current = true;
+
+      const [adminRes, operatorRes] = await Promise.all([
+        supabase.rpc('has_role', { _user_id: user.id, _role: 'admin' }),
+        supabase.rpc('has_role', { _user_id: user.id, _role: 'operator' }),
       ]);
 
-      const isAdmin = adminResult.data === true;
-      const isOperator = operatorResult.data === true;
-      setHasRole(isAdmin || isOperator);
+      setState({
+        user,
+        isAdmin: adminRes.data === true,
+        isOperator: operatorRes.data === true,
+        loading: false,
+      });
+      checking.current = false;
     };
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-      if (currentUser) {
-        await checkRole(currentUser.id);
-      } else {
-        setHasRole(false);
-      }
-      setLoading(false);
+    // Get session first (faster path)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      resolve(session?.user ?? null);
     });
 
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-      if (currentUser) {
-        await checkRole(currentUser.id);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      // Only re-resolve if state actually changed
+      const newUser = session?.user ?? null;
+      if (newUser?.id !== state.user?.id) {
+        resolve(newUser);
       }
-      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  if (loading) {
+  if (state.loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <RefreshCw className="h-6 w-6 animate-spin text-primary" />
@@ -58,9 +81,13 @@ export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
     );
   }
 
-  if (!user || !hasRole) {
+  if (!state.user || (!state.isAdmin && !state.isOperator)) {
     return <>{fallback}</>;
   }
 
-  return <>{children}</>;
+  return (
+    <ProtectedCtx.Provider value={{ user: state.user, isAdmin: state.isAdmin, isOperator: state.isOperator }}>
+      {children}
+    </ProtectedCtx.Provider>
+  );
 }
