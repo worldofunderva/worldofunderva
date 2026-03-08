@@ -325,7 +325,7 @@ async function checkDatabaseSchema(supabaseUrl: string, serviceKey: string): Pro
         const { count, error: tErr } = await client
           .from(table)
           .select("*", { count: "exact", head: true });
-        tableChecks[table] = tErr ? "error" : `exists:${count ?? 0}`;
+        tableChecks[table] = tErr ? "error" : "exists";
       } catch {
         tableChecks[table] = "missing";
       }
