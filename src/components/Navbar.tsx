@@ -23,6 +23,10 @@ export function Navbar() {
     truncatedAddress, 
     handleConnect,
     disconnect,
+    showConnectModal,
+    closeConnectModal,
+    connectWithConnector,
+    connectors,
   } = useWalletConnection();
   
   useEffect(() => {
@@ -44,7 +48,12 @@ export function Navbar() {
 
   return (
     <>
-      <WalletConnectModal />
+      <WalletConnectModal
+        open={showConnectModal}
+        onClose={closeConnectModal}
+        connectors={connectors}
+        onSelectConnector={connectWithConnector}
+      />
       <nav className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled 

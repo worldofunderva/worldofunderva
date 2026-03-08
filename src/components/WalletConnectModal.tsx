@@ -1,14 +1,19 @@
 import { Wallet, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { useWalletConnection } from '@/hooks/useWalletConnection';
+import { Connector } from 'wagmi';
 
-export function WalletConnectModal() {
-  const { showConnectModal, closeConnectModal, connectWithConnector, connectors } = useWalletConnection();
+interface WalletConnectModalProps {
+  open: boolean;
+  onClose: () => void;
+  connectors: readonly Connector[];
+  onSelectConnector: (index: number) => void;
+}
 
+export function WalletConnectModal({ open, onClose, connectors, onSelectConnector }: WalletConnectModalProps) {
   return (
     <AnimatePresence>
-      {showConnectModal && (
+      {open && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -18,7 +23,7 @@ export function WalletConnectModal() {
           {/* Backdrop */}
           <motion.div 
             className="absolute inset-0 bg-background/80 backdrop-blur-sm"
-            onClick={closeConnectModal}
+            onClick={onClose}
           />
           
           {/* Modal */}
@@ -36,7 +41,7 @@ export function WalletConnectModal() {
                 <h3 className="text-lg font-semibold">Connect Wallet</h3>
               </div>
               <button
-                onClick={closeConnectModal}
+                onClick={onClose}
                 className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
               >
                 <X className="h-5 w-5" />
@@ -50,7 +55,7 @@ export function WalletConnectModal() {
                   key={connector.uid}
                   variant="outline"
                   className="w-full h-12 justify-start gap-3 text-sm font-medium"
-                  onClick={() => connectWithConnector(index)}
+                  onClick={() => onSelectConnector(index)}
                 >
                   {connector.icon && (
                     <img src={connector.icon} alt="" className="h-6 w-6 rounded" />
