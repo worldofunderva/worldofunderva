@@ -14,7 +14,124 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      sentry_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string
+          details: string
+          id: string
+          maintenance_mode_engaged: boolean
+          telegram_sent: boolean
+        }
+        Insert: {
+          alert_type?: string
+          created_at?: string
+          details: string
+          id?: string
+          maintenance_mode_engaged?: boolean
+          telegram_sent?: boolean
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string
+          details?: string
+          id?: string
+          maintenance_mode_engaged?: boolean
+          telegram_sent?: boolean
+        }
+        Relationships: []
+      }
+      sentry_baselines: {
+        Row: {
+          captured_at: string
+          deployment_window_id: string | null
+          description: string | null
+          id: string
+          snapshot: Json
+        }
+        Insert: {
+          captured_at?: string
+          deployment_window_id?: string | null
+          description?: string | null
+          id?: string
+          snapshot: Json
+        }
+        Update: {
+          captured_at?: string
+          deployment_window_id?: string | null
+          description?: string | null
+          id?: string
+          snapshot?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentry_baselines_deployment_window_id_fkey"
+            columns: ["deployment_window_id"]
+            isOneToOne: false
+            referencedRelation: "sentry_deployment_windows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sentry_deployment_windows: {
+        Row: {
+          created_at: string
+          created_by: string
+          ends_at: string
+          id: string
+          label: string
+          starts_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          ends_at: string
+          id?: string
+          label: string
+          starts_at: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          ends_at?: string
+          id?: string
+          label?: string
+          starts_at?: string
+        }
+        Relationships: []
+      }
+      sentry_status: {
+        Row: {
+          id: string
+          last_baseline_id: string | null
+          last_check_at: string | null
+          maintenance_mode: boolean
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          last_baseline_id?: string | null
+          last_check_at?: string | null
+          maintenance_mode?: boolean
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          last_baseline_id?: string | null
+          last_check_at?: string | null
+          maintenance_mode?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentry_status_last_baseline_id_fkey"
+            columns: ["last_baseline_id"]
+            isOneToOne: false
+            referencedRelation: "sentry_baselines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
