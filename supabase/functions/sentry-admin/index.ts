@@ -275,15 +275,33 @@ Deno.serve(async (req) => {
         })
         .eq("resolved", false);
 
+      // Capture a fresh baseline so cron doesn't re-trigger on the same drift
+      const freshSnapshot = await captureServerSnapshot(supabaseUrl, supabaseServiceKey);
+      const { data: newBaseline } = await supabase
+        .from("sentry_baselines")
+        .insert({
+          snapshot: freshSnapshot,
+          description: "Auto-baseline after maintenance disengaged",
+        })
+        .select()
+        .single();
+
+      const now = new Date().toISOString();
+      const statusUpdate: Record<string, unknown> = {
+        maintenance_mode: false,
+        updated_at: now,
+        last_check_at: now,
+      };
+      if (newBaseline) {
+        statusUpdate.last_baseline_id = newBaseline.id;
+      }
+
       const { error } = await supabase
         .from("sentry_status")
-        .update({
-          maintenance_mode: false,
-          updated_at: new Date().toISOString(),
-        })
+        .update(statusUpdate)
         .not("id", "is", null);
       if (error) throw error;
-      return new Response(JSON.stringify({ success: true }), {
+      return new Response(JSON.stringify({ success: true, baseline_id: newBaseline?.id }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
