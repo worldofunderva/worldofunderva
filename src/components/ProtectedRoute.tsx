@@ -15,13 +15,16 @@ export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
 
   useEffect(() => {
     const checkRole = async (userId: string) => {
-      const { data } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', userId)
-        .in('role', ['admin', 'operator']);
+      // Use server-side SECURITY DEFINER function instead of direct table query
+      // This cannot be spoofed by intercepting/modifying network responses
+      const [adminResult, operatorResult] = await Promise.all([
+        supabase.rpc('has_role', { _user_id: userId, _role: 'admin' }),
+        supabase.rpc('has_role', { _user_id: userId, _role: 'operator' }),
+      ]);
 
-      setHasRole(!!(data && data.length > 0));
+      const isAdmin = adminResult.data === true;
+      const isOperator = operatorResult.data === true;
+      setHasRole(isAdmin || isOperator);
     };
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
