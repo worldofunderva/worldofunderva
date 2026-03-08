@@ -241,6 +241,11 @@ Deno.serve(async (req) => {
     }
 
     if (action === "disengage_maintenance") {
+      if (!isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can disengage maintenance mode" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       const { error } = await supabase
         .from("sentry_status")
         .update({
