@@ -98,7 +98,7 @@ export default function SentryAuthPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                minLength={8}
+                minLength={mode === 'signup' ? 8 : 6}
                 className="mt-1"
               />
             </div>
