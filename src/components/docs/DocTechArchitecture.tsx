@@ -20,7 +20,7 @@ const undoAgents = [
   {
     icon: Scan,
     title: 'Scanner Agent',
-    description: 'Conducts real-time blockchain surveillance across all pillar wallets for $WOU transaction activity. Prior to recording any entry in the "Golden Record," the Scanner validates that the transacting wallet holds a Sentinel NFT — ensuring only verified holders are eligible for downstream reward processing by the Calculator Agent.',
+    description: 'Conducts real time blockchain surveillance across all pillar wallets for $WOU transaction activity. Before recording any entry in the "Golden Record," the Scanner validates that the transacting wallet holds a Sentinel NFT, ensuring only verified holders are eligible for downstream reward processing by the Calculator Agent.',
     color: 'text-cyan-400',
     bg: 'bg-cyan-400/10',
   },
@@ -44,8 +44,8 @@ export function DocTechArchitecture() {
   return (
     <div className="space-y-8">
       <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-        A vertically integrated engine combining AI-driven financial oversight with institutional-grade 
-        multi-party computation vaults.
+        A vertically integrated engine combining AI driven financial oversight with institutional grade 
+        multi party computation vaults.
       </p>
 
       {/* Multichain Infrastructure */}

@@ -10,13 +10,13 @@ const channels = [
   {
     icon: Bot,
     title: 'Automated Support',
-    description: 'The Scanner and Calculator agents provide real-time, 24/7 automated support for all account-related queries and distribution verification.',
+    description: 'The Scanner and Calculator agents provide real time, around the clock automated support for all account related queries and distribution verification.',
     highlight: false,
   },
   {
     icon: Users,
-    title: 'Human-in-the-Loop Coordination',
-    description: 'While the system operates autonomously, the human team remains available to review and approve transaction reports, addressing escalations that require oversight beyond protocol capabilities.',
+    title: 'Human in the Loop Coordination',
+    description: 'While the system operates autonomously, the team remains available to review and approve transaction reports, addressing escalations that require oversight beyond protocol capabilities.',
     highlight: false,
   },
 ];

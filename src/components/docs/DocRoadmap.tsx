@@ -36,7 +36,7 @@ const phases: Phase[] = [
     milestones: [
       'Underva Fashion launch',
       'Hybrid Payment integration (Stripe + $WOU)',
-      'Dual-Yield engine activation via UNDO AI agents',
+      'Dual Yield engine activation via UNDO AI agents',
     ],
   },
   {
@@ -81,7 +81,7 @@ export function DocRoadmap() {
   return (
     <div className="space-y-8">
       <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-        A disciplined, multi-year roadmap for complete vertical integration — 
+        A disciplined, multi year roadmap for complete vertical integration — 
         <span className="text-foreground font-medium"> The Decade of Discipline</span>.
       </p>
 

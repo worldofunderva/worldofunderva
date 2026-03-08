@@ -10,11 +10,11 @@ export function DocStoryVision() {
           <h3 className="text-base font-semibold text-foreground">The Origin Story</h3>
         </div>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          World of Underva was founded on the belief that the current crypto-economic landscape lacks the industrial 
-          discipline necessary for long-term sustainability. We observed a persistent failure in models that prioritize 
-          speculative volatility over tangible value. Our solution was to build a system that bridges the digital and 
-          physical worlds — <span className="text-foreground font-medium">Fashion, Stride, and Express</span> — anchored 
-          by verified, autonomous audit protocols.
+          World of Underva was founded on the belief that today's crypto economic landscape lacks the industrial 
+          discipline needed for long term sustainability. We saw a persistent failure in models that prioritize 
+          speculative volatility over tangible value. Our solution was to build a system that bridges digital and 
+          physical worlds through <span className="text-foreground font-medium">Fashion, Stride, and Express</span>, 
+          anchored by verified, autonomous audit protocols.
         </p>
       </div>
 
@@ -25,10 +25,10 @@ export function DocStoryVision() {
           <h3 className="text-base font-semibold text-foreground">Our Vision</h3>
         </div>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          We envision a future where digital ownership is a gateway to exclusive, real-world value. Our mission is to 
-          facilitate a self-sustaining ecosystem where industrial excellence and blockchain integrity are not just goals, 
-          but the foundation of every transaction. We aim to prove that when you combine high-end commerce with rigorous, 
-          AI-verified governance, you create a standard of institutional stewardship that transcends traditional crypto models.
+          We envision a future where digital ownership unlocks exclusive, real world value. Our mission is to 
+          build a self-sustaining ecosystem where industrial excellence and blockchain integrity form the foundation 
+          of every transaction. We aim to prove that combining high end commerce with rigorous, AI verified governance 
+          creates a standard of institutional stewardship that goes beyond traditional crypto models.
         </p>
       </div>
     </div>

@@ -23,7 +23,7 @@ export function DocLegalSuccession() {
                 <p className="text-sm font-semibold text-foreground mb-1">Asset Integrity</p>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   The Sentinel NFT functions as a legally recognized bearer instrument. All rights, perks, and 
-                  ecosystem benefits are inextricably linked to the NFT holder of record.
+                  ecosystem benefits are linked to the NFT holder of record.
                 </p>
               </div>
             </div>
@@ -51,7 +51,7 @@ export function DocLegalSuccession() {
                 <p className="text-sm font-semibold text-foreground mb-1">Enforcement</p>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   The smart contract architecture serves as the definitive record of ownership. Legal succession is 
-                  triggered automatically upon the valid on-chain transfer of the asset, ensuring seamless continuity 
+                  triggered automatically upon valid on-chain transfer of the asset, ensuring seamless continuity 
                   for the new owner within the ecosystem.
                 </p>
               </div>
@@ -72,7 +72,7 @@ export function DocLegalSuccession() {
             <div>
               <span className="font-medium text-foreground">Payment Logging:</span>{' '}
               <span className="text-muted-foreground">
-                The UNDO AI protocol is responsible for scanning and logging all payments.
+                The UNDO AI protocol is responsible for scanning and logging all payments across the ecosystem.
               </span>
             </div>
           </div>
@@ -81,7 +81,7 @@ export function DocLegalSuccession() {
             <div>
               <span className="font-medium text-foreground">Monthly & Semi-Annual Audit:</span>{' '}
               <span className="text-muted-foreground">
-                The AI is in charge of logging payments monthly and every 6 months; the teams just approve the transactions.
+                The AI handles payment logging on monthly and semi-annual cycles. The team reviews and approves the final transactions.
               </span>
             </div>
           </div>
