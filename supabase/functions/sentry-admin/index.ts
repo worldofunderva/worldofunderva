@@ -211,7 +211,14 @@ Deno.serve(async (req) => {
     }
 
     if (action === "capture_baseline") {
-      const { snapshot, description, deployment_window_id } = data;
+      if (!isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can capture baselines" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const { description, deployment_window_id } = data;
+      // Generate snapshot server-side to prevent client injection
+      const snapshot = await captureServerSnapshot(supabaseUrl, supabaseServiceKey);
       const { data: baseline, error } = await supabase
         .from("sentry_baselines")
         .insert({ snapshot, description, deployment_window_id })
