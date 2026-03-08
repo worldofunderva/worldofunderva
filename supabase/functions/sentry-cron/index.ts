@@ -3,11 +3,11 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 /**
  * Sentry Cron — automated scanning triggered by pg_cron.
  * Authenticates via SENTRY_CRON_SECRET header (server-to-server).
- * Runs two scan passes ~30 seconds apart to achieve ~30s intervals from a 1-minute cron.
+ * Runs a single scan pass per invocation. Scheduled every minute via two
+ * offset cron jobs for ~30-second effective scan intervals.
  */
 
 Deno.serve(async (req) => {
-  // Only allow POST
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 204 });
   }
@@ -28,16 +28,10 @@ Deno.serve(async (req) => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-  // ─── Run two passes ~30s apart ──────────────────────────────────
-  const result1 = await runScan(supabaseUrl, supabaseServiceKey);
-  
-  // Wait 30 seconds, then run again
-  await new Promise((resolve) => setTimeout(resolve, 30_000));
-  
-  const result2 = await runScan(supabaseUrl, supabaseServiceKey);
+  const result = await runScan(supabaseUrl, supabaseServiceKey);
 
   return new Response(
-    JSON.stringify({ pass1: result1, pass2: result2 }),
+    JSON.stringify(result),
     { status: 200, headers: { "Content-Type": "application/json" } }
   );
 });
