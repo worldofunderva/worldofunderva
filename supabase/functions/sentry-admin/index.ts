@@ -313,7 +313,7 @@ async function captureServerSnapshot(supabaseUrl: string, serviceKey: string): P
       const { count, error } = await client
         .from(table)
         .select("*", { count: "exact", head: true });
-      tableChecks[table] = error ? "error" : `exists:${count ?? 0}`;
+      tableChecks[table] = error ? "error" : "exists";
     } catch {
       tableChecks[table] = "missing";
     }
