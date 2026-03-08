@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
+import { lovable } from '@/integrations/lovable/index';
 import { Shield, LogIn, UserPlus, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
