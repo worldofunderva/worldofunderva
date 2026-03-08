@@ -93,16 +93,37 @@ export default function SentryGuardPage() {
   async function createDeploymentWindow() {
     if (!newWindow.label || !newWindow.starts_at || !newWindow.ends_at) return;
     const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-    // Use edge function to insert (service role)
-    // For now, since RLS is read-only for anon, we invoke via edge function
-    // But we can also just call insert since service role bypasses RLS
-    // For a simple approach, let's use the supabase client with anon key
-    // This won't work with RLS, so we need an edge function for writes
-    // For MVP, let's create a simple write endpoint
-    toast({
-      title: 'Deployment Window Created',
-      description: `Window "${newWindow.label}" registered. Use the Sentry Guard edge function to write data.`,
-    });
+    try {
+      const res = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/sentry-admin`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({
+            action: 'create_window',
+            data: {
+              label: newWindow.label,
+              starts_at: new Date(newWindow.starts_at).toISOString(),
+              ends_at: new Date(newWindow.ends_at).toISOString(),
+            },
+          }),
+        }
+      );
+      if (!res.ok) throw new Error('Failed to create window');
+      toast({ title: 'Deployment Window Created', description: `"${newWindow.label}" registered.` });
+      setShowNewWindow(false);
+      setNewWindow({ label: '', starts_at: '', ends_at: '' });
+      await fetchData();
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: err instanceof Error ? err.message : 'Unknown error',
+        variant: 'destructive',
+      });
+    }
     setShowNewWindow(false);
     setNewWindow({ label: '', starts_at: '', ends_at: '' });
   }
