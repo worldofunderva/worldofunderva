@@ -290,8 +290,8 @@ export default function SentryGuardPage() {
           )}
         </Card>
 
-        {/* Team Members & Access Log */}
-        <TeamMembers />
+        {/* Team Members & Access Log - Admin only */}
+        {isAdmin && <TeamMembers />}
 
         {/* Alert Log */}
         <Card className="p-4 sm:p-6 border-primary/10">
