@@ -23,6 +23,8 @@ interface SentryAlertRow {
   details: string;
   maintenance_mode_engaged: boolean;
   telegram_sent: boolean;
+  resolved: boolean;
+  resolved_at: string | null;
   created_at: string;
 }
 
