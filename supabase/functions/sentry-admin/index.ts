@@ -165,8 +165,8 @@ Deno.serve(async (req) => {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      if (role === "admin" && !isAdmin) {
-        return new Response(JSON.stringify({ error: "Forbidden: only admins can manage the admin role" }), {
+      if (!isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can manage roles" }), {
           status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
