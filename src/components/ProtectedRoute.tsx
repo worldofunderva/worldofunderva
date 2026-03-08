@@ -57,17 +57,14 @@ export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
       checking.current = false;
     };
 
-    // Get session first (faster path)
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // Listen first so we don't miss events
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       resolve(session?.user ?? null);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      // Only re-resolve if state actually changed
-      const newUser = session?.user ?? null;
-      if (newUser?.id !== state.user?.id) {
-        resolve(newUser);
-      }
+    // Then get current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      resolve(session?.user ?? null);
     });
 
     return () => subscription.unsubscribe();
