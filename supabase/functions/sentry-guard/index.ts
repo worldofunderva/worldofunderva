@@ -185,41 +185,48 @@ Deno.serve(async (req) => {
       telegram_sent: false,
     };
 
+    console.log("Telegram config check - Token:", telegramToken ? `set (${telegramToken.length} chars)` : "MISSING", "ChatId:", telegramChatId || "MISSING");
+
     if (telegramToken && telegramChatId) {
       const telegramMessage = [
-        "🚨 *[SENTRY ALERT]*",
+        "🚨 <b>[SENTRY ALERT]</b>",
         "",
-        `*Status:* Unauthorized Change Detected`,
-        `*Details:* ${driftDetails}`,
-        `*Action:* Maintenance Mode Engaged`,
+        `<b>Status:</b> Unauthorized Change Detected`,
+        `<b>Details:</b> ${driftDetails.replace(/[<>&]/g, '')}`,
+        `<b>Action:</b> Maintenance Mode Engaged`,
         "",
-        `_Timestamp: ${now}_`,
-        `_Agent: Sentry Guard v2.0_`,
+        `<i>Timestamp: ${now}</i>`,
+        `<i>Agent: Sentry Guard v2.0</i>`,
       ].join("\n");
 
       try {
         console.log("Sending Telegram alert to chat:", telegramChatId);
-        const tgResponse = await fetch(
-          `https://api.telegram.org/bot${telegramToken}/sendMessage`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              chat_id: telegramChatId,
-              text: telegramMessage,
-              parse_mode: "Markdown",
-            }),
+        const tgUrl = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
+        console.log("Telegram URL:", tgUrl.replace(telegramToken, "***"));
+        const tgResponse = await fetch(tgUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: telegramChatId,
+            text: telegramMessage,
+            parse_mode: "HTML",
+          }),
+        });
+        const tgText = await tgResponse.text();
+        console.log("Telegram raw response:", tgText);
+        try {
+          const tgResult = JSON.parse(tgText);
+          if (tgResult.ok) {
+            alertRecord.telegram_sent = true;
+            console.log("Telegram alert sent successfully");
+          } else {
+            console.error("Telegram API error:", tgResult.description || tgText);
           }
-        );
-        const tgResult = await tgResponse.json();
-        console.log("Telegram response:", JSON.stringify(tgResult));
-        if (tgResult.ok) {
-          alertRecord.telegram_sent = true;
-        } else {
-          console.error("Telegram API error:", tgResult.description || JSON.stringify(tgResult));
+        } catch {
+          console.error("Failed to parse Telegram response:", tgText);
         }
       } catch (tgError) {
-        console.error("Telegram notification failed:", tgError);
+        console.error("Telegram fetch failed:", String(tgError));
       }
     } else {
       console.warn("Telegram not configured. Token present:", !!telegramToken, "ChatId present:", !!telegramChatId);
