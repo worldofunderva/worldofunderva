@@ -272,6 +272,24 @@ export default function SentryGuardPage() {
               </p>
             </div>
           </div>
+          {/* Disengage button for admin when in maintenance */}
+          {status?.maintenance_mode && isAdmin && (
+            <div className="mt-4 pt-4 border-t border-destructive/20">
+              <Button
+                onClick={disengageMaintenanceAndRebaseline}
+                disabled={disengaging}
+                variant="outline"
+                size="sm"
+                className="border-emerald-500/50 text-emerald-500 hover:bg-emerald-500/10"
+              >
+                <CheckCircle className={`h-4 w-4 mr-1.5 ${disengaging ? 'animate-spin' : ''}`} />
+                {disengaging ? 'Resolving...' : 'Mark as Resolved & Re-baseline'}
+              </Button>
+              <p className="text-xs text-muted-foreground mt-2">
+                Captures a fresh baseline from current state and disengages maintenance mode.
+              </p>
+            </div>
+          )}
         </Card>
 
         {/* Deployment Windows */}
