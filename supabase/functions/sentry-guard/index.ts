@@ -4,11 +4,14 @@ function getCorsHeaders(req: Request): Record<string, string> {
   const origin = req.headers.get("Origin") || "";
   const allowedRaw = Deno.env.get("ALLOWED_ORIGINS") || "";
   const allowedOrigins = allowedRaw.split(",").map((s) => s.trim()).filter(Boolean);
-  const isAllowed = allowedOrigins.includes(origin);
+  // Allow Lovable preview/project origins dynamically
+  const isLovableOrigin = origin.endsWith(".lovableproject.com") || origin.endsWith(".lovable.app");
+  const isAllowed = isLovableOrigin || allowedOrigins.includes(origin);
   return {
-    "Access-Control-Allow-Origin": isAllowed ? origin : allowedOrigins[0] || "",
+    "Access-Control-Allow-Origin": isAllowed ? origin : "",
     "Access-Control-Allow-Headers":
       "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Vary": "Origin",
   };
 }
