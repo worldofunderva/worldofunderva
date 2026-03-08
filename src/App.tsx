@@ -10,6 +10,7 @@ import { useWalletSessionPolicy } from '@/hooks/useWalletSessionPolicy';
 import { NetworkWarningBanner } from '@/components/NetworkWarningBanner';
 import Index from './pages/Index';
 import DocsPage from './pages/Docs';
+import SentryGuardPage from './pages/SentryGuard';
 import NotFound from './pages/NotFound';
 
 function WalletSecurityManager() {
