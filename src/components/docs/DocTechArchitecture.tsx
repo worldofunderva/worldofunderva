@@ -20,7 +20,7 @@ const undoAgents = [
   {
     icon: Scan,
     title: 'Scanner Agent',
-    description: 'Performs real-time ingestion of commercial and blockchain activity. It logs every transaction — whether fiat or crypto — into the "Golden Record," ensuring no movement of value goes unrecorded.',
+    description: 'Performs real-time ingestion of blockchain activity for $WOU transactions. It logs every on-chain movement into the "Golden Record," ensuring no transaction goes unrecorded. Note: The Scanner Agent monitors blockchain activity only and does not scan for fiat payments.',
     color: 'text-cyan-400',
     bg: 'bg-cyan-400/10',
   },
