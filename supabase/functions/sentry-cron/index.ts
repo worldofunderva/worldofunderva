@@ -55,14 +55,16 @@ async function runScan(
   try {
     const now = new Date().toISOString();
 
-    // Check for active deployment windows
+    // Check for active deployment windows — skip entirely if one is active
     const { data: activeWindows } = await supabase
       .from("sentry_deployment_windows")
       .select("*")
       .lte("starts_at", now)
       .gte("ends_at", now);
 
-    const isDeploymentWindow = activeWindows && activeWindows.length > 0;
+    if (activeWindows && activeWindows.length > 0) {
+      return { status: "paused", message: `Deployment window "${activeWindows[0].label}" active. Scanning paused.` };
+    }
 
     // Get current status + baseline
     const { data: status } = await supabase
@@ -81,32 +83,6 @@ async function runScan(
 
     // Capture current snapshot
     const currentSnapshot = await captureCurrentSnapshot(supabaseUrl, serviceKey);
-
-    // During deployment window: auto-update baseline
-    if (isDeploymentWindow) {
-      const { data: newBaseline } = await supabase
-        .from("sentry_baselines")
-        .insert({
-          snapshot: currentSnapshot,
-          description: `Auto-captured during deployment window: ${activeWindows[0].label}`,
-          deployment_window_id: activeWindows[0].id,
-        })
-        .select()
-        .single();
-
-      if (newBaseline) {
-        await supabase
-          .from("sentry_status")
-          .update({
-            last_baseline_id: newBaseline.id,
-            last_check_at: now,
-            updated_at: now,
-          })
-          .eq("id", status.id);
-      }
-
-      return { status: "ok", message: "Deployment window active. Baseline updated.", window: activeWindows[0].label };
-    }
 
     const baseline = status.sentry_baselines;
     if (!baseline) {

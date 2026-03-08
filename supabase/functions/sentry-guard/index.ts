@@ -68,13 +68,25 @@ Deno.serve(async (req) => {
 
   try {
     const now = new Date().toISOString();
+
+    // Check for active deployment windows — if one is active, skip scanning entirely
     const { data: activeWindows } = await supabase
       .from("sentry_deployment_windows")
       .select("*")
       .lte("starts_at", now)
       .gte("ends_at", now);
 
-    const isDeploymentWindow = activeWindows && activeWindows.length > 0;
+    if (activeWindows && activeWindows.length > 0) {
+      return new Response(
+        JSON.stringify({
+          status: "paused",
+          message: `Sentry Guard is paused. Deployment window "${activeWindows[0].label}" is active. Scanning will resume when the window closes.`,
+          window: activeWindows[0].label,
+          ends_at: activeWindows[0].ends_at,
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     const { data: status } = await supabase
       .from("sentry_status")
@@ -90,38 +102,6 @@ Deno.serve(async (req) => {
 
     // Capture current state with real checks
     const currentSnapshot = await captureCurrentSnapshot(supabaseUrl, supabaseServiceKey);
-
-    if (isDeploymentWindow) {
-      const { data: newBaseline } = await supabase
-        .from("sentry_baselines")
-        .insert({
-          snapshot: currentSnapshot,
-          description: `Auto-captured during deployment window: ${activeWindows[0].label}`,
-          deployment_window_id: activeWindows[0].id,
-        })
-        .select()
-        .single();
-
-      if (newBaseline) {
-        await supabase
-          .from("sentry_status")
-          .update({
-            last_baseline_id: newBaseline.id,
-            last_check_at: now,
-            updated_at: now,
-          })
-          .eq("id", status.id);
-      }
-
-      return new Response(
-        JSON.stringify({
-          status: "ok",
-          message: "Deployment window active. Baseline updated.",
-          window: activeWindows[0].label,
-        }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
 
     const baseline = status.sentry_baselines;
     if (!baseline) {
