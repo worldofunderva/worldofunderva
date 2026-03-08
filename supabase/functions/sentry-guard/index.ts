@@ -11,10 +11,50 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Authenticate: require a valid user JWT with admin/operator role
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const supabaseAnonKey = Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
   const telegramToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
   const telegramChatId = Deno.env.get("TELEGRAM_CHAT_ID");
+
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return new Response(
+      JSON.stringify({ error: "Unauthorized" }),
+      { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  // Verify JWT
+  const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+    global: { headers: { Authorization: authHeader } },
+  });
+  const token = authHeader.replace("Bearer ", "");
+  const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(token);
+  if (claimsError || !claimsData?.claims) {
+    return new Response(
+      JSON.stringify({ error: "Unauthorized: invalid token" }),
+      { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  const userId = claimsData.claims.sub;
+
+  // Verify operator or admin role
+  const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
+  const { data: roles } = await serviceClient
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId);
+
+  const userRoles = (roles || []).map((r: { role: string }) => r.role);
+  if (!userRoles.includes("operator") && !userRoles.includes("admin")) {
+    return new Response(
+      JSON.stringify({ error: "Forbidden: insufficient privileges" }),
+      { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
 
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
