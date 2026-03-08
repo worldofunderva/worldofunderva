@@ -49,7 +49,8 @@ Deno.serve(async (req) => {
     .eq("user_id", userId);
 
   const userRoles = (roles || []).map((r: { role: string }) => r.role);
-  const isAuthorized = userRoles.includes("operator") || userRoles.includes("admin");
+  const isAdmin = userRoles.includes("admin");
+  const isAuthorized = userRoles.includes("operator") || isAdmin;
 
   if (!isAuthorized) {
     return new Response(
@@ -97,8 +98,16 @@ Deno.serve(async (req) => {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+      // Prevent operators from banning admins
+      const { data: targetRoles } = await supabase.from("user_roles").select("role").eq("user_id", user_id);
+      const isTargetAdmin = (targetRoles || []).some((r: { role: string }) => r.role === "admin");
+      if (isTargetAdmin && !isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can action admin accounts" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       const { error } = await supabase.auth.admin.updateUserById(user_id, {
-        ban_duration: "876000h", // ~100 years
+        ban_duration: "876000h",
       });
       if (error) throw error;
       return new Response(JSON.stringify({ success: true }), {
@@ -124,6 +133,14 @@ Deno.serve(async (req) => {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+      // Prevent operators from deleting admins
+      const { data: targetRolesD } = await supabase.from("user_roles").select("role").eq("user_id", user_id);
+      const isTargetAdminD = (targetRolesD || []).some((r: { role: string }) => r.role === "admin");
+      if (isTargetAdminD && !isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can action admin accounts" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       const { error } = await supabase.auth.admin.deleteUser(user_id);
       if (error) throw error;
       return new Response(JSON.stringify({ success: true }), {
@@ -136,6 +153,12 @@ Deno.serve(async (req) => {
       if (!["admin", "operator"].includes(role)) {
         return new Response(JSON.stringify({ error: "Invalid role" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      // Only admins can grant or revoke the admin role
+      if (role === "admin" && !isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can manage the admin role" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (grant) {
