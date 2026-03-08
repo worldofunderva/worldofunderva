@@ -147,22 +147,23 @@ export default function SentryGuardPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6 sm:space-y-8">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary">
-              <Shield className="h-6 w-6" />
+            <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-primary/15 text-primary shrink-0">
+              <Shield className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <div>
-              <h1 className="text-xl font-bold">Sentry Guard</h1>
-              <p className="text-sm text-muted-foreground">Frontend Infrastructure & Integrity Auditor</p>
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-xl font-bold">Sentry Guard</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground truncate">Frontend Infrastructure & Integrity Auditor</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 self-end sm:self-auto">
             <Button onClick={triggerManualCheck} disabled={running} size="sm">
-              <RefreshCw className={`h-4 w-4 mr-2 ${running ? 'animate-spin' : ''}`} />
-              {running ? 'Scanning...' : 'Run Check'}
+              <RefreshCw className={`h-4 w-4 mr-1.5 ${running ? 'animate-spin' : ''}`} />
+              <span className="hidden xs:inline">{running ? 'Scanning...' : 'Run Check'}</span>
+              <span className="xs:hidden">{running ? '...' : 'Scan'}</span>
             </Button>
             <Button
               variant="outline"
@@ -178,14 +179,14 @@ export default function SentryGuardPage() {
         </div>
 
         {/* System Status */}
-        <Card className="p-6 border-primary/20">
-          <h2 className="text-sm font-semibold mb-4">System Status</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Card className="p-4 sm:p-6 border-primary/20">
+          <h2 className="text-sm font-semibold mb-3 sm:mb-4">System Status</h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="flex items-center gap-3">
               {status?.maintenance_mode ? (
-                <AlertTriangle className="h-5 w-5 text-destructive" />
+                <AlertTriangle className="h-5 w-5 text-destructive shrink-0" />
               ) : (
-                <CheckCircle className="h-5 w-5 text-emerald-500" />
+                <CheckCircle className="h-5 w-5 text-emerald-500 shrink-0" />
               )}
               <div>
                 <p className="text-xs text-muted-foreground">Mode</p>
@@ -195,17 +196,17 @@ export default function SentryGuardPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Clock className="h-5 w-5 text-muted-foreground" />
-              <div>
+              <Clock className="h-5 w-5 text-muted-foreground shrink-0" />
+              <div className="min-w-0">
                 <p className="text-xs text-muted-foreground">Last Check</p>
-                <p className="text-sm font-medium">
+                <p className="text-sm font-medium truncate">
                   {status?.last_check_at
                     ? new Date(status.last_check_at).toLocaleString()
                     : 'Never'}
                 </p>
               </div>
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-xs text-muted-foreground">Baseline ID</p>
               <p className="text-xs font-mono text-muted-foreground truncate">
                 {status?.last_baseline_id || 'No baseline'}
@@ -215,16 +216,18 @@ export default function SentryGuardPage() {
         </Card>
 
         {/* Deployment Windows */}
-        <Card className="p-6 border-primary/10">
-          <div className="flex items-center justify-between mb-4">
+        <Card className="p-4 sm:p-6 border-primary/10">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
             <h2 className="text-sm font-semibold">Deployment Windows</h2>
             <Button variant="outline" size="sm" onClick={() => setShowNewWindow(!showNewWindow)}>
-              <Plus className="h-4 w-4 mr-1" /> New Window
+              <Plus className="h-4 w-4 mr-1" />
+              <span className="hidden sm:inline">New Window</span>
+              <span className="sm:hidden">New</span>
             </Button>
           </div>
 
           {showNewWindow && (
-            <div className="mb-4 p-4 rounded-lg border border-primary/10 bg-secondary/20 space-y-3">
+            <div className="mb-4 p-3 sm:p-4 rounded-lg border border-primary/10 bg-secondary/20 space-y-3">
               <div>
                 <Label className="text-xs">Label</Label>
                 <Input
@@ -234,7 +237,7 @@ export default function SentryGuardPage() {
                   className="mt-1"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs">Start</Label>
                   <Input
@@ -263,14 +266,14 @@ export default function SentryGuardPage() {
           ) : (
             <div className="space-y-2">
               {windows.map((w) => (
-                <div key={w.id} className="flex items-center justify-between rounded-lg border border-primary/10 bg-secondary/20 p-3">
-                  <div>
+                <div key={w.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg border border-primary/10 bg-secondary/20 p-3">
+                  <div className="min-w-0">
                     <p className="text-sm font-medium">{w.label}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-muted-foreground break-words">
                       {new Date(w.starts_at).toLocaleString()} — {new Date(w.ends_at).toLocaleString()}
                     </p>
                   </div>
-                  <Badge variant="outline" className="text-xs">{w.created_by}</Badge>
+                  <Badge variant="outline" className="text-xs self-start sm:self-auto shrink-0">{w.created_by}</Badge>
                 </div>
               ))}
             </div>
@@ -281,22 +284,22 @@ export default function SentryGuardPage() {
         <TeamMembers />
 
         {/* Alert Log */}
-        <Card className="p-6 border-primary/10">
-          <h2 className="text-sm font-semibold mb-4">Alert Log</h2>
+        <Card className="p-4 sm:p-6 border-primary/10">
+          <h2 className="text-sm font-semibold mb-3 sm:mb-4">Alert Log</h2>
           {alerts.length === 0 ? (
             <p className="text-sm text-muted-foreground">No alerts recorded. System is clean.</p>
           ) : (
             <div className="space-y-2">
               {alerts.map((a) => (
                 <div key={a.id} className="rounded-lg border border-destructive/20 bg-destructive/5 p-3">
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-1">
                     <div className="flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-destructive" />
+                      <AlertTriangle className="h-4 w-4 text-destructive shrink-0" />
                       <span className="text-sm font-semibold text-destructive">
                         {a.alert_type.replace('_', ' ').toUpperCase()}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 ml-6 sm:ml-0">
                       {a.telegram_sent && (
                         <Badge variant="outline" className="text-xs">Telegram Sent</Badge>
                       )}
@@ -305,7 +308,7 @@ export default function SentryGuardPage() {
                       </span>
                     </div>
                   </div>
-                  <p className="text-xs text-muted-foreground">{a.details}</p>
+                  <p className="text-xs text-muted-foreground ml-6 sm:ml-0">{a.details}</p>
                 </div>
               ))}
             </div>
@@ -313,7 +316,7 @@ export default function SentryGuardPage() {
         </Card>
 
         {/* Scope Notice */}
-        <div className="text-center text-xs text-muted-foreground py-4 border-t border-primary/5">
+        <div className="text-center text-xs text-muted-foreground py-4 border-t border-primary/5 px-2">
           Sentry Guard is strictly infrastructure focused. It operates independently of financial ledger processes and external AI agents.
         </div>
       </div>

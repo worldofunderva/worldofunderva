@@ -17,14 +17,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 
 interface Member {
   id: string;
@@ -57,6 +49,94 @@ async function callAdmin(action: string, data: Record<string, unknown> = {}) {
   const json = await res.json();
   if (!res.ok) throw new Error(json.error || 'Request failed');
   return json;
+}
+
+function MemberCard({ member, actionLoading, onBan, onDelete, onRoleToggle }: {
+  member: Member;
+  actionLoading: string | null;
+  onBan: (userId: string, ban: boolean) => void;
+  onDelete: (userId: string) => void;
+  onRoleToggle: (userId: string, role: string, grant: boolean) => void;
+}) {
+  const isLoading = actionLoading === member.id;
+
+  return (
+    <div className={`rounded-lg border border-primary/10 bg-secondary/10 p-3 space-y-3 ${member.banned ? 'opacity-60' : ''}`}>
+      {/* Top row: name + status */}
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-sm font-medium truncate">{member.display_name}</p>
+          <p className="text-xs text-muted-foreground truncate">{member.email}</p>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          {member.banned ? (
+            <Badge variant="destructive" className="text-xs">Banned</Badge>
+          ) : (
+            <Badge variant="secondary" className="text-xs">Active</Badge>
+          )}
+          <Badge variant="outline" className="text-xs capitalize">{member.provider}</Badge>
+        </div>
+      </div>
+
+      {/* Middle row: roles + dates */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+        <div className="flex items-center gap-3">
+          {AVAILABLE_ROLES.map((role) => (
+            <label key={role} className="flex items-center gap-1 cursor-pointer">
+              <Checkbox
+                checked={member.roles.includes(role)}
+                disabled={isLoading}
+                onCheckedChange={(checked) => onRoleToggle(member.id, role, !!checked)}
+              />
+              <span className="capitalize">{role}</span>
+            </label>
+          ))}
+        </div>
+        <span>Joined {new Date(member.created_at).toLocaleDateString()}</span>
+        <span>Last in: {member.last_sign_in_at ? new Date(member.last_sign_in_at).toLocaleDateString() : 'Never'}</span>
+      </div>
+
+      {/* Bottom row: actions */}
+      <div className="flex items-center gap-1 pt-1 border-t border-primary/5">
+        <Button
+          variant="ghost"
+          size="sm"
+          disabled={isLoading}
+          onClick={() => onBan(member.id, !member.banned)}
+          className="h-7 text-xs gap-1"
+        >
+          {member.banned ? <ShieldCheck className="h-3.5 w-3.5 text-primary" /> : <Ban className="h-3.5 w-3.5 text-destructive" />}
+          {member.banned ? 'Unban' : 'Ban'}
+        </Button>
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="ghost" size="sm" disabled={isLoading} className="h-7 text-xs gap-1 text-destructive hover:text-destructive">
+              <Trash2 className="h-3.5 w-3.5" />
+              Delete
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent className="mx-4 max-w-sm">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete User</AlertDialogTitle>
+              <AlertDialogDescription>
+                Permanently delete <strong>{member.email}</strong>? This removes their login credentials and all access. This cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => onDelete(member.id)}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Delete Permanently
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+    </div>
+  );
 }
 
 export default function TeamMembers() {
@@ -114,11 +194,11 @@ export default function TeamMembers() {
   }
 
   return (
-    <Card className="p-6 border-primary/10">
-      <div className="flex items-center justify-between mb-4">
+    <Card className="p-4 sm:p-6 border-primary/10">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div className="flex items-center gap-2">
           <Users className="h-4 w-4 text-primary" />
-          <h2 className="text-sm font-semibold">Team Members & Access Log</h2>
+          <h2 className="text-sm font-semibold">Team Members</h2>
         </div>
         <Button variant="outline" size="sm" onClick={fetchMembers} disabled={loading}>
           <RefreshCw className={`h-3 w-3 mr-1 ${loading ? 'animate-spin' : ''}`} />
@@ -133,102 +213,17 @@ export default function TeamMembers() {
       ) : members.length === 0 ? (
         <p className="text-sm text-muted-foreground">No members found.</p>
       ) : (
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Member</TableHead>
-                <TableHead>Provider</TableHead>
-                <TableHead>Roles</TableHead>
-                <TableHead>Joined</TableHead>
-                <TableHead>Last Sign In</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {members.map((m) => (
-                <TableRow key={m.id} className={m.banned ? 'opacity-60' : ''}>
-                  <TableCell>
-                    <div>
-                      <p className="text-sm font-medium">{m.display_name}</p>
-                      <p className="text-xs text-muted-foreground">{m.email}</p>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="text-xs capitalize">{m.provider}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col gap-1.5">
-                      {AVAILABLE_ROLES.map((role) => (
-                        <label key={role} className="flex items-center gap-1.5 cursor-pointer">
-                          <Checkbox
-                            checked={m.roles.includes(role)}
-                            disabled={actionLoading === m.id}
-                            onCheckedChange={(checked) => handleRoleToggle(m.id, role, !!checked)}
-                          />
-                          <span className="text-xs capitalize">{role}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">
-                    {new Date(m.created_at).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">
-                    {m.last_sign_in_at
-                      ? new Date(m.last_sign_in_at).toLocaleString()
-                      : 'Never'}
-                  </TableCell>
-                  <TableCell>
-                    {m.banned ? (
-                      <Badge variant="destructive" className="text-xs">Banned</Badge>
-                    ) : (
-                      <Badge variant="secondary" className="text-xs">Active</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        disabled={actionLoading === m.id}
-                        onClick={() => handleBan(m.id, !m.banned)}
-                        title={m.banned ? 'Unban user' : 'Ban user'}
-                      >
-                        {m.banned ? <ShieldCheck className="h-4 w-4 text-primary" /> : <Ban className="h-4 w-4 text-destructive" />}
-                      </Button>
-
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="ghost" size="sm" disabled={actionLoading === m.id} title="Delete user">
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Delete User</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Permanently delete <strong>{m.email}</strong>? This removes their login credentials and all access. This cannot be undone.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDelete(m.id)}
-                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                            >
-                              Delete Permanently
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+        <div className="space-y-3">
+          {members.map((m) => (
+            <MemberCard
+              key={m.id}
+              member={m}
+              actionLoading={actionLoading}
+              onBan={handleBan}
+              onDelete={handleDelete}
+              onRoleToggle={handleRoleToggle}
+            />
+          ))}
         </div>
       )}
     </Card>
