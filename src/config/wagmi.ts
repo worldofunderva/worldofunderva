@@ -1,19 +1,13 @@
-import { createConfig, createStorage, http } from 'wagmi';
+import { http } from 'wagmi';
 import { base } from 'wagmi/chains';
-import { injected, walletConnect, coinbaseWallet } from 'wagmi/connectors';
+import { createConfig } from '@privy-io/wagmi';
 
 /**
- * World of Underva - Strict Base-Only Configuration
+ * World of Underva - Privy + Wagmi Configuration
  * 
- * Uses wagmi native connectors only.
- * - ONLY Base chain supported
- * - Session storage only (cleared on tab close)
- * - No auto-reconnect on page refresh
+ * Uses @privy-io/wagmi createConfig (no connectors needed — Privy handles those).
+ * ONLY Base chain supported.
  */
-
-const sessionStorageConfig = createStorage({
-  storage: typeof window !== 'undefined' ? window.sessionStorage : undefined,
-});
 
 const optimizedBase = {
   ...base,
@@ -28,21 +22,8 @@ const optimizedBase = {
   },
 } as const;
 
-const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID ?? '';
-if (!projectId) {
-  console.warn('VITE_WALLETCONNECT_PROJECT_ID is not set. WalletConnect will not work until it is configured.');
-}
-
-const connectors = [
-  injected(),
-  coinbaseWallet({ appName: 'World of Underva' }),
-  ...(projectId ? [walletConnect({ projectId })] : []),
-];
-
 export const config = createConfig({
   chains: [optimizedBase],
-  connectors,
-  storage: sessionStorageConfig,
   transports: {
     [base.id]: http(undefined, {
       batch: true,

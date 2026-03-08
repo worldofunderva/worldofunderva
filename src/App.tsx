@@ -1,4 +1,5 @@
-import { WagmiProvider } from 'wagmi';
+import { PrivyProvider } from '@privy-io/react-auth';
+import { WagmiProvider } from '@privy-io/wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
@@ -6,20 +7,15 @@ import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { SentinelProvider } from '@/contexts/SentinelContext';
 import { config } from '@/config/wagmi';
-import { useWalletSessionPolicy } from '@/hooks/useWalletSessionPolicy';
 import { NetworkWarningBanner } from '@/components/NetworkWarningBanner';
 import { MaintenanceGate } from '@/components/MaintenanceGate';
+import { base } from 'wagmi/chains';
 import Index from './pages/Index';
 import DocsPage from './pages/Docs';
 import SentryGuardPage from './pages/SentryGuard';
 import SentryAuthPage from './pages/SentryAuth';
 import NotFound from './pages/NotFound';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
-
-function WalletSecurityManager() {
-  useWalletSessionPolicy();
-  return null;
-}
 
 // Prevent HMR from trying to preserve state
 if (import.meta.hot) {
@@ -41,39 +37,50 @@ const queryClient = new QueryClient({
 });
 
 const App = () => (
-  <WagmiProvider config={config} reconnectOnMount={false}>
+  <PrivyProvider
+    appId="cmmhpeqt600jb0dlbd3erefb4"
+    config={{
+      appearance: {
+        theme: 'dark',
+        accentColor: '#1E90FF',
+      },
+      defaultChain: base,
+      supportedChains: [base],
+    }}
+  >
     <QueryClientProvider client={queryClient}>
-      <WalletSecurityManager />
-      <SentinelProvider>
-        <TooltipProvider>
-          <NetworkWarningBanner />
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              {/* Sentry Guard routes are always accessible (exempt from maintenance) */}
-              <Route path="/sentry-guard" element={
-                <ProtectedRoute fallback={<SentryAuthPage />}>
-                  <SentryGuardPage />
-                </ProtectedRoute>
-              } />
-              {/* All other routes are gated by maintenance mode */}
-              <Route path="*" element={
-                <MaintenanceGate>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/docs" element={<DocsPage />} />
-                    <Route path="/docs/:section" element={<DocsPage />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </MaintenanceGate>
-              } />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </SentinelProvider>
+      <WagmiProvider config={config}>
+        <SentinelProvider>
+          <TooltipProvider>
+            <NetworkWarningBanner />
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                {/* Sentry Guard routes are always accessible (exempt from maintenance) */}
+                <Route path="/sentry-guard" element={
+                  <ProtectedRoute fallback={<SentryAuthPage />}>
+                    <SentryGuardPage />
+                  </ProtectedRoute>
+                } />
+                {/* All other routes are gated by maintenance mode */}
+                <Route path="*" element={
+                  <MaintenanceGate>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/docs" element={<DocsPage />} />
+                      <Route path="/docs/:section" element={<DocsPage />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </MaintenanceGate>
+                } />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </SentinelProvider>
+      </WagmiProvider>
     </QueryClientProvider>
-  </WagmiProvider>
+  </PrivyProvider>
 );
 
 export default App;
