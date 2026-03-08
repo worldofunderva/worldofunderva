@@ -271,6 +271,9 @@ export default function SentryGuardPage() {
           )}
         </Card>
 
+        {/* Team Members & Access Log */}
+        <TeamMembers />
+
         {/* Alert Log */}
         <Card className="p-6 border-primary/10">
           <h2 className="text-sm font-semibold mb-4">Alert Log</h2>
