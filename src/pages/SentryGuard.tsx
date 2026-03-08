@@ -64,6 +64,12 @@ export default function SentryGuardPage() {
   async function triggerManualCheck() {
     setRunning(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        toast({ title: 'Error', description: 'Not authenticated', variant: 'destructive' });
+        setRunning(false);
+        return;
+      }
       const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
       const res = await fetch(
         `https://${projectId}.supabase.co/functions/v1/sentry-guard`,
@@ -71,7 +77,7 @@ export default function SentryGuardPage() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${session.access_token}`,
           },
         }
       );
