@@ -94,13 +94,15 @@ export default function SentryGuardPage() {
     if (!newWindow.label || !newWindow.starts_at || !newWindow.ends_at) return;
     const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) throw new Error('Not authenticated');
       const res = await fetch(
         `https://${projectId}.supabase.co/functions/v1/sentry-admin`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({
             action: 'create_window',

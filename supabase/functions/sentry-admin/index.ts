@@ -3,27 +3,70 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response("ok", { headers: corsHeaders });
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const supabaseAnonKey = Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
+
+  // Authenticate the caller
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return new Response(
+      JSON.stringify({ error: "Unauthorized" }),
+      { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  // Verify JWT and extract user identity
+  const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+    global: { headers: { Authorization: authHeader } },
+  });
+
+  const token = authHeader.replace("Bearer ", "");
+  const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(token);
+  if (claimsError || !claimsData?.claims) {
+    return new Response(
+      JSON.stringify({ error: "Unauthorized: invalid token" }),
+      { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  const userId = claimsData.claims.sub;
+
+  // Verify operator or admin role using service role client
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+  const { data: roles } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId);
+
+  const userRoles = (roles || []).map((r: { role: string }) => r.role);
+  const isAuthorized = userRoles.includes("operator") || userRoles.includes("admin");
+
+  if (!isAuthorized) {
+    return new Response(
+      JSON.stringify({ error: "Forbidden: insufficient privileges" }),
+      { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
 
   try {
     const body = await req.json();
     const { action, data } = body;
 
     if (action === "create_window") {
-      const { label, starts_at, ends_at, created_by } = data;
+      const { label, starts_at, ends_at } = data;
       const { data: result, error } = await supabase
         .from("sentry_deployment_windows")
-        .insert({ label, starts_at, ends_at, created_by: created_by || "admin" })
+        .insert({ label, starts_at, ends_at, created_by: claimsData.claims.email || "operator" })
         .select()
         .single();
 
@@ -43,7 +86,6 @@ Deno.serve(async (req) => {
 
       if (error) throw error;
 
-      // Update status with new baseline
       await supabase
         .from("sentry_status")
         .update({
