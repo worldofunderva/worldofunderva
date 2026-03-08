@@ -155,6 +155,12 @@ Deno.serve(async (req) => {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+      // Only admins can grant or revoke the admin role
+      if (role === "admin" && !isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden: only admins can manage the admin role" }), {
+          status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       if (grant) {
         const { error } = await supabase
           .from("user_roles")
