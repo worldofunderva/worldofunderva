@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Shield, AlertTriangle, CheckCircle, Clock, Plus, RefreshCw } from 'lucide-react';
+import { Shield, AlertTriangle, CheckCircle, Clock, Plus, RefreshCw, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -150,10 +150,22 @@ export default function SentryGuardPage() {
               <p className="text-sm text-muted-foreground">Frontend Infrastructure & Integrity Auditor</p>
             </div>
           </div>
-          <Button onClick={triggerManualCheck} disabled={running} size="sm">
-            <RefreshCw className={`h-4 w-4 mr-2 ${running ? 'animate-spin' : ''}`} />
-            {running ? 'Scanning...' : 'Run Check'}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button onClick={triggerManualCheck} disabled={running} size="sm">
+              <RefreshCw className={`h-4 w-4 mr-2 ${running ? 'animate-spin' : ''}`} />
+              {running ? 'Scanning...' : 'Run Check'}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={async () => {
+                await supabase.auth.signOut();
+                toast({ title: 'Signed out' });
+              }}
+            >
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
         {/* System Status */}
