@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useWalletConnection } from '@/hooks/useWalletConnection';
-import { WalletConnectModal } from '@/components/WalletConnectModal';
 import { Link } from 'react-router-dom';
 
 const navItems = [
