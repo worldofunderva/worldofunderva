@@ -21,10 +21,8 @@ export function useWalletConnection() {
   }, [wagmiDisconnect]);
 
   const handleConnect = useCallback(() => {
-    if (isConnected) return;
-    const c = connectors[0];
-    if (c) connect({ connector: c });
-  }, [isConnected, connectors, connect]);
+    // RainbowKit integration pending wagmi v3 support
+  }, []);
 
   return {
     address,
