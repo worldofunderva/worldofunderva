@@ -44,6 +44,7 @@ export default function SentryGuardPage() {
   const [showNewWindow, setShowNewWindow] = useState(false);
   const [newWindow, setNewWindow] = useState({ label: '', starts_at: '', ends_at: '' });
   const [isAdmin, setIsAdmin] = useState(false);
+  const [disengaging, setDisengaging] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -147,6 +148,54 @@ export default function SentryGuardPage() {
     setNewWindow({ label: '', starts_at: '', ends_at: '' });
   }
 
+  async function disengageMaintenanceAndRebaseline() {
+    setDisengaging(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) throw new Error('Not authenticated');
+      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      };
+
+      // 1. Capture a fresh baseline so future scans match current state
+      const baselineRes = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/sentry-admin`,
+        {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            action: 'capture_baseline',
+            data: { description: 'Post-maintenance baseline after review' },
+          }),
+        }
+      );
+      if (!baselineRes.ok) throw new Error('Failed to capture baseline');
+
+      // 2. Disengage maintenance mode
+      const disengageRes = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/sentry-admin`,
+        {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ action: 'disengage_maintenance', data: {} }),
+        }
+      );
+      if (!disengageRes.ok) throw new Error('Failed to disengage maintenance');
+
+      toast({ title: 'Maintenance Disengaged', description: 'New baseline captured. System is operational.' });
+      await fetchData();
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: err instanceof Error ? err.message : 'Unknown error',
+        variant: 'destructive',
+      });
+    }
+    setDisengaging(false);
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -223,6 +272,24 @@ export default function SentryGuardPage() {
               </p>
             </div>
           </div>
+          {/* Disengage button for admin when in maintenance */}
+          {status?.maintenance_mode && isAdmin && (
+            <div className="mt-4 pt-4 border-t border-destructive/20">
+              <Button
+                onClick={disengageMaintenanceAndRebaseline}
+                disabled={disengaging}
+                variant="outline"
+                size="sm"
+                className="border-emerald-500/50 text-emerald-500 hover:bg-emerald-500/10"
+              >
+                <CheckCircle className={`h-4 w-4 mr-1.5 ${disengaging ? 'animate-spin' : ''}`} />
+                {disengaging ? 'Resolving...' : 'Mark as Resolved & Re-baseline'}
+              </Button>
+              <p className="text-xs text-muted-foreground mt-2">
+                Captures a fresh baseline from current state and disengages maintenance mode.
+              </p>
+            </div>
+          )}
         </Card>
 
         {/* Deployment Windows */}
