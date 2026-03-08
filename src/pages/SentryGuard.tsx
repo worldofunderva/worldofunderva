@@ -7,7 +7,10 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import TeamMembers from '@/components/sentry/TeamMembers';
+import { useProtectedContext } from '@/components/ProtectedRoute';
+import { lazy, Suspense } from 'react';
+
+const TeamMembers = lazy(() => import('@/components/sentry/TeamMembers'));
 
 interface SentryStatusRow {
   id: string;
@@ -38,6 +41,7 @@ interface DeploymentWindowRow {
 }
 
 export default function SentryGuardPage() {
+  const { isAdmin } = useProtectedContext();
   const [status, setStatus] = useState<SentryStatusRow | null>(null);
   const [alerts, setAlerts] = useState<SentryAlertRow[]>([]);
   const [windows, setWindows] = useState<DeploymentWindowRow[]>([]);
@@ -45,21 +49,11 @@ export default function SentryGuardPage() {
   const [running, setRunning] = useState(false);
   const [showNewWindow, setShowNewWindow] = useState(false);
   const [newWindow, setNewWindow] = useState({ label: '', starts_at: '', ends_at: '' });
-  const [isAdmin, setIsAdmin] = useState(false);
   const [disengaging, setDisengaging] = useState(false);
 
   useEffect(() => {
     fetchData();
-    checkAdmin();
   }, []);
-
-  async function checkAdmin() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user) {
-      const { data } = await supabase.rpc('has_role', { _user_id: session.user.id, _role: 'admin' });
-      setIsAdmin(data === true);
-    }
-  }
 
   async function fetchData() {
     setLoading(true);
@@ -161,7 +155,6 @@ export default function SentryGuardPage() {
         Authorization: `Bearer ${session.access_token}`,
       };
 
-      // 1. Capture a fresh baseline so future scans match current state
       const baselineRes = await fetch(
         `https://${projectId}.supabase.co/functions/v1/sentry-admin`,
         {
@@ -175,7 +168,6 @@ export default function SentryGuardPage() {
       );
       if (!baselineRes.ok) throw new Error('Failed to capture baseline');
 
-      // 2. Disengage maintenance mode
       const disengageRes = await fetch(
         `https://${projectId}.supabase.co/functions/v1/sentry-admin`,
         {
@@ -274,7 +266,6 @@ export default function SentryGuardPage() {
               </p>
             </div>
           </div>
-          {/* Disengage button for admin when in maintenance */}
           {status?.maintenance_mode && isAdmin && (
             <div className="mt-4 pt-4 border-t border-destructive/20">
               <Button
@@ -359,8 +350,16 @@ export default function SentryGuardPage() {
           )}
         </Card>
 
-        {/* Team Members & Access Log - Admin only */}
-        {isAdmin && <TeamMembers />}
+        {/* Team Members & Access Log - Admin only, lazy loaded */}
+        {isAdmin && (
+          <Suspense fallback={
+            <Card className="p-6 border-primary/10 flex items-center justify-center">
+              <RefreshCw className="h-5 w-5 animate-spin text-muted-foreground" />
+            </Card>
+          }>
+            <TeamMembers />
+          </Suspense>
+        )}
 
         {/* Alert Log */}
         <Card className="p-4 sm:p-6 border-primary/10">
