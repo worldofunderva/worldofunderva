@@ -26,11 +26,7 @@ const Maintenance = () => {
           </p>
         </div>
         <p className="text-xs text-muted-foreground">
-          If you are an administrator, access the{' '}
-          <a href="/sentry-guard" className="text-primary underline hover:text-primary/80">
-            Sentry Guard Dashboard
-          </a>{' '}
-          to review and resolve.
+          If you are an administrator, access the Sentry Guard Dashboard to review and resolve.
         </p>
       </div>
     </div>
