@@ -9,6 +9,7 @@ import { SentinelProvider } from '@/contexts/SentinelContext';
 import { config } from '@/config/wagmi';
 import { NetworkWarningBanner } from '@/components/NetworkWarningBanner';
 import { MaintenanceGate } from '@/components/MaintenanceGate';
+import { SessionPolicyEnforcer } from '@/components/SessionPolicyEnforcer';
 import { base } from 'wagmi/chains';
 import Index from './pages/Index';
 import DocsPage from './pages/Docs';
@@ -17,7 +18,6 @@ import SentryAuthPage from './pages/SentryAuth';
 import NotFound from './pages/NotFound';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 
-// Prevent HMR from trying to preserve state
 if (import.meta.hot) {
   import.meta.hot.accept();
 }
@@ -54,18 +54,19 @@ const App = () => (
       <WagmiProvider config={config}>
         <SentinelProvider>
           <TooltipProvider>
+            {/* Enforce session policies (refresh disconnect + 1hr timeout) */}
+            <SessionPolicyEnforcer />
+            {/* Block UI when on wrong network */}
             <NetworkWarningBanner />
             <Toaster />
             <Sonner />
             <BrowserRouter>
               <Routes>
-                {/* Sentry Guard routes are always accessible (exempt from maintenance) */}
                 <Route path="/sentry-guard" element={
                   <ProtectedRoute fallback={<SentryAuthPage />}>
                     <SentryGuardPage />
                   </ProtectedRoute>
                 } />
-                {/* All other routes are gated by maintenance mode */}
                 <Route path="*" element={
                   <MaintenanceGate>
                     <Routes>
