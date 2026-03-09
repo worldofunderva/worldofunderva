@@ -9,6 +9,7 @@ import DocsPage from './pages/Docs';
 import SentryGuardPage from './pages/SentryGuard';
 import SentryAuthPage from './pages/SentryAuth';
 import NotFound from './pages/NotFound';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 if (import.meta.hot) {
@@ -47,6 +48,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/docs" element={<DocsPage />} />
                 <Route path="/docs/:section" element={<DocsPage />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </MaintenanceGate>
