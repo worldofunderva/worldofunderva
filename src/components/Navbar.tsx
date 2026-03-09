@@ -3,7 +3,6 @@ import { Wallet, Menu, X, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { useWalletConnection } from '@/hooks/useWalletConnection';
 import { Link } from 'react-router-dom';
 
 const navItems = [
@@ -16,7 +15,6 @@ const navItems = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isConnected, truncatedAddress, login, logout, isConnecting } = useWalletConnection();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -70,17 +68,10 @@ export function Navbar() {
 
             {/* Wallet Button - Desktop */}
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="hidden lg:flex lg:items-center lg:gap-2">
-              {isConnected ? (
-                <Button variant="wallet-connected" size="sm" onClick={() => logout()} className="gap-2">
-                  <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
-                  {truncatedAddress}
-                </Button>
-              ) : (
-                <Button variant="wallet" size="sm" onClick={() => login()} disabled={isConnecting} className="gap-2">
-                  <Wallet className="h-4 w-4" />
-                  {isConnecting ? 'Connecting...' : 'Connect Wallet'}
-                </Button>
-              )}
+              <Button variant="wallet" size="sm" className="gap-2">
+                <Wallet className="h-4 w-4" />
+                Connect Wallet
+              </Button>
             </motion.div>
 
             {/* Mobile Menu Button */}
@@ -139,17 +130,10 @@ export function Navbar() {
 
                   {/* Wallet Button - Mobile */}
                   <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="pt-4">
-                    {isConnected ? (
-                      <Button variant="wallet-connected" size="lg" onClick={() => { logout(); setIsOpen(false); }} className="w-full gap-2 h-14 text-base">
-                        <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
-                        {truncatedAddress}
-                      </Button>
-                    ) : (
-                      <Button variant="wallet" size="lg" onClick={() => { login(); setIsOpen(false); }} disabled={isConnecting} className="w-full gap-2 h-14 text-base">
-                        <Wallet className="h-5 w-5" />
-                        {isConnecting ? 'Connecting...' : 'Connect Wallet'}
-                      </Button>
-                    )}
+                    <Button variant="wallet" size="lg" onClick={() => setIsOpen(false)} className="w-full gap-2 h-14 text-base">
+                      <Wallet className="h-5 w-5" />
+                      Connect Wallet
+                    </Button>
 
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="flex items-center justify-center gap-6 pt-3 text-xs text-muted-foreground">
                       <span className="flex items-center gap-2">

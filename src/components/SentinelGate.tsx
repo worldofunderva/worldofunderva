@@ -1,19 +1,13 @@
-import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock } from 'lucide-react';
+import { Shield, Check, Sparkles, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useWalletConnection } from '@/hooks/useWalletConnection';
-import { useSentinel } from '@/contexts/SentinelContext';
 import { cn } from '@/lib/utils';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
-import { useEthPrice } from '@/hooks/useEthPrice';
+import { Wallet } from 'lucide-react';
 
 const MINT_PRICE_USD = 500;
 const LIQUIDITY_TRIGGER_THRESHOLD = 2000;
 
 export function SentinelGate() {
-  const { isConnected, login, isConnecting } = useWalletConnection();
-  const { hasSentinelNFT, isCheckingOwnership, isNFTContractReady } = useSentinel();
-  const { ethPrice, getEthEquivalent, isLoading: isPriceLoading } = useEthPrice();
-
   return (
     <section id="sentinel" className="relative py-20 sm:py-28 lg:py-36 overflow-hidden bg-card/40">
       <div className="absolute inset-0 grid-pattern opacity-20" />
@@ -116,20 +110,10 @@ export function SentinelGate() {
           {/* Interactive Card Side */}
           <ScrollReveal variant="fade-left" delay={0.2}>
             <div className="relative">
-              <div className={cn(
-                "rounded-xl sm:rounded-2xl border p-6 sm:p-8 transition-all duration-500",
-                hasSentinelNFT 
-                  ? "border-success/50 bg-success/5 sentinel-glow"
-                  : isConnected
-                    ? "border-warning/50 bg-warning/5"
-                    : "border-primary/10 bg-card"
-              )}>
+              <div className="rounded-xl sm:rounded-2xl border border-primary/10 bg-card p-6 sm:p-8 transition-all duration-500">
                 <div className="flex items-center justify-between mb-6 sm:mb-8">
                   <div className="flex items-center gap-3">
-                    <div className={cn(
-                      "flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl",
-                      hasSentinelNFT ? "bg-success/20 text-success" : "bg-primary/20 text-primary"
-                    )}>
+                    <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-primary/20 text-primary">
                       <Shield className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
                     <div>
@@ -137,63 +121,15 @@ export function SentinelGate() {
                       <p className="text-xs sm:text-sm text-muted-foreground">Fixed Entry Equity</p>
                     </div>
                   </div>
-                  <div className={cn(
-                    "rounded-full px-2.5 sm:px-3 py-1 text-[10px] sm:text-xs font-medium",
-                    isCheckingOwnership
-                      ? "bg-muted text-muted-foreground"
-                      : hasSentinelNFT 
-                        ? "bg-success/20 text-success" 
-                        : "bg-muted text-muted-foreground"
-                  )}>
-                    {isCheckingOwnership ? (
-                      <span className="flex items-center gap-1">
-                        <Loader2 className="h-3 w-3 animate-spin" />
-                        CHECKING
-                      </span>
-                    ) : hasSentinelNFT ? 'ENROLLED' : 'NOT ENROLLED'}
+                  <div className="rounded-full px-2.5 sm:px-3 py-1 text-[10px] sm:text-xs font-medium bg-muted text-muted-foreground">
+                    NOT ENROLLED
                   </div>
                 </div>
 
-                {isConnected && !hasSentinelNFT && !isCheckingOwnership && (
-                  <div className="mb-5 sm:mb-6 rounded-lg border border-warning/30 bg-warning/10 p-4">
-                    <div className="flex items-start gap-3">
-                      <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-warning shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-xs sm:text-sm font-medium text-warning">Disqualified from Rewards</p>
-                        <p className="text-[11px] sm:text-sm text-muted-foreground mt-1">
-                          Your wallet lacks the Sentinel NFT. Mint now to unlock the Dual-Yield Protocol.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {hasSentinelNFT && (
-                  <div className="mb-5 sm:mb-6 rounded-lg border border-success/30 bg-success/10 p-4">
-                    <div className="flex items-start gap-3">
-                      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-success shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-xs sm:text-sm font-medium text-success">Full Access Granted</p>
-                        <p className="text-[11px] sm:text-sm text-muted-foreground mt-1">
-                          You are enrolled in the Sentinel program. All rewards and VIP benefits are active.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
                 <div className="space-y-0 mb-5 sm:mb-6">
                   {[
-                    { 
-                      label: 'Mint Price (Fixed)', 
-                      value: isPriceLoading 
-                        ? '$500 USD (...)' 
-                        : `$500 USD (${getEthEquivalent(MINT_PRICE_USD)} ETH)`,
-                    },
-                    { 
-                      label: 'Remaining', 
-                      value: isNFTContractReady ? '21,000 / 21,000' : '21,000 (Total)'
-                    },
+                    { label: 'Mint Price (Fixed)', value: '$500 USD' },
+                    { label: 'Remaining', value: '21,000 (Total)' },
                     { label: 'Network', value: 'Base L2', highlight: true },
                   ].map((item, index) => (
                     <div 
@@ -211,7 +147,7 @@ export function SentinelGate() {
                     </div>
                   ))}
                   <p className="text-[9px] sm:text-[10px] text-muted-foreground pt-2">
-                    Fixed at $500 USD. ETH updates with market price{ethPrice ? ` ($${ethPrice.toLocaleString()}/ETH)` : ''}.
+                    Fixed at $500 USD. ETH equivalent calculated at time of mint.
                   </p>
                 </div>
 
@@ -231,38 +167,14 @@ export function SentinelGate() {
                 </div>
 
                 {/* Action Button */}
-                {!isConnected ? (
-                  <Button 
-                    variant="sentinel" 
-                    size="lg" 
-                    className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg"
-                    onClick={() => login()}
-                    disabled={isConnecting}
-                  >
-                    <Shield className="h-4 w-4 mr-2" />
-                    {isConnecting ? 'Connecting...' : 'Connect Wallet to Mint'}
-                  </Button>
-                ) : isCheckingOwnership ? (
-                  <Button variant="secondary" size="lg" className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg" disabled>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Checking Ownership
-                  </Button>
-                ) : hasSentinelNFT ? (
-                  <Button variant="secondary" size="lg" className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg" disabled>
-                    <Check className="h-4 w-4 mr-2" />
-                    Already Enrolled
-                  </Button>
-                ) : isNFTContractReady ? (
-                  <Button variant="sentinel" size="lg" className="w-full h-12 sm:h-14 text-sm sm:text-base animate-glow rounded-lg">
-                    <Shield className="h-4 w-4 mr-2" />
-                    Mint Sentinel NFT
-                  </Button>
-                ) : (
-                  <Button variant="secondary" size="lg" className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg" disabled>
-                    <Clock className="h-4 w-4 mr-2" />
-                    Minting Opens Soon
-                  </Button>
-                )}
+                <Button 
+                  variant="sentinel" 
+                  size="lg" 
+                  className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg"
+                >
+                  <Wallet className="h-4 w-4 mr-2" />
+                  Connect Wallet to Mint
+                </Button>
               </div>
             </div>
           </ScrollReveal>

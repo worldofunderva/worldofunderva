@@ -1,12 +1,8 @@
-import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { SentinelProvider } from '@/contexts/SentinelContext';
-import { config } from '@/config/wagmi';
-import { NetworkWarningBanner } from '@/components/NetworkWarningBanner';
 import { MaintenanceGate } from '@/components/MaintenanceGate';
 import Index from './pages/Index';
 import DocsPage from './pages/Docs';
@@ -34,36 +30,31 @@ const queryClient = new QueryClient({
 });
 
 const App = () => (
-  <WagmiProvider config={config}>
-    <QueryClientProvider client={queryClient}>
-      <SentinelProvider>
-        <TooltipProvider>
-          <NetworkWarningBanner />
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/sentry-guard" element={
-                <ProtectedRoute fallback={<SentryAuthPage />}>
-                  <SentryGuardPage />
-                </ProtectedRoute>
-              } />
-              <Route path="*" element={
-                <MaintenanceGate>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/docs" element={<DocsPage />} />
-                    <Route path="/docs/:section" element={<DocsPage />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </MaintenanceGate>
-              } />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </SentinelProvider>
-    </QueryClientProvider>
-  </WagmiProvider>
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/sentry-guard" element={
+            <ProtectedRoute fallback={<SentryAuthPage />}>
+              <SentryGuardPage />
+            </ProtectedRoute>
+          } />
+          <Route path="*" element={
+            <MaintenanceGate>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/docs" element={<DocsPage />} />
+                <Route path="/docs/:section" element={<DocsPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </MaintenanceGate>
+          } />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
 );
 
 export default App;
