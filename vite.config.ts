@@ -19,8 +19,17 @@ export default defineConfig(({ mode, command }) => ({
   },
   build: {
     rollupOptions: {
-      // Treat problematic CJS externals as external to avoid resolution errors
-      external: (id) => id.endsWith('.cjs') && id.includes('?commonjs-external'),
+      plugins: [
+        {
+          name: 'resolve-commonjs-external',
+          resolveId(source) {
+            if (source.includes('?commonjs-external')) {
+              return { id: source, external: true };
+            }
+            return null;
+          },
+        },
+      ],
       onwarn(warning, warn) {
         if (warning.message?.includes('contains an annotation that Rollup cannot interpret')) return;
         if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
