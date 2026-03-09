@@ -48,6 +48,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/docs" element={<DocsPage />} />
                 <Route path="/docs/:section" element={<DocsPage />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </MaintenanceGate>
