@@ -23,7 +23,7 @@ const PrivacyPolicy = () => {
       {/* Content */}
       <main className="mx-auto max-w-4xl px-6 py-16 sm:py-20">
         <h1 className="text-3xl sm:text-4xl font-bold mb-3">Privacy Policy</h1>
-        <p className="text-sm text-muted-foreground mb-12">Last updated: March 9, 2025</p>
+        <p className="text-sm text-muted-foreground mb-12">Last updated: March 9, 2026</p>
 
         <div className="space-y-10 text-sm leading-relaxed text-muted-foreground">
           <section>
@@ -132,7 +132,7 @@ const PrivacyPolicy = () => {
       {/* Minimal footer */}
       <footer className="border-t border-border/50 py-6">
         <div className="mx-auto max-w-4xl px-6 flex items-center justify-between text-xs text-muted-foreground">
-          <p>© 2025 World of Underva. All rights reserved.</p>
+          <p>© 2026 World of Underva. All rights reserved.</p>
           <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
         </div>
       </footer>
