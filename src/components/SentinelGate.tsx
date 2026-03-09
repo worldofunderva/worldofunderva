@@ -1,23 +1,12 @@
-import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock } from 'lucide-react';
+import { Shield, Check, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useWalletConnection } from '@/hooks/useWalletConnection';
-import { useSentinel } from '@/contexts/SentinelContext';
 import { cn } from '@/lib/utils';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
-import { useEthPrice } from '@/hooks/useEthPrice';
 
 const MINT_PRICE_USD = 500;
 const LIQUIDITY_TRIGGER_THRESHOLD = 2000;
 
 export function SentinelGate() {
-  const { isConnected, login } = useWalletConnection();
-  const { hasSentinelNFT, isCheckingOwnership, isNFTContractReady } = useSentinel();
-  const { ethPrice, getEthEquivalent, isLoading: isPriceLoading } = useEthPrice();
-
-  const handleMint = () => {
-    console.log('Mint functionality pending — NFT contract not yet deployed');
-  };
-
   return (
     <section id="sentinel" className="relative py-20 sm:py-28 lg:py-36 overflow-hidden bg-card/40">
       <div className="absolute inset-0 grid-pattern opacity-20" />
@@ -40,7 +29,6 @@ export function SentinelGate() {
           {/* Content Side */}
           <ScrollReveal variant="fade-right">
             <div className="h-full flex flex-col">
-              {/* Perks */}
               <div className="space-y-6 flex-1">
                 {/* Dual-Yield Protocol */}
                 <div className="flex items-start gap-3">
@@ -50,16 +38,16 @@ export function SentinelGate() {
                   <div>
                     <p className="text-xs sm:text-sm font-semibold text-foreground">Dual-Yield Protocol</p>
                     <p className="text-[11px] sm:text-xs text-muted-foreground mt-1.5 leading-relaxed">
-                      The Dual-Yield Protocol is an automated RWA reward engine designed for the 21,000 total supply of the World of Underva. This protocol is divided into two distinct liquidity phases:
+                      The Dual-Yield Protocol is an automated RWA reward engine designed for the 21,000 total supply of the World of Underva.
                     </p>
                     <ul className="mt-2.5 space-y-1.5">
                       <li className="flex items-center gap-2 text-[11px] sm:text-xs text-muted-foreground">
                         <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span><span className="text-foreground font-medium">Monthly Cashback:</span> 2.0% for all Sentinel NFT holders (Origin and Standard)</span>
+                        <span><span className="text-foreground font-medium">Monthly Cashback:</span> 2.0% for all Sentinel NFT holders</span>
                       </li>
                       <li className="flex items-center gap-2 text-[11px] sm:text-xs text-muted-foreground">
                         <Check className="h-3 w-3 text-primary shrink-0" />
-                        <span><span className="text-foreground font-medium">Loyalty Dividend:</span> 5.0% every 6 months, exclusive to Origin Sentinel holders only, based on $WOU token holdings</span>
+                        <span><span className="text-foreground font-medium">Loyalty Dividend:</span> 5.0% every 6 months, exclusive to Origin Sentinel holders</span>
                       </li>
                     </ul>
                   </div>
@@ -113,7 +101,7 @@ export function SentinelGate() {
                       </li>
                       <li className="flex items-center gap-2 text-[11px] sm:text-xs text-muted-foreground">
                         <Check className="h-3 w-3 text-amber-500 shrink-0" />
-                        <span className="text-foreground/80 font-medium">Succession Policy: If the NFT is sold, all rights, perks, and ecosystem benefits transfer in full to the new owner</span>
+                        <span className="text-foreground/80 font-medium">Succession Policy: If the NFT is sold, all rights transfer to the new owner</span>
                       </li>
                     </ul>
                   </div>
@@ -127,19 +115,12 @@ export function SentinelGate() {
             <div className="relative">
               <div className={cn(
                 "rounded-xl sm:rounded-2xl border p-6 sm:p-8 transition-all duration-500",
-                hasSentinelNFT 
-                  ? "border-success/50 bg-success/5 sentinel-glow"
-                  : isConnected
-                    ? "border-warning/50 bg-warning/5"
-                    : "border-primary/10 bg-card"
+                "border-primary/10 bg-card"
               )}>
                 {/* Card Header */}
                 <div className="flex items-center justify-between mb-6 sm:mb-8">
                   <div className="flex items-center gap-3">
-                    <div className={cn(
-                      "flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl",
-                      hasSentinelNFT ? "bg-success/20 text-success" : "bg-primary/20 text-primary"
-                    )}>
+                    <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-primary/20 text-primary">
                       <Shield className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
                     <div>
@@ -147,66 +128,16 @@ export function SentinelGate() {
                       <p className="text-xs sm:text-sm text-muted-foreground">Fixed Entry Equity</p>
                     </div>
                   </div>
-                  <div className={cn(
-                    "rounded-full px-2.5 sm:px-3 py-1 text-[10px] sm:text-xs font-medium",
-                    isCheckingOwnership
-                      ? "bg-muted text-muted-foreground"
-                      : hasSentinelNFT 
-                        ? "bg-success/20 text-success" 
-                        : "bg-muted text-muted-foreground"
-                  )}>
-                    {isCheckingOwnership ? (
-                      <span className="flex items-center gap-1">
-                        <Loader2 className="h-3 w-3 animate-spin" />
-                        CHECKING
-                      </span>
-                    ) : hasSentinelNFT ? 'ENROLLED' : 'NOT ENROLLED'}
+                  <div className="rounded-full px-2.5 sm:px-3 py-1 text-[10px] sm:text-xs font-medium bg-muted text-muted-foreground">
+                    COMING SOON
                   </div>
                 </div>
-
-                {/* Status Display */}
-                {isConnected && !hasSentinelNFT && !isCheckingOwnership && (
-                  <div className="mb-5 sm:mb-6 rounded-lg border border-warning/30 bg-warning/10 p-4">
-                    <div className="flex items-start gap-3">
-                      <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-warning shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-xs sm:text-sm font-medium text-warning">Disqualified from Rewards</p>
-                        <p className="text-[11px] sm:text-sm text-muted-foreground mt-1">
-                          Your wallet lacks the Sentinel NFT. Mint now to unlock the Dual-Yield Protocol.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {hasSentinelNFT && (
-                  <div className="mb-5 sm:mb-6 rounded-lg border border-success/30 bg-success/10 p-4">
-                    <div className="flex items-start gap-3">
-                      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-success shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-xs sm:text-sm font-medium text-success">Full Access Granted</p>
-                        <p className="text-[11px] sm:text-sm text-muted-foreground mt-1">
-                          You are enrolled in the Sentinel program. All rewards and VIP benefits are active.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
 
                 {/* Mint Info */}
                 <div className="space-y-0 mb-5 sm:mb-6">
                   {[
-                    { 
-                      label: 'Mint Price (Fixed)', 
-                      value: isPriceLoading 
-                        ? '$500 USD (...)' 
-                        : `$500 USD (${getEthEquivalent(MINT_PRICE_USD)} ETH)`,
-                      loading: isPriceLoading
-                    },
-                    { 
-                      label: 'Remaining', 
-                      value: isNFTContractReady ? '21,000 / 21,000' : '21,000 (Total)'
-                    },
+                    { label: 'Mint Price (Fixed)', value: `$${MINT_PRICE_USD} USD` },
+                    { label: 'Total Supply', value: '21,000' },
                     { label: 'Network', value: 'Base L2', highlight: true },
                   ].map((item, index) => (
                     <div 
@@ -223,9 +154,6 @@ export function SentinelGate() {
                       )}>{item.value}</span>
                     </div>
                   ))}
-                  <p className="text-[9px] sm:text-[10px] text-muted-foreground pt-2">
-                    Fixed at $500 USD. ETH updates with market price{ethPrice ? ` ($${ethPrice.toLocaleString()}/ETH)` : ''}.
-                  </p>
                 </div>
 
                 {/* Liquidity Trigger */}
@@ -245,37 +173,10 @@ export function SentinelGate() {
                 </div>
 
                 {/* Action Button */}
-                {!isConnected ? (
-                  <Button 
-                    variant="sentinel" 
-                    size="lg" 
-                    className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg"
-                    onClick={() => login()}
-                  >
-                    <Shield className="h-4 w-4 mr-2" />
-                    Connect Wallet to Mint
-                  </Button>
-                ) : isCheckingOwnership ? (
-                  <Button variant="secondary" size="lg" className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg" disabled>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Checking Ownership
-                  </Button>
-                ) : hasSentinelNFT ? (
-                  <Button variant="secondary" size="lg" className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg" disabled>
-                    <Check className="h-4 w-4 mr-2" />
-                    Already Enrolled
-                  </Button>
-                ) : isNFTContractReady ? (
-                  <Button variant="sentinel" size="lg" className="w-full h-12 sm:h-14 text-sm sm:text-base animate-glow rounded-lg" onClick={handleMint}>
-                    <Shield className="h-4 w-4 mr-2" />
-                    Mint Sentinel NFT
-                  </Button>
-                ) : (
-                  <Button variant="secondary" size="lg" className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg" disabled>
-                    <Clock className="h-4 w-4 mr-2" />
-                    Minting Opens Soon
-                  </Button>
-                )}
+                <Button variant="secondary" size="lg" className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg" disabled>
+                  <Clock className="h-4 w-4 mr-2" />
+                  Minting Opens Soon
+                </Button>
               </div>
             </div>
           </ScrollReveal>
