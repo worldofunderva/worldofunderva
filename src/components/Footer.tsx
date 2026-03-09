@@ -153,7 +153,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               </div>
             </div>
             <div className="flex items-center gap-5 text-xs text-muted-foreground">
-              <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
+              <Link to="/terms" className="hover:text-foreground transition-colors">Terms of Service</Link>
               <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
             </div>
           </div>
