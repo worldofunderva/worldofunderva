@@ -11,7 +11,6 @@ export default defineConfig(({ mode, command }) => ({
       overlay: false,
     },
   },
-  // lovable-tagger is a dev-server helper; avoid running it during builds.
   plugins: [react(), command === "serve" && mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
@@ -20,8 +19,9 @@ export default defineConfig(({ mode, command }) => ({
   },
   build: {
     rollupOptions: {
+      // Treat problematic CJS externals as external to avoid resolution errors
+      external: (id) => id.endsWith('.cjs') && id.includes('?commonjs-external'),
       onwarn(warning, warn) {
-        // Suppress Privy annotation warnings that flood the build log
         if (warning.message?.includes('contains an annotation that Rollup cannot interpret')) return;
         if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
         warn(warning);
