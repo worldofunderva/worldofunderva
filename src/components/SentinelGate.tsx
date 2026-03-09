@@ -159,17 +159,26 @@ export function SentinelGate() {
                 <div className="space-y-0 mb-5 sm:mb-6">
                   {[
                     { label: 'Mint Price (Fixed)', value: '$500 USD' },
+                    { label: 'ETH Equivalent', value: loading ? '...' : ethEquivalent ? `≈ ${ethEquivalent} ETH` : 'Unavailable', highlight: false, live: true },
                     { label: 'Remaining', value: '21,000 (Total)' },
                     { label: 'Network', value: 'Base L2', highlight: true },
-                  ].map((item, index) => (
+                  ].map((item, index, arr) => (
                     <div 
                       key={item.label}
                       className={cn(
                         "flex items-center justify-between py-2.5",
-                        index !== 2 && "border-b border-border/50"
+                        index !== arr.length - 1 && "border-b border-border/50"
                       )}
                     >
-                      <span className="text-[11px] sm:text-xs text-muted-foreground">{item.label}</span>
+                      <span className="text-[11px] sm:text-xs text-muted-foreground flex items-center gap-1.5">
+                        {item.label}
+                        {'live' in item && item.live && (
+                          <span className="inline-flex items-center gap-1 text-[9px] text-primary font-medium">
+                            <RefreshCw className={cn("h-2.5 w-2.5", loading && "animate-spin")} />
+                            LIVE
+                          </span>
+                        )}
+                      </span>
                       <span className={cn(
                         "font-mono text-[11px] sm:text-xs font-medium",
                         item.highlight && "text-primary"
@@ -177,7 +186,7 @@ export function SentinelGate() {
                     </div>
                   ))}
                   <p className="text-[9px] sm:text-[10px] text-muted-foreground pt-2">
-                    Fixed at $500 USD. ETH equivalent calculated at time of mint.
+                    Fixed at $500 USD. ETH equivalent updates live via CoinGecko.
                   </p>
                 </div>
 
