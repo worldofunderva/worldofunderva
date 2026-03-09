@@ -170,7 +170,7 @@ export function SentinelGate() {
                 <Button 
                   variant="sentinel" 
                   size="lg" 
-                  className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg"
+                  className="w-full h-12 sm:h-14 text-sm sm:text-base"
                 >
                   <Wallet className="h-4 w-4 mr-2" />
                   Connect Wallet to Mint
