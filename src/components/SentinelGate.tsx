@@ -158,8 +158,7 @@ export function SentinelGate() {
 
                 <div className="space-y-0 mb-5 sm:mb-6">
                   {[
-                    { label: 'Mint Price (Fixed)', value: '$500 USD' },
-                    { label: 'ETH Equivalent', value: loading ? '...' : ethEquivalent ? `≈ ${ethEquivalent} ETH` : 'Unavailable', highlight: false, live: true },
+                    { label: 'Mint Price (Fixed)', value: loading ? '$500 USD' : ethEquivalent ? `$500 USD ≈ ${ethEquivalent} ETH` : '$500 USD', live: true },
                     { label: 'Remaining', value: '21,000 (Total)' },
                     { label: 'Network', value: 'Base L2', highlight: true },
                   ].map((item, index, arr) => (
@@ -173,15 +172,12 @@ export function SentinelGate() {
                       <span className="text-[11px] sm:text-xs text-muted-foreground flex items-center gap-1.5">
                         {item.label}
                         {'live' in item && item.live && (
-                          <span className="inline-flex items-center gap-1 text-[9px] text-primary font-medium">
-                            <RefreshCw className={cn("h-2.5 w-2.5", loading && "animate-spin")} />
-                            LIVE
-                          </span>
+                          <RefreshCw className={cn("h-2.5 w-2.5 text-primary", loading && "animate-spin")} />
                         )}
                       </span>
                       <span className={cn(
                         "font-mono text-[11px] sm:text-xs font-medium",
-                        item.highlight && "text-primary"
+                        'highlight' in item && item.highlight && "text-primary"
                       )}>{item.value}</span>
                     </div>
                   ))}
