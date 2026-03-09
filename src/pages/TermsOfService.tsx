@@ -197,7 +197,7 @@ const TermsOfService = () => {
       {/* Minimal footer */}
       <footer className="border-t border-border/50 py-6">
         <div className="mx-auto max-w-4xl px-6 flex items-center justify-between text-xs text-muted-foreground">
-          <p>© 2025 World of Underva. All rights reserved.</p>
+          <p>© 2026 World of Underva. All rights reserved.</p>
           <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
         </div>
       </footer>
