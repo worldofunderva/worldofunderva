@@ -1,13 +1,43 @@
-import { Shield, Check, Sparkles, Clock } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Shield, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
-import { Wallet } from 'lucide-react';
+import { Wallet, RefreshCw } from 'lucide-react';
 
 const MINT_PRICE_USD = 500;
 const LIQUIDITY_TRIGGER_THRESHOLD = 2000;
 
+function useEthPrice() {
+  const [ethPrice, setEthPrice] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const res = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
+        );
+        const data = await res.json();
+        setEthPrice(data.ethereum?.usd ?? null);
+      } catch (err) {
+        console.error('Failed to fetch ETH price:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPrice();
+    const interval = setInterval(fetchPrice, 60000); // refresh every 60s
+    return () => clearInterval(interval);
+  }, []);
+
+  return { ethPrice, loading };
+}
+
 export function SentinelGate() {
+  const { ethPrice, loading } = useEthPrice();
+  const ethEquivalent = ethPrice ? (MINT_PRICE_USD / ethPrice).toFixed(4) : null;
   return (
     <section id="sentinel" className="relative py-20 sm:py-28 lg:py-36 overflow-hidden bg-card/40">
       <div className="absolute inset-0 grid-pattern opacity-20" />
