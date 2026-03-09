@@ -9,6 +9,7 @@ import DocsPage from './pages/Docs';
 import SentryGuardPage from './pages/SentryGuard';
 import SentryAuthPage from './pages/SentryAuth';
 import NotFound from './pages/NotFound';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 if (import.meta.hot) {
