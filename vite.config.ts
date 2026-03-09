@@ -19,19 +19,7 @@ export default defineConfig(({ mode, command }) => ({
   },
   build: {
     rollupOptions: {
-      plugins: [
-        {
-          name: 'resolve-commonjs-external',
-          resolveId(source) {
-            if (source.includes('?commonjs-external')) {
-              return { id: source, external: true };
-            }
-            return null;
-          },
-        },
-      ],
       onwarn(warning, warn) {
-        if (warning.message?.includes('contains an annotation that Rollup cannot interpret')) return;
         if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
         warn(warning);
       },
@@ -52,6 +40,6 @@ export default defineConfig(({ mode, command }) => ({
     target: 'esnext',
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'wagmi', 'viem', '@privy-io/react-auth', '@privy-io/wagmi'],
+    include: ['react', 'react-dom', 'react-router-dom'],
   },
 }));
