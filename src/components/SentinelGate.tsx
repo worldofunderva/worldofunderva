@@ -1,6 +1,5 @@
 import { Shield, Check, AlertTriangle, Sparkles, Loader2, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAccount } from 'wagmi';
 import { useWalletConnection } from '@/hooks/useWalletConnection';
 import { useSentinel } from '@/contexts/SentinelContext';
 import { cn } from '@/lib/utils';
@@ -11,8 +10,7 @@ const MINT_PRICE_USD = 500;
 const LIQUIDITY_TRIGGER_THRESHOLD = 2000;
 
 export function SentinelGate() {
-  const { isConnected } = useAccount();
-  const { handleConnect } = useWalletConnection();
+  const { isConnected, login } = useWalletConnection();
   const { hasSentinelNFT, isCheckingOwnership, isNFTContractReady } = useSentinel();
   const { ethPrice, getEthEquivalent, isLoading: isPriceLoading } = useEthPrice();
 
