@@ -28,7 +28,6 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'wallet-vendor': ['wagmi', 'viem'],
           'ui-vendor': ['framer-motion', 'lucide-react'],
           'query-vendor': ['@tanstack/react-query'],
         },
