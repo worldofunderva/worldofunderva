@@ -250,7 +250,7 @@ export function SentinelGate() {
                     variant="sentinel" 
                     size="lg" 
                     className="w-full h-12 sm:h-14 text-sm sm:text-base rounded-lg"
-                    onClick={handleConnect}
+                    onClick={() => login()}
                   >
                     <Shield className="h-4 w-4 mr-2" />
                     Connect Wallet to Mint
